@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DROPMALLU — Premium Gadgets, Watches & Lifestyle Store</title>
+  <meta name="description" content="Shop premium tech gadgets, luxury watches, powerbanks, shoes and projectors at DROPMALLU. Quick WhatsApp checkout with curated catalog.">
+  <meta name="keywords" content="DROPMALLU, gadgets, watches, powerbank, shoes, projector, online shop, WhatsApp order">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- ═══ Ambient Background ═══ -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <!-- ═══ 3D Scroll Geometries ═══ -->
+  <div class="scroll-3d-scene" id="scroll3d">
+    <div class="geo-shape geo-1"></div>
+    <div class="geo-shape geo-2"></div>
+    <div class="geo-shape geo-3"></div>
+  </div>
+
+  <!-- ═══ Backdrop Dimmer (for cart drawer) ═══ -->
+  <div id="backdrop" class="backdrop-dimmer"></div>
+
+  <!-- ═══ Header ═══ -->
+  <header id="main-header">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <i data-lucide="shield-check"></i>
+        DROPMALLU<span class="dot">.</span>
+      </a>
+
+      <nav class="nav-links" id="desktop-nav">
+        <a href="#" class="active">Home</a>
+        <a href="#explore">Products</a>
+        <a href="#deals">Featured</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#explore" class="icon-btn" title="Search">
+          <i data-lucide="search"></i>
+        </a>
+        <button id="cart-toggle" class="icon-btn" title="Cart">
+          <i data-lucide="shopping-bag"></i>
+          <span id="cart-badge" class="badge" style="display:none;">0</span>
+        </button>
+        <button id="signin-trigger" class="signin-btn">
+          <i data-lucide="lock" style="width:14px;height:14px;"></i>
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ Hero Section ═══ -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-text anim-fade-up">
+        <span class="hero-badge">
+          <i data-lucide="check-circle" style="width:12px;height:12px;"></i>
+          Verified online Store
+        </span>
+        <h1 class="hero-title">Premium <span>Gadget Hub</span></h1>
+        <p class="hero-desc">Discover curated high-quality tech, luxury watches, performance shoes and trending gadgets. Add items to cart and checkout instantly via WhatsApp.</p>
+        <div class="hero-btns">
+          <a href="#explore" class="btn btn-primary">
+            <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i>
+            Shop Catalog
+          </a>
+          <a href="#deals" class="btn btn-outline">View Offers</a>
+        </div>
+      </div>
+
+      <div class="hero-visual anim-fade-up anim-delay-2">
+        <div class="scrolling-slideshow">
+          <!-- Track 1: Scrolls Down -->
+          <div class="scrolling-track track-down" id="hero-scroll-1">
+            <!-- Populated by JS -->
+          </div>
+          <!-- Track 2: Scrolls Up -->
+          <div class="scrolling-track track-up" id="hero-scroll-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Featured Carousel (Flipkart/Amazon Style) ═══ -->
+  <section id="deals" class="carousel-section anim-fade-up">
+    <div class="carousel-container glass">
+      <div class="carousel-track" id="carousel-track">
+
+        <div class="carousel-slide active" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-content">
+            <span class="slide-badge">Tech Insights</span>
+            <h2 class="slide-title">4K Laser Projectors are Replacing Big Screen TVs</h2>
+            <p class="slide-desc">Mini portable laser systems deliver theater-quality displays up to 150 inches — reshaping home entertainment.</p>
+            <button class="btn btn-primary" onclick="openArticle('b1')">Read Analysis</button>
+          </div>
+        </div>
+
+        <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1600541519463-ee100e3ad498?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-content">
+            <span class="slide-badge">Charging Guide</span>
+            <h2 class="slide-title">Fast USB-C PD Charging: Protecting Battery Life</h2>
+            <p class="slide-desc">Not all powerbanks are equal. Learn PD protocols and keep your devices charged safely.</p>
+            <button class="btn btn-primary" onclick="openArticle('b2')">Read Guide</button>
+          </div>
+        </div>
+
+        <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=1200&q=80');">
+          <div class="slide-content">
+            <span class="slide-badge">Lifestyle</span>
+            <h2 class="slide-title">Performance Footwear: Carbon Shanks & Nitrogen Foams</h2>
+            <p class="slide-desc">Streetwear meets aerospace engineering — the science inside daily sneakers.</p>
+            <button class="btn btn-primary" onclick="openArticle('b3')">Read Review</button>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="carousel-btn prev" id="slide-prev" title="Previous"><i data-lucide="chevron-left"></i></button>
+      <button class="carousel-btn next" id="slide-next" title="Next"><i data-lucide="chevron-right"></i></button>
+
+      <div class="carousel-dots" id="carousel-dots">
+        <span class="dot active" data-idx="0"></span>
+        <span class="dot" data-idx="1"></span>
+        <span class="dot" data-idx="2"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Explore Products ═══ -->
+  <section id="explore" class="explore-section">
+    <div class="section-header anim-fade-up">
+      <p class="section-tag">Catalog</p>
+      <h2 class="section-title">Browse Our Store</h2>
+    </div>
+
+    <div class="filter-bar glass anim-fade-up anim-delay-1">
+      <div class="categories">
+        <button class="cat-btn active" data-cat="all">All</button>
+        <button class="cat-btn" data-cat="watch">Watches</button>
+        <button class="cat-btn" data-cat="powerbank">Powerbanks</button>
+        <button class="cat-btn" data-cat="shoe">Shoes</button>
+        <button class="cat-btn" data-cat="projector">Projectors</button>
+        <button class="cat-btn" data-cat="gadgets">Gadgets</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search products...">
+        <i data-lucide="search"></i>
+      </div>
+    </div>
+
+    <div id="product-grid" class="product-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ═══ Sign-In Modal ═══ -->
+  <div id="signin-modal" class="modal-overlay">
+    <div class="modal-box glass" style="max-width:380px; padding:0;">
+      <button class="modal-close-btn" id="signin-close"><i data-lucide="x"></i></button>
+      <div class="login-modal-inner">
+        <div class="logo">
+          <i data-lucide="shield-check"></i>
+          DROPMALLU<span class="dot">.</span>
+        </div>
+        <h2>Merchant Sign In</h2>
+        <p class="subtitle">Enter credentials to access the admin dashboard.</p>
+        <form id="login-form">
+          <div class="login-field">
+            <label for="login-id">Username</label>
+            <input type="text" id="login-id" placeholder="Enter username" required>
+          </div>
+          <div class="login-field">
+            <label for="login-pass">Password</label>
+            <input type="password" id="login-pass" placeholder="Enter password" required>
+          </div>
+          <div id="login-error" class="login-error">Incorrect username or password.</div>
+          <button type="submit" class="checkout-btn" style="border-radius:10px;">
+            <i data-lucide="unlock" style="width:16px;height:16px;"></i>
+            Authenticate
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Product Detail Modal ═══ -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="modal-box glass">
+      <button class="modal-close-btn"><i data-lucide="x"></i></button>
+      <div class="modal-body" id="product-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══ Article/Blog Modal ═══ -->
+  <div id="blog-modal" class="modal-overlay">
+    <div class="modal-box glass" style="max-width:760px;">
+      <button class="modal-close-btn"><i data-lucide="x"></i></button>
+      <div class="modal-body" id="blog-modal-body" style="padding:0;"></div>
+    </div>
+  </div>
+
+  <!-- ═══ Cart Drawer ═══ -->
+  <div id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h2><i data-lucide="shopping-bag" style="color:var(--primary);width:20px;height:20px;"></i> Your Cart</h2>
+      <button id="cart-close" class="cart-close" title="Close"><i data-lucide="arrow-right"></i></button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span id="cart-total">₹0</span>
+      </div>
+      <button id="checkout-btn" class="checkout-btn" disabled>
+        <i data-lucide="send" style="width:16px;height:16px;"></i>
+        Order via WhatsApp
+      </button>
+      <p class="checkout-hint">Opens a formatted WhatsApp chat to finalize your order.</p>
+    </div>
+  </div>
+
+  <!-- ═══ Mobile Bottom Nav ═══ -->
+  <nav class="mobile-nav">
+    <a href="#" class="mobile-nav-item active" id="mnav-home">
+      <i data-lucide="home"></i><span>Home</span>
+    </a>
+    <a href="#explore" class="mobile-nav-item" id="mnav-explore">
+      <i data-lucide="search"></i><span>Explore</span>
+    </a>
+    <a href="#" class="mobile-nav-item" id="mnav-cart">
+      <i data-lucide="shopping-bag"></i><span>Cart</span>
+    </a>
+    <a href="#" class="mobile-nav-item" id="mnav-account">
+      <i data-lucide="user"></i><span>Sign In</span>
+    </a>
+  </nav>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="margin-bottom:14px;">
+          <i data-lucide="shield-check"></i>
+          DROPMALLU<span class="dot">.</span>
+        </a>
+        <p class="footer-brand-desc">Premium boutique tech store delivering high-quality gadgets, luxury watches and footwear directly via WhatsApp checkout.</p>
+        <div class="footer-socials">
+          <a href="#" class="icon-btn" title="Instagram"><i data-lucide="instagram"></i></a>
+          <a href="#" class="icon-btn" title="Twitter"><i data-lucide="twitter"></i></a>
+          <a href="#" class="icon-btn" title="Facebook"><i data-lucide="facebook"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Catalog</h4>
+        <ul>
+          <li><a href="#explore">Luxury Watches</a></li>
+          <li><a href="#explore">Powerbanks</a></li>
+          <li><a href="#explore">Tech Shoes</a></li>
+          <li><a href="#explore">Projectors</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#deals">Featured Deals</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="https://wa.me/919895177154">WhatsApp</a></li>
+          <li><a href="mailto:support@dropmallu.com">Email Support</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DROPMALLU. All rights reserved.</p>
+      <p style="display:flex;align-items:center;gap:4px;">
+        Verified Merchant
+        <i data-lucide="check-circle" style="color:var(--primary);width:12px;height:12px;"></i>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ═══ Floating WhatsApp ═══ -->
+  <a href="https://wa.me/919895177154?text=Hi!%20I%20need%20support%20regarding%20DROPMALLU." class="float-wa" target="_blank" title="WhatsApp 24/7 Support">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 448 512" fill="#fff">
+      <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5.1-3.9-10.6-6.9z"/>
+    </svg>
+    <span class="wa-badge">1</span>
+  </a>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="js/storage.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  <script>lucide.createIcons();</script>
+
+</body>
+</html>

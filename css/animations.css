@@ -1,0 +1,155 @@
+/* DROPMALLU Premium Store Animations */
+
+/* Background wireframe rotating effect */
+@keyframes gridRotate {
+  0% {
+    transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateX(60deg) rotateZ(360deg);
+  }
+}
+
+.wireframe-grid {
+  animation: gridRotate 30s linear infinite;
+}
+
+/* Floating idle animation for 3D elements */
+@keyframes float3D {
+  0% {
+    transform: translateZ(20px) translateY(0) rotateY(-5deg);
+  }
+  50% {
+    transform: translateZ(35px) translateY(-10px) rotateY(5deg) rotateX(5deg);
+  }
+  100% {
+    transform: translateZ(20px) translateY(0) rotateY(-5deg);
+  }
+}
+
+.floating-card {
+  animation: float3D 6s ease-in-out infinite;
+}
+
+/* Pulsing accent glow */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+  }
+}
+
+.glow-pulse {
+  animation: pulseGlow 2s infinite;
+}
+
+/* 3D scrolling container transitions */
+.stage-3d {
+  transition: transform 0.4s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+.floating-3d-item {
+  transition: transform 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Entrance Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Delay classes */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* Pulse shimmer for loaders */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-loader {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Scale pop in */
+@keyframes scalePop {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-pop {
+  animation: scalePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Magnetic Hover Effect classes */
+.hover-magnetic {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hover-magnetic:hover {
+  transform: scale(1.05);
+}
+
+/* 3D Parallax Scrolling Glide Transitions */
+.scroll-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: transform 0.9s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.9s ease;
+}
+
+.reveal-left {
+  transform: translateX(-70px) rotateY(15deg) scale(0.96);
+}
+
+.reveal-right {
+  transform: translateX(70px) rotateY(-15deg) scale(0.96);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateX(0) rotateY(0) scale(1);
+}
+
+/* Simplified animation on mobile viewports for clean navigation */
+@media (max-width: 768px) {
+  .reveal-left {
+    transform: translateY(40px) scale(0.98);
+  }
+  .reveal-right {
+    transform: translateY(40px) scale(0.98);
+  }
+  .scroll-reveal.revealed {
+    transform: translateY(0) scale(1);
+  }
+}
