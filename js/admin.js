@@ -26,14 +26,67 @@ const prodFormTitle = document.getElementById("prod-form-title");
 const blogFormTitle = document.getElementById("blog-form-title");
 const signoutBtn = document.getElementById("signout-btn");
 
-function initAdmin() {
-  if (typeof getProducts === "function") adminProducts = getProducts();
-  if (typeof getBlogs === "function") adminBlogs = getBlogs();
+// Premium Visual Feedback Systems
+function showLoadingOverlay(show, message = "Synchronizing database...") {
+  const overlay = document.getElementById("admin-loading-overlay");
+  const msgEl = document.getElementById("admin-loading-msg");
+  if (!overlay) return;
+  if (show) {
+    if (msgEl) msgEl.textContent = message;
+    overlay.style.display = "flex";
+    setTimeout(() => overlay.classList.add("active"), 10);
+  } else {
+    overlay.classList.remove("active");
+    setTimeout(() => overlay.style.display = "none", 300);
+  }
+}
 
-  renderStats();
-  renderProductsTable();
-  renderBlogsTable();
-  setupListeners();
+function showToast(message, type = "success") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  
+  const toast = document.createElement("div");
+  toast.className = `toast glass ${type}`;
+  
+  let icon = "check-circle";
+  if (type === "error") icon = "alert-circle";
+  if (type === "warning") icon = "alert-triangle";
+  
+  toast.innerHTML = `
+    <i data-lucide="${icon}" class="toast-icon"></i>
+    <span class="toast-msg">${message}</span>
+  `;
+  
+  container.appendChild(toast);
+  if (window.lucide) lucide.createIcons();
+  
+  // Animate slide in
+  setTimeout(() => toast.classList.add("show"), 10);
+  
+  // Auto remove
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("hide");
+    setTimeout(() => toast.remove(), 400);
+  }, 4000);
+}
+
+async function initAdmin() {
+  showLoadingOverlay(true, "Loading database...");
+  try {
+    if (typeof getProducts === "function") adminProducts = await getProducts();
+    if (typeof getBlogs === "function") adminBlogs = await getBlogs();
+
+    renderStats();
+    renderProductsTable();
+    renderBlogsTable();
+    setupListeners();
+  } catch (err) {
+    showToast("Failed to connect to database", "error");
+    console.error(err);
+  } finally {
+    showLoadingOverlay(false);
+  }
 }
 
 function renderStats() {
@@ -215,7 +268,7 @@ window.editProduct = function(id) {
   }
 };
 
-function handleProductSubmit(e) {
+async function handleProductSubmit(e) {
   e.preventDefault();
   const name = document.getElementById("f-name").value.trim();
   const category = document.getElementById("f-cat").value;
@@ -228,30 +281,55 @@ function handleProductSubmit(e) {
     image = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80";
   }
 
-  if (editingItemId) {
-    const idx = adminProducts.findIndex(x => x.id === editingItemId);
-    if (idx > -1) {
-      adminProducts[idx] = { ...adminProducts[idx], name, category, price, image, badge, description };
+  showLoadingOverlay(true, "Saving product...");
+  try {
+    if (editingItemId) {
+      const idx = adminProducts.findIndex(x => x.id === editingItemId);
+      if (idx > -1) {
+        adminProducts[idx] = { ...adminProducts[idx], name, category, price, image, badge, description };
+      }
+    } else {
+      adminProducts.push({
+        id: "p_" + Date.now(),
+        name, category, price, image, badge, description, rating: 4.5, reviews: 0
+      });
     }
-  } else {
-    adminProducts.push({
-      id: "p_" + Date.now(),
-      name, category, price, image, badge, description, rating: 4.5, reviews: 0
-    });
-  }
 
-  if (typeof saveProducts === "function") saveProducts(adminProducts);
-  renderProductsTable();
-  renderStats();
-  closeForm("product-form-modal");
-}
-
-window.deleteProduct = function(id) {
-  if (confirm("Delete this product?")) {
-    adminProducts = adminProducts.filter(p => p.id !== id);
-    if (typeof saveProducts === "function") saveProducts(adminProducts);
+    if (typeof saveProducts === "function") await saveProducts(adminProducts);
     renderProductsTable();
     renderStats();
+    closeForm("product-form-modal");
+    showToast(editingItemId ? "Product updated successfully!" : "Product added successfully!", "success");
+  } catch (err) {
+    showToast("Error saving product: " + err.message, "error");
+    console.error(err);
+  } finally {
+    showLoadingOverlay(false);
+  }
+}
+
+window.deleteProduct = async function(id) {
+  if (confirm("Delete this product?")) {
+    showLoadingOverlay(true, "Deleting product...");
+    try {
+      const updatedProducts = adminProducts.filter(p => p.id !== id);
+      
+      if (typeof deleteProductFromStorage === "function") {
+        await deleteProductFromStorage(id, updatedProducts);
+      } else if (typeof saveProducts === "function") {
+        await saveProducts(updatedProducts);
+      }
+      
+      adminProducts = updatedProducts;
+      renderProductsTable();
+      renderStats();
+      showToast("Product deleted successfully!", "success");
+    } catch (err) {
+      showToast("Error deleting product: " + err.message, "error");
+      console.error(err);
+    } finally {
+      showLoadingOverlay(false);
+    }
   }
 };
 
@@ -297,7 +375,7 @@ window.editBlog = function(id) {
   }
 };
 
-function handleBlogSubmit(e) {
+async function handleBlogSubmit(e) {
   e.preventDefault();
   const title = document.getElementById("fb-title").value.trim();
   const author = document.getElementById("fb-author").value.trim();
@@ -310,31 +388,56 @@ function handleBlogSubmit(e) {
     image = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&q=80";
   }
 
-  if (editingItemId) {
-    const idx = adminBlogs.findIndex(x => x.id === editingItemId);
-    if (idx > -1) {
-      adminBlogs[idx] = { ...adminBlogs[idx], title, author, readTime, image, summary, content };
+  showLoadingOverlay(true, "Saving banner slide...");
+  try {
+    if (editingItemId) {
+      const idx = adminBlogs.findIndex(x => x.id === editingItemId);
+      if (idx > -1) {
+        adminBlogs[idx] = { ...adminBlogs[idx], title, author, readTime, image, summary, content };
+      }
+    } else {
+      adminBlogs.push({
+        id: "b_" + Date.now(),
+        title, author, readTime, image, summary, content,
+        date: new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: '2-digit' })
+      });
     }
-  } else {
-    adminBlogs.push({
-      id: "b_" + Date.now(),
-      title, author, readTime, image, summary, content,
-      date: new Date().toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: '2-digit' })
-    });
-  }
 
-  if (typeof saveBlogs === "function") saveBlogs(adminBlogs);
-  renderBlogsTable();
-  renderStats();
-  closeForm("blog-form-modal");
-}
-
-window.deleteBlog = function(id) {
-  if (confirm("Delete this slide?")) {
-    adminBlogs = adminBlogs.filter(b => b.id !== id);
-    if (typeof saveBlogs === "function") saveBlogs(adminBlogs);
+    if (typeof saveBlogs === "function") await saveBlogs(adminBlogs);
     renderBlogsTable();
     renderStats();
+    closeForm("blog-form-modal");
+    showToast(editingItemId ? "Banner slide updated!" : "Banner slide published!", "success");
+  } catch (err) {
+    showToast("Error saving banner: " + err.message, "error");
+    console.error(err);
+  } finally {
+    showLoadingOverlay(false);
+  }
+}
+
+window.deleteBlog = async function(id) {
+  if (confirm("Delete this slide?")) {
+    showLoadingOverlay(true, "Deleting banner slide...");
+    try {
+      const updatedBlogs = adminBlogs.filter(b => b.id !== id);
+      
+      if (typeof deleteBlogFromStorage === "function") {
+        await deleteBlogFromStorage(id, updatedBlogs);
+      } else if (typeof saveBlogs === "function") {
+        await saveBlogs(updatedBlogs);
+      }
+      
+      adminBlogs = updatedBlogs;
+      renderBlogsTable();
+      renderStats();
+      showToast("Banner slide deleted successfully!", "success");
+    } catch (err) {
+      showToast("Error deleting banner: " + err.message, "error");
+      console.error(err);
+    } finally {
+      showLoadingOverlay(false);
+    }
   }
 };
 

@@ -258,6 +258,16 @@ const DEFAULT_BLOGS = [
   }
 ];
 
+// Check if Supabase is configured
+const isSupabaseConfigured = typeof CONFIG !== 'undefined' && CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY;
+
+// Base headers for Supabase
+const getSupabaseHeaders = () => ({
+  'apikey': CONFIG.SUPABASE_ANON_KEY,
+  'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+  'Content-Type': 'application/json'
+});
+
 // Initialize LocalStorage Data
 function initializeStorage() {
   const currentProducts = JSON.parse(localStorage.getItem("dropmallu_products"));
@@ -271,23 +281,163 @@ function initializeStorage() {
 }
 
 // Product Storage Accessors
-function getProducts() {
+async function getProducts() {
+  if (isSupabaseConfigured) {
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?select=*&order=created_at.asc`, {
+        headers: {
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error("Failed to fetch products from database");
+      const data = await res.json();
+      // If database is empty, seed it with defaults
+      if (data.length === 0) {
+        await saveProducts(DEFAULT_PRODUCTS);
+        return DEFAULT_PRODUCTS;
+      }
+      return data;
+    } catch (err) {
+      console.error("Database error, falling back to LocalStorage:", err);
+    }
+  }
+  
   initializeStorage();
   return JSON.parse(localStorage.getItem("dropmallu_products"));
 }
 
-function saveProducts(products) {
+async function saveProducts(products) {
+  if (isSupabaseConfigured) {
+    try {
+      const sanitized = products.map(p => ({
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        price: Number(p.price),
+        description: p.description,
+        image: p.image,
+        badge: p.badge || '',
+        rating: Number(p.rating || 4.5),
+        reviews: Number(p.reviews || 0)
+      }));
+
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products`, {
+        method: 'POST',
+        headers: {
+          ...getSupabaseHeaders(),
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(sanitized)
+      });
+      if (!res.ok) throw new Error("Failed to save products to database");
+      return;
+    } catch (err) {
+      console.error("Database save error:", err);
+      throw err;
+    }
+  }
+
   localStorage.setItem("dropmallu_products", JSON.stringify(products));
 }
 
+async function deleteProductFromStorage(id, updatedProducts) {
+  if (isSupabaseConfigured) {
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error("Failed to delete product from database");
+      return;
+    } catch (err) {
+      console.error("Database delete error:", err);
+      throw err;
+    }
+  }
+  localStorage.setItem("dropmallu_products", JSON.stringify(updatedProducts));
+}
+
 // Blog Storage Accessors
-function getBlogs() {
+async function getBlogs() {
+  if (isSupabaseConfigured) {
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/banners?select=*&order=created_at.asc`, {
+        headers: {
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error("Failed to fetch banners from database");
+      const data = await res.json();
+      if (data.length === 0) {
+        await saveBlogs(DEFAULT_BLOGS);
+        return DEFAULT_BLOGS;
+      }
+      return data;
+    } catch (err) {
+      console.error("Database error, falling back to LocalStorage:", err);
+    }
+  }
+
   initializeStorage();
   return JSON.parse(localStorage.getItem("dropmallu_blogs"));
 }
 
-function saveBlogs(blogs) {
+async function saveBlogs(blogs) {
+  if (isSupabaseConfigured) {
+    try {
+      const sanitized = blogs.map(b => ({
+        id: b.id,
+        title: b.title,
+        author: b.author,
+        date: b.date,
+        readTime: b.readTime,
+        image: b.image,
+        summary: b.summary,
+        content: b.content || ''
+      }));
+
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/banners`, {
+        method: 'POST',
+        headers: {
+          ...getSupabaseHeaders(),
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(sanitized)
+      });
+      if (!res.ok) throw new Error("Failed to save banners to database");
+      return;
+    } catch (err) {
+      console.error("Database save error:", err);
+      throw err;
+    }
+  }
+
   localStorage.setItem("dropmallu_blogs", JSON.stringify(blogs));
+}
+
+async function deleteBlogFromStorage(id, updatedBlogs) {
+  if (isSupabaseConfigured) {
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/banners?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error("Failed to delete banner from database");
+      return;
+    } catch (err) {
+      console.error("Database delete error:", err);
+      throw err;
+    }
+  }
+  localStorage.setItem("dropmallu_blogs", JSON.stringify(updatedBlogs));
 }
 
 // Initialize on script load

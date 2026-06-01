@@ -51,9 +51,9 @@ const mnavCart = $('#mnav-cart');
 const mnavAccount = $('#mnav-account');
 
 // ── Init ─────────────────────────────────────────────────────────
-function init() {
-  products = typeof getProducts === 'function' ? getProducts() : [];
-  blogs = typeof getBlogs === 'function' ? getBlogs() : [];
+async function init() {
+  products = typeof getProducts === 'function' ? await getProducts() : [];
+  blogs = typeof getBlogs === 'function' ? await getBlogs() : [];
 
   const saved = localStorage.getItem('dropmallu_cart');
   if (saved) cart = JSON.parse(saved);
