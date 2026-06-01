@@ -205,7 +205,7 @@ const DEFAULT_PRODUCTS = [
     category: "projector",
     price: 145000,
     description: "The absolute pinnacle of home cinema. Delivers true 8K resolution from just 4 inches away from the wall. Includes built-in Harman Kardon soundbar.",
-    image: "https://images.unsplash.com/photo-1621360144686-2a7e78d91c13?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1535016120720-40c646be5580?w=600&q=80",
     badge: "Flagship",
     rating: 5.0,
     reviews: 14
@@ -216,7 +216,7 @@ const DEFAULT_PRODUCTS = [
     category: "gadgets",
     price: 2499,
     description: "Simultaneously fast-charge your phone, watch, and earbuds with this sleek magnetic levitating dock station. Keeps your desk completely wire-free.",
-    image: "https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&q=80",
     badge: "Essential",
     rating: 4.8,
     reviews: 512
