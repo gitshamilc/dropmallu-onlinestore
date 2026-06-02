@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /js/config.js
 
-Sitemap: https://dropmallu.xyz/sitemap.xml
+Sitemap: https://www.dropmallu.xyz/sitemap.xml
