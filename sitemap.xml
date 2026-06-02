@@ -3,14 +3,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
-    <loc>https://dropmallu.vercel.app/</loc>
+    <loc>https://dropmallu.xyz/</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://dropmallu.vercel.app/index.html</loc>
+    <loc>https://dropmallu.xyz/index.html</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>

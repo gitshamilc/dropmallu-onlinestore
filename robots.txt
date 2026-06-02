@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /js/config.js
 
-Sitemap: https://dropmallu.vercel.app/sitemap.xml
+Sitemap: https://dropmallu.xyz/sitemap.xml
