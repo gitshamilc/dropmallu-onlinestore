@@ -312,7 +312,8 @@ async function handleProductSubmit(e) {
       const { error } = await supabase.from('products').update({ name, category, price, image, badge, description }).eq('id', editingItemId);
       if (error) throw error;
     } else {
-      const { error } = await supabase.from('products').insert([{ name, category, price, image, badge, description, rating: 4.5, reviews: 0 }]);
+      const id = "p_" + Date.now();
+      const { error } = await supabase.from('products').insert([{ id, name, category, price, image, badge, description, rating: 4.5, reviews: 0 }]);
       if (error) throw error;
     }
     const b = await getProducts();

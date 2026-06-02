@@ -1,5 +1,7 @@
 // DROPMALLU Store Storage Manager
 
+const CONFIG = window.CONFIG;
+
 const DEFAULT_PRODUCTS = [
   {
     id: "p1",
