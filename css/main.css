@@ -682,6 +682,24 @@ header.scrolled {
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
 }
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .product-card {
+    padding: 8px;
+  }
+  .product-img-wrap {
+    height: 150px;
+  }
+  .product-name {
+    font-size: 14px;
+  }
+  .product-price {
+    font-size: 15px;
+  }
+}
 
 .product-card {
   border-radius: var(--radius-md);

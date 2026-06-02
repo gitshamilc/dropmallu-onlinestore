@@ -1,5 +1,7 @@
 // DROPMALLU Admin Dashboard Javascript Logic
 
+import { supabase } from "../supabase/client.js";
+
 let adminProducts = [];
 let adminBlogs = [];
 let editingItemId = null;
@@ -81,6 +83,29 @@ async function initAdmin() {
     renderProductsTable();
     renderBlogsTable();
     setupListeners();
+
+    // Supabase realtime subscriptions for products and banners
+    supabase
+      .channel('public:products')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
+        getProducts().then(p => {
+          adminProducts = p;
+          renderProductsTable();
+          renderStats();
+        }).catch(err => console.error('Realtime product update error:', err));
+      })
+      .subscribe();
+
+    supabase
+      .channel('public:banners')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, payload => {
+        getBlogs().then(b => {
+          adminBlogs = b;
+          renderBlogsTable();
+          renderStats();
+        }).catch(err => console.error('Realtime banner update error:', err));
+      })
+      .subscribe();
   } catch (err) {
     showToast("Failed to connect to database", "error");
     console.error(err);

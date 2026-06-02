@@ -3,6 +3,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 // ── State ────────────────────────────────────────────────────────
+import { supabase } from "../supabase/client.js";
 let products = [];
 let blogs = [];
 let cart = [];
@@ -67,6 +68,17 @@ async function init() {
   // URL Hash Routing
   window.addEventListener('hashchange', checkUrlHash);
   checkUrlHash();
+  // Supabase realtime subscription for product changes
+  supabase
+    .channel('public:products')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
+      // Reload products on any insert, update, delete
+      getProducts().then(p => {
+        products = p;
+        renderProducts(products);
+      }).catch(err => console.error('Realtime product update error:', err));
+    })
+    .subscribe();
 }
 
 
