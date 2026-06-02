@@ -63,7 +63,12 @@ async function init() {
   bindEvents();
   setupHeroScrolling();
   startCarousel();
+
+  // URL Hash Routing
+  window.addEventListener('hashchange', checkUrlHash);
+  checkUrlHash();
 }
+
 
 // ── Render Products ──────────────────────────────────────────────
 function renderProducts(list) {
@@ -338,6 +343,11 @@ function showProduct(p) {
     </div>
   `;
   productModal.classList.add('active');
+  
+  // Update URL hash to allow sharing and indexing
+  if (window.location.hash !== `#product-${p.id}`) {
+    window.location.hash = `#product-${p.id}`;
+  }
 }
 
 window.directBuy = function(id) {
@@ -370,9 +380,14 @@ window.openArticle = function(blogId) {
     </div>
   `;
   blogModal.classList.add('active');
+
+  // Update URL hash to allow sharing and indexing
+  if (window.location.hash !== `#blog-${b.id}`) {
+    window.location.hash = `#blog-${b.id}`;
+  }
 };
 
-function closeModals() {
+function closeModals(skipHashUpdate = false) {
   signinModal?.classList.remove('active');
   productModal?.classList.remove('active');
   blogModal?.classList.remove('active');
@@ -380,7 +395,33 @@ function closeModals() {
     backdrop?.classList.remove('active');
     setTimeout(() => { if (backdrop) backdrop.style.display = 'none'; }, 300);
   }
+
+  // Clear hash without adding to browser history loop if closed manually
+  if (!skipHashUpdate && (window.location.hash.startsWith('#product-') || window.location.hash.startsWith('#blog-'))) {
+    history.replaceState(null, null, ' ');
+  }
 }
+
+// ── URL Hash Routing ─────────────────────────────────────────────
+function checkUrlHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#product-')) {
+    const id = hash.replace('#product-', '');
+    const p = products.find(x => x.id === id);
+    if (p) {
+      showProduct(p);
+    }
+  } else if (hash.startsWith('#blog-')) {
+    const id = hash.replace('#blog-', '');
+    const b = blogs.find(x => x.id === id);
+    if (b) {
+      window.openArticle(id);
+    }
+  } else {
+    closeModals(true);
+  }
+}
+
 
 // ── Carousel ─────────────────────────────────────────────────────
 function startCarousel() {
