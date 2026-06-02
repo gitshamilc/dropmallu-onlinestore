@@ -309,18 +309,14 @@ async function handleProductSubmit(e) {
   showLoadingOverlay(true, "Saving product...");
   try {
     if (editingItemId) {
-      const idx = adminProducts.findIndex(x => x.id === editingItemId);
-      if (idx > -1) {
-        adminProducts[idx] = { ...adminProducts[idx], name, category, price, image, badge, description };
-      }
+      const { error } = await supabase.from('products').update({ name, category, price, image, badge, description }).eq('id', editingItemId);
+      if (error) throw error;
     } else {
-      adminProducts.push({
-        id: "p_" + Date.now(),
-        name, category, price, image, badge, description, rating: 4.5, reviews: 0
-      });
+      const { error } = await supabase.from('products').insert([{ name, category, price, image, badge, description, rating: 4.5, reviews: 0 }]);
+      if (error) throw error;
     }
-
-    if (typeof saveProducts === "function") await saveProducts(adminProducts);
+    const b = await getProducts();
+    adminProducts = b;
     renderProductsTable();
     renderStats();
     closeForm("product-form-modal");
@@ -337,15 +333,9 @@ window.deleteProduct = async function(id) {
   if (confirm("Delete this product?")) {
     showLoadingOverlay(true, "Deleting product...");
     try {
-      const updatedProducts = adminProducts.filter(p => p.id !== id);
-      
-      if (typeof deleteProductFromStorage === "function") {
-        await deleteProductFromStorage(id, updatedProducts);
-      } else if (typeof saveProducts === "function") {
-        await saveProducts(updatedProducts);
-      }
-      
-      adminProducts = updatedProducts;
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (error) throw error;
+      adminProducts = adminProducts.filter(p => p.id !== id);
       renderProductsTable();
       renderStats();
       showToast("Product deleted successfully!", "success");
