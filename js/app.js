@@ -91,7 +91,7 @@ function renderProducts(list) {
     card.innerHTML = `
       ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
       <div class="product-img-wrap">
-        <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy">
+        <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
       </div>
       <div class="product-info">
         <div class="product-meta">
@@ -245,7 +245,7 @@ function refreshCart() {
     checkoutBtn.disabled = false;
     cartItemsEl.innerHTML = cart.map(item => `
       <div class="cart-item">
-        <img class="cart-item-img" src="${item.image}" alt="${item.name}">
+        <img class="cart-item-img" src="${item.image}" alt="${item.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
         <div class="cart-item-info">
           <h4 class="cart-item-name">${item.name}</h4>
           <span class="cart-item-price">${formatPrice(item.price)}</span>
@@ -326,7 +326,7 @@ function showProduct(p) {
   const price = formatPrice(p.price);
   body.innerHTML = `
     <div class="pdp-grid">
-      <div><img class="pdp-img" src="${p.image}" alt="${p.name}"></div>
+      <div><img class="pdp-img" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';"></div>
       <div class="pdp-info">
         ${p.badge ? `<span class="pdp-badge">${p.badge}</span>` : ''}
         <h2 class="pdp-title">${p.name}</h2>
@@ -364,7 +364,7 @@ window.openArticle = function(blogId) {
   const body = $('#blog-modal-body');
   body.innerHTML = `
     <div class="article-hero">
-      <img src="${b.image}" alt="${b.title}">
+      <img src="${b.image}" alt="${b.title}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
       <div class="article-hero-text">
         <h2>${b.title}</h2>
         <div class="article-meta">
@@ -452,7 +452,7 @@ function setupHeroScrolling() {
   items.forEach((p, i) => {
     const card = `
       <div class="scroll-card">
-        <img src="${p.image}" alt="${p.name}">
+        <img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
         <div class="scroll-card-title" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name}</div>
         <div class="scroll-card-price">${formatPrice(p.price)}</div>
       </div>
