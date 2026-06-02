@@ -3,18 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DROPMALLU — Premium Gadgets, Watches & Lifestyle Store</title>
-  <meta name="description" content="Shop premium tech gadgets, luxury watches, powerbanks, shoes and projectors at DROPMALLU. Quick WhatsApp checkout with curated catalog.">
-  <meta name="keywords" content="DROPMALLU, gadgets, watches, powerbank, shoes, projector, online shop, WhatsApp order">
+
+  <!-- ═══ Primary SEO ═══ -->
+  <title>DROPMALLU — Premium Gadgets, Watches, iPhone Cases & Lifestyle Store</title>
+  <meta name="description" content="Shop premium tech gadgets, iPhone cases, luxury watches, powerbanks, shoes and projectors at DROPMALLU. New arrivals daily. Quick WhatsApp checkout.">
+  <meta name="keywords" content="DROPMALLU, iPhone case, gadgets, watches, powerbank, shoes, projector, online shop Kerala, WhatsApp order, tech accessories India">
+  <meta name="author" content="DROPMALLU">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://dropmallu.vercel.app/">
+
+  <!-- ═══ Open Graph (Facebook / WhatsApp preview) ═══ -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DROPMALLU">
+  <meta property="og:title" content="DROPMALLU — Premium Gadgets & Lifestyle Store">
+  <meta property="og:description" content="Curated tech gadgets, iPhone cases, luxury watches, powerbanks and shoes. Order instantly via WhatsApp.">
+  <meta property="og:url" content="https://dropmallu.vercel.app/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:locale" content="en_IN">
+
+  <!-- ═══ Twitter Card ═══ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DROPMALLU — Premium Gadgets & Lifestyle Store">
+  <meta name="twitter:description" content="Curated tech gadgets, iPhone cases, luxury watches & more. WhatsApp checkout.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- ═══ JSON-LD Structured Data (Google Shopping / Rich Results) ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "OnlineStore",
+    "name": "DROPMALLU",
+    "url": "https://dropmallu.vercel.app/",
+    "description": "Premium boutique online store for gadgets, iPhone cases, luxury watches, powerbanks, shoes and projectors in India.",
+    "logo": "https://dropmallu.vercel.app/favicon.ico",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-9895177154",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Malayalam"]
+    },
+    "sameAs": [
+      "https://github.com/gitshamilc/dropmallu-onlinestore"
+    ]
+  }
+  </script>
+
+  <!-- ═══ Favicon ═══ -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
 
-  <!-- Styles -->
+  <!-- ═══ Styles ═══ -->
   <link rel="stylesheet" href="css/main.css">
 
-  <!-- Lucide Icons -->
+  <!-- ═══ Splash Screen Styles ═══ -->
+  <style>
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #050508;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .splash-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Outfit', 'Inter', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      animation: splashLogoPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .splash-logo svg {
+      width: 36px;
+      height: 36px;
+      color: #f59e0b;
+      filter: drop-shadow(0 0 12px rgba(245,158,11,0.6));
+    }
+    .splash-logo .dot { color: #f59e0b; }
+    .splash-tagline {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: splashFade 0.8s 0.3s ease both;
+    }
+    .splash-bar-wrap {
+      width: 180px;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+      animation: splashFade 0.5s 0.2s ease both;
+    }
+    .splash-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      border-radius: 99px;
+      animation: splashProgress 1.6s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .splash-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .splash-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      animation: splashOrbPulse 3s ease-in-out infinite alternate;
+    }
+    .splash-orb-1 { width:400px;height:400px;background:#f59e0b;top:-100px;left:-100px; }
+    .splash-orb-2 { width:300px;height:300px;background:#8b5cf6;bottom:-80px;right:-80px;animation-delay:1s; }
+    @keyframes splashLogoPop {
+      from { opacity:0; transform: scale(0.7) translateY(20px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    @keyframes splashFade {
+      from { opacity:0; transform: translateY(8px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes splashProgress {
+      0%   { width: 0%; }
+      60%  { width: 80%; }
+      100% { width: 100%; }
+    }
+    @keyframes splashOrbPulse {
+      from { transform: scale(1); }
+      to   { transform: scale(1.2); }
+    }
+  </style>
+
+  <!-- ═══ Lucide Icons ═══ -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+
+  <!-- ═══ Branded Splash Screen ═══ -->
+  <div id="splash-screen" role="status" aria-label="Loading DROPMALLU">
+    <div class="splash-orbs">
+      <div class="splash-orb splash-orb-1"></div>
+      <div class="splash-orb splash-orb-2"></div>
+    </div>
+    <div class="splash-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+      DROPMALLU<span class="dot">.</span>
+    </div>
+    <div class="splash-tagline">Premium Online Store</div>
+    <div class="splash-bar-wrap">
+      <div class="splash-bar"></div>
+    </div>
+  </div>
 
   <!-- ═══ Ambient Background ═══ -->
   <div class="ambient-bg">
@@ -312,10 +467,60 @@
   </a>
 
   <!-- ═══ Scripts ═══ -->
-  <script src="js/config.js?v=3"></script>
-  <script src="js/storage.js?v=3"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/config.js?v=4"></script>
+  <script src="js/storage.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
   <script>lucide.createIcons();</script>
+
+  <!-- ═══ Splash Screen Dismiss + Dynamic JSON-LD Products ═══ -->
+  <script>
+    // Dismiss splash after page is ready
+    function dismissSplash() {
+      const splash = document.getElementById('splash-screen');
+      if (splash) {
+        setTimeout(() => splash.classList.add('hidden'), 1800);
+      }
+    }
+    if (document.readyState === 'complete') {
+      dismissSplash();
+    } else {
+      window.addEventListener('load', dismissSplash);
+    }
+
+    // Inject product JSON-LD for Google after products load
+    async function injectProductSchema() {
+      try {
+        const products = await getProducts();
+        if (!products || products.length === 0) return;
+        const schemaList = products.slice(0, 20).map(p => ({
+          "@type": "Product",
+          "name": p.name,
+          "description": p.description,
+          "image": p.image,
+          "brand": { "@type": "Brand", "name": "DROPMALLU" },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "INR",
+            "price": p.price,
+            "availability": "https://schema.org/InStock",
+            "url": "https://dropmallu.vercel.app/",
+            "seller": { "@type": "Organization", "name": "DROPMALLU" }
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": p.rating,
+            "reviewCount": p.reviews
+          }
+        }));
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify({ "@context": "https://schema.org", "@graph": schemaList });
+        document.head.appendChild(script);
+      } catch(e) { /* silent */ }
+    }
+    // Run after app initializes
+    setTimeout(injectProductSchema, 3000);
+  </script>
 
 </body>
 </html>
