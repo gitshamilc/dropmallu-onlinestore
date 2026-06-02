@@ -285,6 +285,8 @@ function initializeStorage() {
 // Product Storage Accessors
 async function getProducts() {
   if (isSupabaseConfigured) {
+    // Ensure we don't use stale local cache before fetching fresh data
+    localStorage.removeItem('dropmallu_products');
     try {
       const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?select=*&order=created_at.asc`, {
         headers: {
@@ -294,11 +296,15 @@ async function getProducts() {
       });
       if (!res.ok) throw new Error("Failed to fetch products from database");
       const data = await res.json();
-      // If database is empty, seed it with defaults
+      // If database is empty, seed it with defaults and cache defaults
       if (data.length === 0) {
         await saveProducts(DEFAULT_PRODUCTS);
+        // After seeding, cache defaults locally
+        localStorage.setItem('dropmallu_products', JSON.stringify(DEFAULT_PRODUCTS));
         return DEFAULT_PRODUCTS;
       }
+      // Cache fetched data
+      localStorage.setItem('dropmallu_products', JSON.stringify(data));
       return data;
     } catch (err) {
       console.error("Database error, falling back to LocalStorage:", err);
@@ -340,7 +346,9 @@ async function saveProducts(products) {
     }
   }
 
+  // Also update LocalStorage cache after saving to Supabase
   localStorage.setItem("dropmallu_products", JSON.stringify(products));
+  // Refresh local cache after successful save (no further action needed as above sets it)
 }
 
 async function deleteProductFromStorage(id, updatedProducts) {

@@ -5,6 +5,10 @@
 // ── State ────────────────────────────────────────────────────────
 import { supabase } from "../supabase/client.js";
 let products = [];
+// Force storage initialization to ensure default data
+if (typeof initializeStorage === 'function') {
+  initializeStorage();
+}
 let blogs = [];
 let cart = [];
 let currentSlide = 0;
