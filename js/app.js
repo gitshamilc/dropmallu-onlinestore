@@ -62,8 +62,8 @@ async function init() {
     products = (typeof getProducts === 'function' ? await getProducts() : []) || [];
     // Sort products descending (newest additions / higher IDs first)
     products.sort((a, b) => {
-      const numA = parseInt(a.id.replace(/\D/g, '')) || 0;
-      const numB = parseInt(b.id.replace(/\D/g, '')) || 0;
+      const numA = parseInt(String(a.id).replace(/\D/g, '')) || 0;
+      const numB = parseInt(String(b.id).replace(/\D/g, '')) || 0;
       return numB - numA;
     });
   } catch (e) {

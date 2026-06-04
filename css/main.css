@@ -2417,6 +2417,12 @@ footer {
   }
 }
 @media (max-width: 768px) {
+  header, .premium-header {
+    height: auto !important;
+    position: sticky !important;
+    background: #04120a !important; /* Solid dark green background to block underlying text elements */
+    border-bottom: 1px solid var(--border-glass) !important;
+  }
   .top-bar {
     display: none;
   }
