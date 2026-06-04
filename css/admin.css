@@ -5,16 +5,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-dark: #070a12;
-  --bg-surface: rgba(14, 18, 30, 0.65);
-  --primary: #10b981;
-  --primary-glow: rgba(16, 185, 129, 0.2);
+  --bg-dark: #0b1e36;
+  --bg-surface: rgba(11, 30, 54, 0.7);
+  --primary: #fbc02d;
+  --primary-glow: rgba(251, 192, 45, 0.2);
   --accent-blue: #3b82f6;
-  --accent-gold: #f59e0b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
+  --accent-gold: #fbc02d;
+  --text-primary: #ffffff;
+  --text-secondary: #a5b4fc;
   --text-muted: #64748b;
-  --border-glass: rgba(255,255,255,0.06);
+  --border-glass: rgba(255,255,255,0.08);
   --font-display: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
   --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -472,11 +472,11 @@ body {
 .spinner-ring {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(16, 185, 129, 0.1);
+  border: 3px solid rgba(251, 192, 45, 0.1);
   border-top: 3px solid var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 15px rgba(251, 192, 45, 0.2);
 }
 
 @keyframes spin {
@@ -516,7 +516,7 @@ body {
   pointer-events: auto;
 }
 .toast.glass {
-  background: rgba(14, 18, 30, 0.85);
+  background: rgba(11, 30, 54, 0.9);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--border-glass);
@@ -536,7 +536,7 @@ body {
   flex-shrink: 0;
 }
 .toast.success {
-  border-color: rgba(16, 185, 129, 0.25);
+  border-color: rgba(251, 192, 45, 0.25);
 }
 .toast.success .toast-icon {
   color: var(--primary);

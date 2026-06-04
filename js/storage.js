@@ -626,10 +626,23 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
 }
 
 const DEFAULT_SETTINGS = {
+  theme_primary: "#fbc02d",
+  theme_primary_hover: "#f9a825",
+  theme_bg_dark: "#f3f5f8",
+  theme_bg_surface: "#ffffff",
+  theme_text_primary: "#1f2937",
+  theme_text_secondary: "#4b5563",
+  theme_border_radius: "14px",
+  theme_shadows: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+
   hero_badge: "Premium Collection",
   hero_title: "Upgrade Your <br><span>Lifestyle</span>",
   hero_subtitle: "Discover trending gadgets, luxury watches, performance shoes and more.",
   hero_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+  hero_image_tablet: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
+  hero_image_mobile: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80",
+  hero_auto_slide: true,
+  hero_transition_speed: 5500,
   
   timer_hours: 12,
   timer_title: "⚡ Deal of the Day",
@@ -643,36 +656,73 @@ const DEFAULT_SETTINGS = {
   promo_b2_title: "Best Selling Shoes",
   promo_b2_subtitle: "Up to 50% Off",
   promo_b2_cat: "shoe",
-  promo_b2_image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80"
+  promo_b2_image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80",
+
+  newsletter_heading: "Join the DROPMALLU Club",
+  newsletter_desc: "Subscribe to receive dynamic updates on exclusive tech arrivals and discount drops.",
+  newsletter_bg: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&q=80",
+  newsletter_success_msg: "Thank you for subscribing! Check WhatsApp for welcome offers.",
+  newsletter_provider: "mailchimp",
+
+  footer_logo_text: "DROPMALLU",
+  footer_about_content: "Curated premium lifestyle boutique offering direct-to-consumer tech accessories, custom project displays, and smart gadgets.",
+  footer_social_facebook: "https://facebook.com",
+  footer_social_instagram: "https://instagram.com",
+  footer_social_twitter: "https://twitter.com",
+  footer_social_youtube: "https://youtube.com",
+  footer_contact_phone: "+91 98951 77154",
+  footer_contact_email: "support@dropmallu.xyz",
+  footer_contact_address: "Kochi, Kerala, India",
+
+  seo_home_title: "DROPMALLU — Premium Boutique Storefront",
+  seo_home_desc: "Shop custom gadgets, smart project tools, luxury watches, and carbon fiber shoes. WhatsApp quick checkouts.",
+  seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
+  seo_home_canonical: "https://dropmallu.xyz"
 };
 
-async function getSettings() {
-  if (isSupabaseConfigured) {
-    try {
-      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/settings?select=*&limit=1`, {
-        headers: {
-          'apikey': CONFIG.SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.length > 0) {
-          try {
-            localStorage.setItem("dropmallu_settings", JSON.stringify(data[0]));
-          } catch (e) {}
-          return data[0];
-        }
-      }
-    } catch (e) {
-      console.warn("Supabase settings fetch error, falling back to LocalStorage:", e);
-    }
-  }
+const DEFAULT_HOMEPAGE_SECTIONS = [
+  { id: "hero", name: "Hero Showcase Area", enabled: true },
+  { id: "categories", name: "Circular Quick Categories", enabled: true },
+  { id: "promo_banners", name: "Promotional Banner Cards", enabled: true },
+  { id: "deals", name: "Deal of the Day Timer", enabled: true },
+  { id: "products", name: "Products Catalog Explorer", enabled: true },
+  { id: "brands", name: "Brands Logo Strip", enabled: true },
+  { id: "testimonials", name: "Customer Testimonials Slider", enabled: true },
+  { id: "newsletter", name: "Newsletter Signup Card", enabled: true }
+];
 
+const DEFAULT_TESTIMONIALS = [
+  { id: "t1", name: "Rahul S. Nair", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80", rating: 5, review: "Excellent product quality. The AeroChron watch looks and feels exceptionally premium!" },
+  { id: "t2", name: "Anjali Krishna", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80", rating: 5, review: "Ordered VoltCore powerbank and got fast delivery in Kochi. Highly recommended." }
+];
+
+const DEFAULT_BRANDS = [
+  { id: "br1", name: "Noise", logo: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=80&q=80", link: "#explore" },
+  { id: "br2", name: "boAt", logo: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=80&q=80", link: "#explore" },
+  { id: "br3", name: "Puma", logo: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&q=80", link: "#explore" }
+];
+
+const DEFAULT_FLASH_SALES = {
+  enabled: false,
+  name: "Midnight Flash Madness",
+  banner: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80",
+  start_time: "",
+  end_time: "",
+  discount_percent: 15,
+  products: []
+};
+
+const DEFAULT_MEDIA = [
+  { id: "m1", name: "Default Watch Showcase", url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80", size: "45 KB", type: "image/jpeg" },
+  { id: "m2", name: "Stealth Smartwatch Banner", url: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&q=80", size: "38 KB", type: "image/jpeg" }
+];
+
+async function getSettings() {
   try {
     const local = localStorage.getItem("dropmallu_settings");
     if (local) {
-      return JSON.parse(local);
+      const parsed = JSON.parse(local);
+      return { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (e) {}
   
@@ -683,30 +733,86 @@ async function getSettings() {
 }
 
 async function saveSettings(settings) {
-  if (isSupabaseConfigured) {
-    try {
-      // Force settings to have a fixed ID for single row update
-      const payload = { id: 1, ...settings };
-      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/settings`, {
-        method: 'POST',
-        headers: {
-          ...getSupabaseHeaders(),
-          'Prefer': 'resolution=merge-duplicates'
-        },
-        body: JSON.stringify([payload])
-      });
-      if (!res.ok) throw new Error("Failed to save settings to database");
-    } catch (err) {
-      console.error("Database settings save error:", err);
-      throw err;
-    }
-  }
-
   try {
     localStorage.setItem("dropmallu_settings", JSON.stringify(settings));
   } catch (err) {
     console.error("LocalStorage settings save error:", err);
   }
+}
+
+async function getHomepageSections() {
+  try {
+    const local = localStorage.getItem("dropmallu_sections");
+    return local ? JSON.parse(local) : DEFAULT_HOMEPAGE_SECTIONS;
+  } catch (e) {
+    return DEFAULT_HOMEPAGE_SECTIONS;
+  }
+}
+
+async function saveHomepageSections(sections) {
+  try {
+    localStorage.setItem("dropmallu_sections", JSON.stringify(sections));
+  } catch (e) {}
+}
+
+async function getTestimonials() {
+  try {
+    const local = localStorage.getItem("dropmallu_testimonials");
+    return local ? JSON.parse(local) : DEFAULT_TESTIMONIALS;
+  } catch (e) {
+    return DEFAULT_TESTIMONIALS;
+  }
+}
+
+async function saveTestimonials(t) {
+  try {
+    localStorage.setItem("dropmallu_testimonials", JSON.stringify(t));
+  } catch (e) {}
+}
+
+async function getBrands() {
+  try {
+    const local = localStorage.getItem("dropmallu_brands");
+    return local ? JSON.parse(local) : DEFAULT_BRANDS;
+  } catch (e) {
+    return DEFAULT_BRANDS;
+  }
+}
+
+async function saveBrands(b) {
+  try {
+    localStorage.setItem("dropmallu_brands", JSON.stringify(b));
+  } catch (e) {}
+}
+
+async function getFlashSales() {
+  try {
+    const local = localStorage.getItem("dropmallu_flash");
+    return local ? JSON.parse(local) : DEFAULT_FLASH_SALES;
+  } catch (e) {
+    return DEFAULT_FLASH_SALES;
+  }
+}
+
+async function saveFlashSales(f) {
+  try {
+    localStorage.setItem("dropmallu_flash", JSON.stringify(f));
+  } catch (e) {}
+}
+
+async function getMediaItems() {
+  try {
+    const local = localStorage.getItem("dropmallu_media");
+    return local ? JSON.parse(local) : DEFAULT_MEDIA;
+  } catch (e) {
+    return DEFAULT_MEDIA;
+  }
+}
+
+async function saveMediaItems(m) {
+  try {
+    localStorage.setItem("dropmallu_media", JSON.stringify(m));
+  } catch (e) {}
 }
 
 // Initialize on script load
@@ -716,9 +822,25 @@ initializeStorage();
 window.DEFAULT_PRODUCTS = DEFAULT_PRODUCTS;
 window.DEFAULT_BLOGS = DEFAULT_BLOGS;
 window.DEFAULT_SETTINGS = DEFAULT_SETTINGS;
+window.DEFAULT_HOMEPAGE_SECTIONS = DEFAULT_HOMEPAGE_SECTIONS;
+window.DEFAULT_TESTIMONIALS = DEFAULT_TESTIMONIALS;
+window.DEFAULT_BRANDS = DEFAULT_BRANDS;
+window.DEFAULT_FLASH_SALES = DEFAULT_FLASH_SALES;
+window.DEFAULT_MEDIA = DEFAULT_MEDIA;
+
 window.getProducts = getProducts;
 window.saveProducts = saveProducts;
 window.getBlogs = getBlogs;
 window.getSettings = getSettings;
 window.saveSettings = saveSettings;
+window.getHomepageSections = getHomepageSections;
+window.saveHomepageSections = saveHomepageSections;
+window.getTestimonials = getTestimonials;
+window.saveTestimonials = saveTestimonials;
+window.getBrands = getBrands;
+window.saveBrands = saveBrands;
+window.getFlashSales = getFlashSales;
+window.saveFlashSales = saveFlashSales;
+window.getMediaItems = getMediaItems;
+window.saveMediaItems = saveMediaItems;
 window.initializeStorage = initializeStorage;

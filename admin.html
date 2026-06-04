@@ -149,133 +149,308 @@
       <section id="section-settings" class="panel-section">
         <div class="section-bar">
           <div>
-            <h2>Customize Storefront</h2>
-            <p>Modify Hero text, Deal timers, and Promo banner images/links directly.</p>
+            <h2>Customize Storefront & CMS Settings</h2>
+            <p>Configure theme layout, SEO tags, footer, brand logos, testimonials, and section sorting.</p>
           </div>
         </div>
 
-        <div class="glass" style="padding: 24px; border-radius: var(--radius-lg); margin-top: 16px;">
-          <form id="settings-form">
-            <!-- Hero Settings -->
-            <div style="margin-bottom: 24px;">
-              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="layout" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Hero Pedestal Section</h3>
-              <div class="field">
-                <label for="s-hero-badge">Hero Badge Text</label>
-                <input type="text" id="s-hero-badge" placeholder="Premium Collection">
-              </div>
-              <div class="field">
-                <label for="s-hero-title">Hero Main Title (HTML supported)</label>
-                <input type="text" id="s-hero-title" placeholder="Upgrade Your &lt;br&gt;&lt;span&gt;Lifestyle&lt;/span&gt;">
-              </div>
-              <div class="field">
-                <label for="s-hero-subtitle">Hero Subtitle Description</label>
-                <textarea id="s-hero-subtitle" style="height: 60px;" placeholder="Discover trending gadgets..."></textarea>
-              </div>
-              <div class="field">
-                <label>Hero Pedestal Image</label>
-                <div style="display:flex; gap:10px; align-items:center;">
-                  <img id="s-hero-image-preview" src="" style="width:44px; height:44px; border-radius:6px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
-                  <input type="file" id="s-hero-image" accept="image/*" style="flex:1;">
-                  <input type="hidden" id="s-hero-image-data">
-                </div>
-              </div>
-            </div>
+        <div class="cms-editor-container" style="display: grid; grid-template-columns: 240px 1fr; gap: 24px; margin-top: 20px;">
+          <!-- CMS Sub Navigation -->
+          <div class="cms-sidebar glass" style="padding: 16px; border-radius: 12px; height: fit-content; display:flex; flex-direction:column; gap:6px;">
+            <button type="button" class="cms-tab-btn active" data-cms-tab="theme" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="palette" style="width:16px; height:16px;"></i> Theme & Colors</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="seo" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="globe" style="width:16px; height:16px;"></i> SEO & Meta Tags</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="builder" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="layout-grid" style="width:16px; height:16px;"></i> Homepage Sections</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="hero" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="layout" style="width:16px; height:16px;"></i> Hero Section</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="deals" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="clock" style="width:16px; height:16px;"></i> Deals & Banners</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="testimonials" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="message-square" style="width:16px; height:16px;"></i> Testimonials CMS</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="brands" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="award" style="width:16px; height:16px;"></i> Brand Logos CMS</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="media" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="image" style="width:16px; height:16px;"></i> Media Library</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="newsletter" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="mail" style="width:16px; height:16px;"></i> Newsletter Settings</button>
+            <button type="button" class="cms-tab-btn" data-cms-tab="footer" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:8px; background:none; border:none; color:var(--text-secondary); text-align:left; cursor:pointer; font-weight:600;"><i data-lucide="bookmark" style="width:16px; height:16px;"></i> Footer Customizer</button>
+          </div>
 
-            <!-- Countdown Deal settings -->
-            <div style="margin-bottom: 24px;">
-              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="clock" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Deal of the Day Timer</h3>
-              <div class="field-row">
-                <div class="field">
-                  <label for="s-timer-title">Deal Section Title</label>
-                  <input type="text" id="s-timer-title" placeholder="⚡ Deal of the Day">
-                </div>
-                <div class="field">
-                  <label for="s-timer-hours">Countdown Duration Offset (Hours)</label>
-                  <input type="number" id="s-timer-hours" min="1" max="168" placeholder="12">
+          <!-- CMS Forms Panels -->
+          <div class="cms-panels glass" style="padding: 24px; border-radius: 12px; flex: 1;">
+            <form id="settings-form">
+              <!-- panel-theme -->
+              <div class="cms-panel active" id="cms-panel-theme">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="palette"></i> Theme Colors & Styling</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                  <div class="field">
+                    <label for="s-theme-primary">Primary Action Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-primary" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-primary-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-primary-hover">Primary Hover Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-primary-hover" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-primary-hover-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-bg-dark">Dark Mode Background</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-bg-dark" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-bg-dark-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-bg-surface">Glass Cards Surface Background</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-bg-surface" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-bg-surface-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-text-primary">Primary Text Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-text-primary" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-text-primary-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-text-secondary">Secondary Subtext Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="s-theme-text-secondary" style="width:40px; height:40px; padding:0; border:none; border-radius:4px;">
+                      <input type="text" id="s-theme-text-secondary-hex" style="flex:1;">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-border-radius">CSS Border Radius (e.g. 14px)</label>
+                    <input type="text" id="s-theme-border-radius" placeholder="14px">
+                  </div>
+                  <div class="field">
+                    <label for="s-theme-shadows">Card Drop Shadows</label>
+                    <input type="text" id="s-theme-shadows" placeholder="0 4px 20px -2px rgba(0, 0, 0, 0.05)">
+                  </div>
                 </div>
               </div>
-              <div class="field">
-                <label for="s-timer-subtitle">Deal Section Subtitle Description</label>
-                <input type="text" id="s-timer-subtitle" placeholder="Limited time offer, don't miss out!">
-              </div>
-            </div>
 
-            <!-- Promo Banner Cards settings -->
-            <div style="margin-bottom: 24px;">
-              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="image" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Promotional Banners</h3>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <!-- Banner 1 -->
-                <div style="padding: 12px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.01);">
-                  <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 14px;">Banner Card 1 (Left)</h4>
+              <!-- panel-seo -->
+              <div class="cms-panel" id="cms-panel-seo" style="display:none;">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="globe"></i> Search Engine Optimization (SEO)</h3>
+                <div class="field">
+                  <label for="s-seo-home-title">Home Meta Title Tags</label>
+                  <input type="text" id="s-seo-home-title" placeholder="DROPMALLU — Premium Boutique Storefront">
+                </div>
+                <div class="field">
+                  <label for="s-seo-home-desc">Home Meta Description</label>
+                  <textarea id="s-seo-home-desc" style="height:80px;" placeholder="Meta descriptions for Google search crawlers..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="s-seo-home-canonical">Canonical Site URL</label>
+                  <input type="text" id="s-seo-home-canonical" placeholder="https://dropmallu.xyz">
+                </div>
+                <div class="field">
+                  <label for="s-seo-home-og-image">OG Image URL (Social Previews)</label>
+                  <input type="text" id="s-seo-home-og-image" placeholder="Image link to preview on WhatsApp/FB shares...">
+                </div>
+              </div>
+
+              <!-- panel-builder -->
+              <div class="cms-panel" id="cms-panel-builder" style="display:none;">
+                <h3 style="margin-bottom:8px; color:var(--accent-gold); font-size:16px;"><i data-lucide="layout-grid"></i> Section Layout Order & Builder</h3>
+                <p style="color:var(--text-secondary); font-size:12px; margin-bottom:16px;">Reorder home sections or disable unused blocks. Real-time updates reflect instantly.</p>
+                <div id="homepage-sections-sorting-list" style="display:flex; flex-direction:column; gap:10px; background:rgba(0,0,0,0.15); padding:12px; border-radius:8px; border:1px solid var(--border-glass);">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- panel-hero -->
+              <div class="cms-panel" id="cms-panel-hero" style="display:none;">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="layout"></i> Hero Showcase Customizer</h3>
+                <div class="field">
+                  <label for="s-hero-badge">Hero Badge Label</label>
+                  <input type="text" id="s-hero-badge" placeholder="Premium Collection">
+                </div>
+                <div class="field">
+                  <label for="s-hero-title">Hero Main Title (HTML supported)</label>
+                  <input type="text" id="s-hero-title" placeholder="Upgrade Your &lt;br&gt;&lt;span&gt;Lifestyle&lt;/span&gt;">
+                </div>
+                <div class="field">
+                  <label for="s-hero-subtitle">Hero Subtitle Text Description</label>
+                  <textarea id="s-hero-subtitle" style="height:60px;" placeholder="Discover trending gadgets..."></textarea>
+                </div>
+                <div class="field">
+                  <label>Hero Graphic Background Image</label>
+                  <div style="display:flex; gap:10px; align-items:center;">
+                    <img id="s-hero-image-preview" src="" style="width:44px; height:44px; border-radius:6px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
+                    <input type="file" id="s-hero-image" accept="image/*" style="flex:1;">
+                    <input type="hidden" id="s-hero-image-data">
+                  </div>
+                </div>
+              </div>
+
+              <!-- panel-deals -->
+              <div class="cms-panel" id="cms-panel-deals" style="display:none;">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="clock"></i> Deals countdown & Promo Cards</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                   <div class="field">
-                    <label for="s-promo-b1-title">Card Title</label>
-                    <input type="text" id="s-promo-b1-title" placeholder="Smart Watches">
+                    <label for="s-timer-title">Deal Section Heading</label>
+                    <input type="text" id="s-timer-title" placeholder="⚡ Deal of the Day">
                   </div>
                   <div class="field">
-                    <label for="s-promo-b1-subtitle">Card Subtitle Text</label>
-                    <input type="text" id="s-promo-b1-subtitle" placeholder="Starting at ₹100">
+                    <label for="s-timer-hours">Countdown Duration (Hours)</label>
+                    <input type="number" id="s-timer-hours" min="1" max="168" placeholder="12">
                   </div>
-                  <div class="field">
-                    <label for="s-promo-b1-cat">Link Category Target</label>
-                    <select id="s-promo-b1-cat">
-                      <option value="all">All</option>
-                      <option value="watch">Watch</option>
-                      <option value="powerbank">Powerbank</option>
-                      <option value="shoe">Shoe</option>
-                      <option value="projector">Projector</option>
-                      <option value="gadgets">Gadgets</option>
-                    </select>
+                </div>
+                <div class="field" style="margin-bottom:16px;">
+                  <label for="s-timer-subtitle">Countdown Subheading</label>
+                  <input type="text" id="s-timer-subtitle" placeholder="Limited time offer, don't miss out!">
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                  <!-- Promo Card 1 -->
+                  <div style="padding:12px; border:1px solid var(--border-glass); border-radius:8px; background:rgba(0,0,0,0.1);">
+                    <h4 style="color:var(--primary); font-size:13px; margin-bottom:8px;">Promo Banner Card 1 (Left)</h4>
+                    <div class="field"><label for="s-promo-b1-title">Title</label><input type="text" id="s-promo-b1-title"></div>
+                    <div class="field"><label for="s-promo-b1-subtitle">Subtitle</label><input type="text" id="s-promo-b1-subtitle"></div>
+                    <div class="field">
+                      <label for="s-promo-b1-cat">Filter Target Category</label>
+                      <select id="s-promo-b1-cat">
+                        <option value="all">All</option>
+                        <option value="watch">Watch</option>
+                        <option value="powerbank">Powerbank</option>
+                        <option value="shoe">Shoe</option>
+                        <option value="projector">Projector</option>
+                        <option value="gadgets">Gadgets</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label>Banner Image</label>
+                      <div style="display:flex; gap:10px; align-items:center;">
+                        <img id="s-promo-b1-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none;">
+                        <input type="file" id="s-promo-b1-image" accept="image/*" style="flex:1;">
+                        <input type="hidden" id="s-promo-b1-image-data">
+                      </div>
+                    </div>
                   </div>
-                  <div class="field">
-                    <label>Card Image</label>
-                    <div style="display:flex; gap:10px; align-items:center;">
-                      <img id="s-promo-b1-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
-                      <input type="file" id="s-promo-b1-image" accept="image/*" style="flex:1;">
-                      <input type="hidden" id="s-promo-b1-image-data">
+
+                  <!-- Promo Card 2 -->
+                  <div style="padding:12px; border:1px solid var(--border-glass); border-radius:8px; background:rgba(0,0,0,0.1);">
+                    <h4 style="color:var(--primary); font-size:13px; margin-bottom:8px;">Promo Banner Card 2 (Right)</h4>
+                    <div class="field"><label for="s-promo-b2-title">Title</label><input type="text" id="s-promo-b2-title"></div>
+                    <div class="field"><label for="s-promo-b2-subtitle">Subtitle</label><input type="text" id="s-promo-b2-subtitle"></div>
+                    <div class="field">
+                      <label for="s-promo-b2-cat">Filter Target Category</label>
+                      <select id="s-promo-b2-cat">
+                        <option value="all">All</option>
+                        <option value="watch">Watch</option>
+                        <option value="powerbank">Powerbank</option>
+                        <option value="shoe">Shoe</option>
+                        <option value="projector">Projector</option>
+                        <option value="gadgets">Gadgets</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label>Banner Image</label>
+                      <div style="display:flex; gap:10px; align-items:center;">
+                        <img id="s-promo-b2-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none;">
+                        <input type="file" id="s-promo-b2-image" accept="image/*" style="flex:1;">
+                        <input type="hidden" id="s-promo-b2-image-data">
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <!-- Banner 2 -->
-                <div style="padding: 12px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.01);">
-                  <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 14px;">Banner Card 2 (Right)</h4>
-                  <div class="field">
-                    <label for="s-promo-b2-title">Card Title</label>
-                    <input type="text" id="s-promo-b2-title" placeholder="Best Selling Shoes">
+              <!-- panel-testimonials -->
+              <div class="cms-panel" id="cms-panel-testimonials" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                  <h3 style="color:var(--accent-gold); font-size:16px; margin:0;"><i data-lucide="message-square"></i> Customer Testimonials List</h3>
+                  <button type="button" class="action-btn" id="add-testimonial-btn" style="padding:6px 12px; font-size:12px;"><i data-lucide="plus"></i> Add Testimonial</button>
+                </div>
+                <div id="testimonials-cms-list" style="display:flex; flex-direction:column; gap:10px; max-height:350px; overflow-y:auto; padding:5px;">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- panel-brands -->
+              <div class="cms-panel" id="cms-panel-brands" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                  <h3 style="color:var(--accent-gold); font-size:16px; margin:0;"><i data-lucide="award"></i> Brand Logos Customizer</h3>
+                  <button type="button" class="action-btn" id="add-brand-btn" style="padding:6px 12px; font-size:12px;"><i data-lucide="plus"></i> Add Brand</button>
+                </div>
+                <div id="brands-cms-list" style="display:flex; flex-direction:column; gap:10px; max-height:350px; overflow-y:auto; padding:5px;">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- panel-media -->
+              <div class="cms-panel" id="cms-panel-media" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                  <h3 style="color:var(--accent-gold); font-size:16px; margin:0;"><i data-lucide="image"></i> WordPress Media Library</h3>
+                  <div style="display:flex; gap:8px;">
+                    <input type="file" id="media-upload-input" accept="image/*" style="display:none;">
+                    <button type="button" class="action-btn" id="trigger-media-upload"><i data-lucide="upload-cloud"></i> Upload Image</button>
                   </div>
-                  <div class="field">
-                    <label for="s-promo-b2-subtitle">Card Subtitle Text</label>
-                    <input type="text" id="s-promo-b2-subtitle" placeholder="Up to 50% Off">
-                  </div>
-                  <div class="field">
-                    <label for="s-promo-b2-cat">Link Category Target</label>
-                    <select id="s-promo-b2-cat">
-                      <option value="all">All</option>
-                      <option value="watch">Watch</option>
-                      <option value="powerbank">Powerbank</option>
-                      <option value="shoe">Shoe</option>
-                      <option value="projector">Projector</option>
-                      <option value="gadgets">Gadgets</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label>Card Image</label>
-                    <div style="display:flex; gap:10px; align-items:center;">
-                      <img id="s-promo-b2-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
-                      <input type="file" id="s-promo-b2-image" accept="image/*" style="flex:1;">
-                      <input type="hidden" id="s-promo-b2-image-data">
-                    </div>
+                </div>
+                <div id="media-library-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:12px; max-height: 350px; overflow-y: auto; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px; border:1px solid var(--border-glass);">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- panel-newsletter -->
+              <div class="cms-panel" id="cms-panel-newsletter" style="display:none;">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="mail"></i> Newsletter Integrations</h3>
+                <div class="field">
+                  <label for="s-newsletter-heading">Subscription Title</label>
+                  <input type="text" id="s-newsletter-heading" placeholder="Join the DROPMALLU Club">
+                </div>
+                <div class="field">
+                  <label for="s-newsletter-desc">Short Subtext Description</label>
+                  <input type="text" id="s-newsletter-desc" placeholder="Subscribe to receive dynamic updates...">
+                </div>
+                <div class="field">
+                  <label for="s-newsletter-success-msg">Subscription Success Toast Alert Message</label>
+                  <input type="text" id="s-newsletter-success-msg" placeholder="Thank you for subscribing! Check WhatsApp.">
+                </div>
+                <div class="field">
+                  <label>Newsletter Background Image Overlay</label>
+                  <div style="display:flex; gap:10px; align-items:center;">
+                    <img id="s-newsletter-bg-preview" src="" style="width:44px; height:44px; border-radius:6px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
+                    <input type="file" id="s-newsletter-bg" accept="image/*" style="flex:1;">
+                    <input type="hidden" id="s-newsletter-bg-data">
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-glass); padding-top: 16px;">
-              <button type="submit" class="action-btn" style="min-width: 150px; font-weight: 700;">
-                <i data-lucide="save"></i> Save Settings
-              </button>
-            </div>
-          </form>
+              <!-- panel-footer -->
+              <div class="cms-panel" id="cms-panel-footer" style="display:none;">
+                <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="bookmark"></i> Store Footer Branding & Handles</h3>
+                <div class="field">
+                  <label for="s-footer-logo-text">Footer Brand Name Text</label>
+                  <input type="text" id="s-footer-logo-text" placeholder="DROPMALLU">
+                </div>
+                <div class="field">
+                  <label for="s-footer-about-content">Footer About Description</label>
+                  <textarea id="s-footer-about-content" style="height:60px;" placeholder="Curated premium lifestyle boutique..."></textarea>
+                </div>
+                <h4 style="color:var(--primary); font-size:13px; margin: 16px 0 8px 0;">Social Network Links</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div class="field"><label for="s-footer-social-facebook">Facebook Page URL</label><input type="text" id="s-footer-social-facebook"></div>
+                  <div class="field"><label for="s-footer-social-instagram">Instagram Profile URL</label><input type="text" id="s-footer-social-instagram"></div>
+                  <div class="field"><label for="s-footer-social-twitter">Twitter Handle URL</label><input type="text" id="s-footer-social-twitter"></div>
+                  <div class="field"><label for="s-footer-social-youtube">Youtube Channel URL</label><input type="text" id="s-footer-social-youtube"></div>
+                </div>
+                <h4 style="color:var(--primary); font-size:13px; margin: 16px 0 8px 0;">Footer Contact Details</h4>
+                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+                  <div class="field"><label for="s-footer-contact-phone">Phone Number</label><input type="text" id="s-footer-contact-phone"></div>
+                  <div class="field"><label for="s-footer-contact-email">Support Email Address</label><input type="text" id="s-footer-contact-email"></div>
+                  <div class="field"><label for="s-footer-contact-address">Location Address</label><input type="text" id="s-footer-contact-address"></div>
+                </div>
+              </div>
+
+              <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-glass); padding-top: 16px;">
+                <button type="submit" class="action-btn" style="min-width: 150px; font-weight: 700;">
+                  <i data-lucide="save"></i> Save Settings
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -319,9 +494,43 @@
               <input type="hidden" id="f-image-data">
             </div>
           </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-badge">Promo Badge</label>
+              <input type="text" id="f-badge" placeholder="e.g. Trending, Hot Seller">
+            </div>
+            <div class="field">
+              <label for="f-sku">Product SKU (Code)</label>
+              <input type="text" id="f-sku" placeholder="e.g. WATCH-AERO-01">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="field">
+              <label for="f-inventory">Stock Count Level</label>
+              <input type="number" id="f-inventory" min="0" placeholder="100">
+            </div>
+            <div class="field">
+              <label for="f-stock-status">Display Stock Label (CMS override)</label>
+              <input type="text" id="f-stock-status" placeholder="e.g. In Stock, Only 2 left">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="field">
+              <label for="f-rating">Rating Score (1-5)</label>
+              <input type="number" id="f-rating" min="1" max="5" step="0.1" placeholder="4.8">
+            </div>
+            <div class="field">
+              <label for="f-reviews">Reviews Count</label>
+              <input type="number" id="f-reviews" min="0" placeholder="145">
+            </div>
+          </div>
           <div class="field">
-            <label for="f-badge">Promo Badge</label>
-            <input type="text" id="f-badge" placeholder="e.g. Trending, Hot Seller">
+            <label for="f-gallery">Additional Gallery Image URLs (Comma separated)</label>
+            <input type="text" id="f-gallery" placeholder="https://image1.jpg, https://image2.jpg">
+          </div>
+          <div class="field">
+            <label for="f-specs">Product Specifications (Format: Key: Value, Key2: Value2)</label>
+            <input type="text" id="f-specs" placeholder="Material: Titanium, Glass: Sapphire, Water Resistance: 100m">
           </div>
           <div class="field">
             <label for="f-desc">Description *</label>
@@ -378,6 +587,75 @@
           <div class="form-btns">
             <button type="button" class="cancel-btn" onclick="closeForm('blog-form-modal')">Cancel</button>
             <button type="submit" class="action-btn">Publish Slide</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Testimonial Form Modal ═══ -->
+  <div id="testimonial-form-modal" class="form-overlay">
+    <div class="form-box glass" style="max-width:440px;">
+      <div class="form-head">
+        <h2 id="t-form-title">Add Testimonial</h2>
+        <button type="button" class="form-close" onclick="closeForm('testimonial-form-modal')"><i data-lucide="x"></i></button>
+      </div>
+      <div class="form-content">
+        <form id="testimonial-form">
+          <input type="hidden" id="f-t-id">
+          <div class="field">
+            <label for="f-t-name">Customer Name *</label>
+            <input type="text" id="f-t-name" required>
+          </div>
+          <div class="field">
+            <label for="f-t-photo">Photo URL / Image</label>
+            <input type="text" id="f-t-photo" placeholder="https://unsplash.com/... or base64">
+          </div>
+          <div class="field">
+            <label for="f-t-rating">Rating (1-5) *</label>
+            <input type="number" id="f-t-rating" min="1" max="5" value="5" required>
+          </div>
+          <div class="field">
+            <label for="f-t-review">Review Message *</label>
+            <textarea id="f-t-review" style="height:80px;" required></textarea>
+          </div>
+          <div class="form-btns">
+            <button type="button" class="cancel-btn" onclick="closeForm('testimonial-form-modal')">Cancel</button>
+            <button type="submit" class="action-btn">Save Testimonial</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Brand Form Modal ═══ -->
+  <div id="brand-form-modal" class="form-overlay">
+    <div class="form-box glass" style="max-width:440px;">
+      <div class="form-head">
+        <h2 id="b-form-title">Add Brand Logo</h2>
+        <button type="button" class="form-close" onclick="closeForm('brand-form-modal')"><i data-lucide="x"></i></button>
+      </div>
+      <div class="form-content">
+        <form id="brand-form">
+          <input type="hidden" id="f-b-id">
+          <div class="field">
+            <label for="f-b-name">Brand Name *</label>
+            <input type="text" id="f-b-name" required>
+          </div>
+          <div class="field">
+            <label for="f-b-logo">Logo Image URL</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="f-b-logo" style="flex:1;">
+              <input type="file" id="f-b-logo-file" accept="image/*" style="width:90px; overflow:hidden;">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-b-link">Explore Navigation Link</label>
+            <input type="text" id="f-b-link" value="#explore">
+          </div>
+          <div class="form-btns">
+            <button type="button" class="cancel-btn" onclick="closeForm('brand-form-modal')">Cancel</button>
+            <button type="submit" class="action-btn">Save Brand</button>
           </div>
         </form>
       </div>

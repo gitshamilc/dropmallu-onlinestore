@@ -99,6 +99,9 @@ async function init() {
   }
 
   applyStorefrontSettings(settings);
+  await renderHomepageSectionsOrder();
+  await renderTestimonials();
+  await renderBrandsList();
   renderProducts(products);
   renderDealsGrid();
   startCountdown();
@@ -283,6 +286,33 @@ function bindEvents() {
 
   // Modal close buttons
   $$('.modal-close-btn').forEach(btn => btn.addEventListener('click', closeModals));
+
+  // Newsletter Card Submit
+  const newsletterForm = $('#newsletter-card-form');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const emailInput = $('#newsletter-card-email');
+      const successEl = $('#newsletter-card-success');
+      if (emailInput && successEl) {
+        successEl.textContent = settings?.newsletter_success_msg || "Thank you for subscribing!";
+        successEl.style.display = 'block';
+        emailInput.value = '';
+        setTimeout(() => { successEl.style.display = 'none'; }, 5000);
+      }
+    });
+  }
+
+  const footerNewsletterBtn = $('#newsletter-btn');
+  if (footerNewsletterBtn) {
+    footerNewsletterBtn.addEventListener('click', () => {
+      const emailInput = $('#newsletter-email');
+      if (emailInput && emailInput.value) {
+        alert(settings?.newsletter_success_msg || "Thank you for subscribing!");
+        emailInput.value = '';
+      }
+    });
+  }
 }
 
 function setMobileActive(el) {
@@ -440,34 +470,90 @@ function showProduct(p) {
   if (!body || !productModal) return;
   const price = formatPrice(p.price);
   
-  // Custom Amazon/Flipkart styling tags
   const ratingStars = '★'.repeat(Math.round(p.rating || 4.5)) + '☆'.repeat(5 - Math.round(p.rating || 4.5));
-  const stockCount = Math.floor(Math.random() * 5) + 2;
+  
+  // Dynamic stock alerts
+  let stockText = '';
+  let stockStyle = '';
+  if (p.stock_status) {
+    stockText = p.stock_status;
+    stockStyle = p.stock_status.toLowerCase().includes('out') ? 'color:#ef4444;' : 'color:#10b981;';
+  } else if (typeof p.inventory !== 'undefined') {
+    const inv = Number(p.inventory);
+    if (inv === 0) {
+      stockText = 'Hurry! Out of stock.';
+      stockStyle = 'color:#ef4444;';
+    } else if (inv <= 10) {
+      stockText = `Hurry! Only ${inv} left in stock.`;
+      stockStyle = 'color:#ef4444; background: rgba(239, 68, 68, 0.05); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #ef4444;';
+    } else {
+      stockText = 'In Stock';
+      stockStyle = 'color:#10b981;';
+    }
+  } else {
+    stockText = 'Hurry! Only 4 left in stock.';
+    stockStyle = 'color:#ef4444; background: rgba(239, 68, 68, 0.05); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #ef4444;';
+  }
+
+  // Gallery slider thumbnails
+  let galleryHtml = '';
+  const images = [];
+  if (p.image) images.push(p.image);
+  if (p.gallery) {
+    p.gallery.split(',').forEach(img => {
+      const trimmed = img.trim();
+      if (trimmed && trimmed !== p.image) images.push(trimmed);
+    });
+  }
+  if (images.length > 1) {
+    galleryHtml = '<div class="pdp-gallery-thumbs" style="display:flex; gap:8px; margin-top:12px; overflow-x:auto; padding-bottom:4px;">';
+    images.forEach((img, idx) => {
+      galleryHtml += `<img src="${img}" style="width:50px; height:50px; border-radius:6px; object-fit:cover; border:2px solid ${idx === 0 ? 'var(--primary)' : 'transparent'}; cursor:pointer; background:rgba(255,255,255,0.05);" onclick="document.querySelector('.pdp-img').src='${img}'; document.querySelectorAll('.pdp-gallery-thumbs img').forEach(i => i.style.borderColor='transparent'); this.style.borderColor='var(--primary)';">`;
+    });
+    galleryHtml += '</div>';
+  }
+
+  // Specifications block
+  let specsHtml = '';
+  if (p.specs) {
+    specsHtml = '<div class="pdp-specs-list" style="margin-top: 15px; border-top: 1px solid var(--border-glass); padding-top: 10px; font-size: 12px; color: var(--text-sub);">';
+    const pairs = p.specs.split(',');
+    pairs.forEach(pair => {
+      const parts = pair.split(':');
+      if (parts.length >= 2) {
+        specsHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.02); padding-bottom:2px;"><strong>${parts[0].trim()}:</strong> <span style="color:var(--text-main);">${parts[1].trim()}</span></div>`;
+      }
+    });
+    specsHtml += '</div>';
+  }
   
   body.innerHTML = `
     <div class="pdp-grid">
       <div class="pdp-left">
         <img class="pdp-img" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        ${galleryHtml}
       </div>
       <div class="pdp-info pdp-right">
         ${p.badge ? `<span class="pdp-badge">${p.badge}</span>` : ''}
         <h2 class="pdp-title">${p.name}</h2>
         <div class="pdp-rating-row">
-          <span class="pdp-stars">${ratingStars}</span>
-          <span class="pdp-rating-val">${p.rating || 4.5}</span>
-          <span class="pdp-reviews-count">(${p.reviews || 20} Ratings)</span>
+          <span class="pdp-stars" style="color:#fbbf24; margin-right:5px;">${ratingStars}</span>
+          <span class="pdp-rating-val" style="font-weight:700; color:var(--primary); margin-right:5px;">${p.rating || 4.5}</span>
+          <span class="pdp-reviews-count" style="color:var(--text-sub);">(${p.reviews || 20} Ratings)</span>
         </div>
         <div class="pdp-price-container">
           <span class="pdp-price">${price}</span>
-          <span class="pdp-delivery-tag">FREE Delivery in 2-3 Days</span>
+          <span class="pdp-delivery-tag" style="color:var(--primary); font-size:12px; font-weight:600; margin-left:12px;">FREE Delivery in 2-3 Days</span>
         </div>
         
-        <p class="pdp-desc">${p.description}</p>
+        <p class="pdp-desc" style="margin-top:12px; line-height:1.5; font-size:13px; color:var(--text-sub);">${p.description}</p>
         
-        <div class="pdp-urgency-box">
-          <span class="pdp-stock-warning">Hurry! Only ${stockCount} left in stock.</span>
+        ${specsHtml}
+        
+        <div class="pdp-urgency-box" style="margin-top:15px; margin-bottom:15px;">
+          <span class="pdp-stock-warning" style="${stockStyle}">${stockText}</span>
         </div>
-
+ 
         <div class="pdp-actions-container">
           <button class="btn-pdp btn-pdp-cart" onclick="addToCart('${p.id}'); closeModals();">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -483,7 +569,6 @@ function showProduct(p) {
   `;
   productModal.classList.add('active');
   
-  // Update URL hash to allow sharing and indexing
   if (window.location.hash !== `#product-${p.id}`) {
     window.location.hash = `#product-${p.id}`;
   }
@@ -791,6 +876,69 @@ function cyclePedestalHeroImage() {
 
 function applyStorefrontSettings(s) {
   if (!s) return;
+
+  // Theme styling overrides
+  const root = document.documentElement;
+  if (s.theme_primary) root.style.setProperty('--primary', s.theme_primary);
+  if (s.theme_primary_hover) root.style.setProperty('--primary-hover', s.theme_primary_hover);
+  if (s.theme_bg_dark) root.style.setProperty('--bg-dark', s.theme_bg_dark);
+  if (s.theme_bg_surface) root.style.setProperty('--bg-card', s.theme_bg_surface);
+  if (s.theme_text_primary) root.style.setProperty('--text-main', s.theme_text_primary);
+  if (s.theme_text_secondary) root.style.setProperty('--text-sub', s.theme_text_secondary);
+  if (s.theme_border_radius) {
+    root.style.setProperty('--radius-sm', s.theme_border_radius);
+    root.style.setProperty('--radius-md', s.theme_border_radius);
+    root.style.setProperty('--radius-lg', s.theme_border_radius);
+  }
+  if (s.theme_shadows) root.style.setProperty('--shadow-card', s.theme_shadows);
+
+  // SEO updates
+  if (s.seo_home_title) document.title = s.seo_home_title;
+  let metaDesc = $('meta[name="description"]');
+  if (s.seo_home_desc) {
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = s.seo_home_desc;
+  }
+  let ogImage = $('meta[property="og:image"]');
+  if (s.seo_home_og_image) {
+    if (!ogImage) {
+      ogImage = document.createElement('meta');
+      ogImage.setAttribute('property', 'og:image');
+      document.head.appendChild(ogImage);
+    }
+    ogImage.content = s.seo_home_og_image;
+  }
+
+  // Footer text overrides
+  const footerLogo = $('footer .logo');
+  if (footerLogo && s.footer_logo_text) {
+    footerLogo.innerHTML = `<i data-lucide="shield-check"></i> ${s.footer_logo_text}<span class="dot">.</span>`;
+  }
+  const footerAbout = $('.footer-brand-desc');
+  if (footerAbout && s.footer_about_content) {
+    footerAbout.textContent = s.footer_about_content;
+  }
+  const fb = $('footer a[title="Facebook"]');
+  if (fb && s.footer_social_facebook) fb.href = s.footer_social_facebook;
+  const insta = $('footer a[title="Instagram"]');
+  if (insta && s.footer_social_instagram) insta.href = s.footer_social_instagram;
+  const tw = $('footer a[title="Twitter"]');
+  if (tw && s.footer_social_twitter) tw.href = s.footer_social_twitter;
+  const yt = $('footer a[title="Youtube"]');
+  if (yt && s.footer_social_youtube) yt.href = s.footer_social_youtube;
+
+  // Newsletter UI card setup
+  const newsletterHeading = $('#newsletter-card-heading');
+  const newsletterDesc = $('#newsletter-card-desc');
+  const newsletterCard = $('#newsletter-card');
+  if (newsletterHeading && s.newsletter_heading) newsletterHeading.textContent = s.newsletter_heading;
+  if (newsletterDesc && s.newsletter_desc) newsletterDesc.textContent = s.newsletter_desc;
+  if (newsletterCard && s.newsletter_bg) newsletterCard.style.backgroundImage = `url('${s.newsletter_bg}')`;
+
   const badge = $('#hero-badge');
   const title = $('#hero-title');
   const subtitle = $('#hero-subtitle');
@@ -831,6 +979,88 @@ function applyStorefrontSettings(s) {
   if (b2Img && s.promo_b2_image) b2Img.src = s.promo_b2_image;
 
   if (window.lucide) window.lucide.createIcons();
+}
+
+async function renderHomepageSectionsOrder() {
+  try {
+    const sections = (typeof getHomepageSections === 'function' ? await getHomepageSections() : []) || [];
+    const container = document.getElementById('homepage-sections-container');
+    if (!container || !sections || sections.length === 0) return;
+
+    sections.forEach(sec => {
+      const el = document.getElementById(`section-${sec.id}`);
+      if (el) {
+        if (sec.enabled) {
+          el.style.display = '';
+          container.appendChild(el);
+        } else {
+          el.style.display = 'none';
+        }
+      }
+    });
+  } catch (e) {
+    console.error("Error sorting sections:", e);
+  }
+}
+
+async function renderTestimonials() {
+  try {
+    const testimonials = (typeof getTestimonials === 'function' ? await getTestimonials() : []) || [];
+    const container = document.getElementById('testimonials-container');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (testimonials.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-sub); text-align:center; width:100%;">No testimonials to show.</p>';
+      return;
+    }
+
+    testimonials.forEach(t => {
+      const stars = '★'.repeat(t.rating || 5) + '☆'.repeat(Math.max(0, 5 - (t.rating || 5)));
+      const card = document.createElement('div');
+      card.className = 'testimonial-card glass scroll-reveal reveal-up';
+      card.style.cssText = 'background: var(--bg-card); border-radius: var(--radius-md); padding: 1.5rem; border: 1px solid var(--border-glass); margin: 10px; max-width: 320px; flex: 1 1 300px;';
+      card.innerHTML = `
+        <div class="testimonial-header" style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
+          <img src="${t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80'}" alt="${t.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <div>
+            <h4 style="margin:0; font-size:14px; font-weight:600; color:var(--text-main);">${t.name}</h4>
+            <div class="testimonial-stars" style="color:#fbbf24; font-size:12px;">${stars}</div>
+          </div>
+        </div>
+        <p class="testimonial-review" style="font-size:13px; color:var(--text-sub); margin:0; line-height: 1.4; font-style: italic;">"${t.review}"</p>
+      `;
+      container.appendChild(card);
+    });
+
+    container.style.cssText = 'display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 0;';
+  } catch (e) {
+    console.error("Testimonial render error:", e);
+  }
+}
+
+async function renderBrandsList() {
+  try {
+    const brands = (typeof getBrands === 'function' ? await getBrands() : []) || [];
+    const container = document.getElementById('brands-row');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (brands.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    brands.forEach(b => {
+      const card = document.createElement('a');
+      card.href = b.link || '#explore';
+      card.className = 'brand-logo-card';
+      card.innerHTML = b.logo ? `<img src="${b.logo}" alt="${b.name}" style="max-height: 36px; max-width: 80px; object-fit: contain;">` : `<span>${b.name}</span>`;
+      container.appendChild(card);
+    });
+  } catch (e) {
+    console.error("Brands row render error:", e);
+  }
 }
 
 // ── Boot ─────────────────────────────────────────────────────────
