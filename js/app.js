@@ -639,10 +639,10 @@ function formatPrice(n) {
 // ── Dynamic Scrolling Background Blending ────────────────────────
 function setupDynamicBackground() {
   const colors = [
-    [4, 18, 10],    // #04120a - Forest Green (Hero Section)
-    [11, 30, 19],   // #0b1e13 - Deep Olive Green (Carousel Section)
-    [26, 30, 20],   // #1a1e14 - Gold-Olive Muted (Explore Catalog)
-    [3, 13, 7]      // #030d07 - Deep Velvet Green (Footer Section)
+    [243, 245, 248], // Light gray-blue
+    [235, 240, 245], // Soft blue tint
+    [245, 247, 250], // Muted light gray
+    [230, 235, 240]  // Muted steel gray
   ];
 
   const updateBg = () => {
