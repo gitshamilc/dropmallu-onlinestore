@@ -222,6 +222,116 @@ const DEFAULT_PRODUCTS = [
     badge: "Essential",
     rating: 4.8,
     reviews: 512
+  },
+  {
+    id: "p21",
+    name: "Elite Watch Classic",
+    category: "watch",
+    price: 100,
+    description: "Simple analog quartz watch with leather strap.",
+    image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&q=80",
+    badge: "Budget",
+    rating: 4.2,
+    reviews: 12
+  },
+  {
+    id: "p22",
+    name: "VoltCap Powerbank Mini",
+    category: "powerbank",
+    price: 243,
+    description: "Ultra-portable pocket powerbank for emergency charge.",
+    image: "https://images.unsplash.com/photo-1609592424109-dd9892f1b17c?w=600&q=80",
+    badge: "Hot",
+    rating: 4.0,
+    reviews: 24
+  },
+  {
+    id: "p23",
+    name: "SoundSync Wireless Bluetooth Earbuds",
+    category: "gadgets",
+    price: 399,
+    description: "Clear audio with lightweight charging case and touch controls.",
+    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&q=80",
+    badge: "Best Value",
+    rating: 4.4,
+    reviews: 350
+  },
+  {
+    id: "p24",
+    name: "AeroGrip Running Shoes",
+    category: "shoe",
+    price: 499,
+    description: "Comfortable mesh trainers built for daily jogging.",
+    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80",
+    badge: "Deal",
+    rating: 4.5,
+    reviews: 89
+  },
+  {
+    id: "p25",
+    name: "Lumina Beam Portable Projector",
+    category: "projector",
+    price: 899,
+    description: "Compact mini projector for basic home viewing.",
+    image: "https://images.unsplash.com/photo-1574375927938-d5a98e8edd86?w=600&q=80",
+    badge: "Special",
+    rating: 4.1,
+    reviews: 5
+  },
+  {
+    id: "p26",
+    name: "AuraLink HDMI 2.1 Cable",
+    category: "gadgets",
+    price: 150,
+    description: "High speed 8K HDMI cable for gold-standard audio & video.",
+    image: "https://images.unsplash.com/photo-1557002665-c552e1832483?w=600&q=80",
+    badge: "Essential",
+    rating: 4.8,
+    reviews: 1200
+  },
+  {
+    id: "p27",
+    name: "VoltCore Powerbank Slim",
+    category: "powerbank",
+    price: 299,
+    description: "Slim form-factor 10000mAh external battery packs.",
+    image: "https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=600&q=80",
+    badge: "Popular",
+    rating: 4.3,
+    reviews: 84
+  },
+  {
+    id: "p28",
+    name: "VeloGlide Sports Sock Bundle",
+    category: "shoe",
+    price: 99,
+    description: "Three pairs of breathable moisture-wicking ankle socks.",
+    image: "https://images.unsplash.com/photo-1582966772680-860e372bb558?w=600&q=80",
+    badge: "Pack",
+    rating: 4.7,
+    reviews: 412
+  },
+  {
+    id: "p29",
+    name: "Chronos Pro Smartwatch Fit",
+    category: "watch",
+    price: 999,
+    description: "Budget-friendly wellness tracker with heart-rate sensor.",
+    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&q=80",
+    badge: "Hot Sell",
+    rating: 4.4,
+    reviews: 73
+  },
+  {
+    id: "p30",
+    name: "HydroStream Insulated Bottle",
+    category: "gadgets",
+    price: 199,
+    description: "Stainless steel vacuum insulated drink container.",
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80",
+    badge: "Eco",
+    rating: 4.6,
+    reviews: 180
   }
 ];
 
@@ -275,7 +385,7 @@ function initializeStorage() {
   try {
     const currentProducts = JSON.parse(localStorage.getItem("dropmallu_products"));
     // Force update if missing the new items
-    if (!currentProducts || currentProducts.length < 20 || currentProducts[10]?.id !== "p11") {
+    if (!currentProducts || currentProducts.length < 30 || currentProducts[10]?.id !== "p11") {
       localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
     }
   } catch (e) {

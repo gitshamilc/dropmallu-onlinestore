@@ -7,21 +7,21 @@
 
 /* ── Design Tokens ───────────────────────────────────────────── */
 :root {
-  --bg-dark: #050508;
-  --bg-surface: rgba(12, 14, 24, 0.72);
-  --bg-card: rgba(15, 18, 30, 0.85);
-  --primary: #3b82f6;
-  --primary-glow: rgba(59, 130, 246, 0.25);
-  --primary-hover: #2563eb;
-  --primary-deep: #1d4ed8;
-  --accent-cyan: #06b6d4;
-  --accent-gold: #f59e0b;
+  --bg-dark: #04120a;
+  --bg-surface: rgba(6, 20, 14, 0.72);
+  --bg-card: rgba(8, 26, 18, 0.85);
+  --primary: #e2d1b2;
+  --primary-glow: rgba(226, 209, 178, 0.25);
+  --primary-hover: #ebd9bf;
+  --primary-deep: #c5b38f;
+  --accent-cyan: #10b981;
+  --accent-gold: #c5b38f;
   --accent-green: #10b981;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
-  --border-glass: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(59, 130, 246, 0.35);
+  --border-glass: rgba(226, 209, 178, 0.08);
+  --border-hover: rgba(226, 209, 178, 0.35);
   --font-display: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
   --radius-sm: 8px;
@@ -29,7 +29,7 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
   --shadow-card: 0 8px 32px -8px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+  --shadow-glow: 0 0 20px rgba(226, 209, 178, 0.15);
   --shadow-heavy: 0 24px 48px -16px rgba(0, 0, 0, 0.85);
   --ease: cubic-bezier(0.25, 0.8, 0.25, 1);
   --transition: all 0.35s var(--ease);
@@ -80,21 +80,21 @@ body {
 
 .orb-1 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent 70%);
   top: -10%; left: -5%;
   animation: orbFloat1 20s ease-in-out infinite;
 }
 
 .orb-2 {
   width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(226, 209, 178, 0.08), transparent 70%);
   bottom: 10%; right: -8%;
   animation: orbFloat2 25s ease-in-out infinite;
 }
 
 .orb-3 {
   width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.06), transparent 70%);
+  background: radial-gradient(circle, rgba(5, 150, 105, 0.06), transparent 70%);
   top: 50%; left: 40%;
   animation: orbFloat3 18s ease-in-out infinite;
 }
@@ -393,6 +393,36 @@ header.scrolled {
   background: rgba(255,255,255,0.04);
   border-color: var(--text-secondary);
   transform: translateY(-2px);
+}
+
+/* Scroll Indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 24px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 10;
+}
+.hero-scroll-indicator a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.indicator-bounce {
+  width: 16px;
+  height: 16px;
+  animation: bounceIndicator 1.8s infinite ease-in-out;
+}
+@keyframes bounceIndicator {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
 }
 
 /* Hero Scrolling Slideshow */
@@ -1458,3 +1488,99 @@ footer {
   .hero-btns { flex-direction: column; align-items: stretch; }
   .btn { padding: 11px 18px; font-size: 12px; }
 }
+
+/* ── Flipkart/Amazon Styled PDP Custom Enhancements ── */
+.pdp-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.pdp-stars {
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+.pdp-rating-val {
+  background: rgba(226, 209, 178, 0.15);
+  color: var(--primary);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.pdp-reviews-count {
+  color: var(--text-secondary);
+}
+.pdp-price-container {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 12px 0;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 12px;
+}
+.pdp-delivery-tag {
+  color: var(--accent-green);
+  font-size: 12px;
+  font-weight: 600;
+}
+.pdp-urgency-box {
+  margin: 10px 0;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid #ef4444;
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.pdp-stock-warning {
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pdp-actions-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+.btn-pdp {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-family: var(--font-body);
+  letter-spacing: 0.5px;
+}
+.btn-pdp-cart {
+  background: var(--bg-surface);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn-pdp-cart:hover {
+  background: var(--primary);
+  color: var(--bg-dark);
+  box-shadow: var(--shadow-glow);
+}
+.btn-pdp-buynow {
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.btn-pdp-buynow:hover {
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+  transform: translateY(-2px);
+}
+@media (max-width: 576px) {
+  .pdp-actions-container {
+    flex-direction: column;
+  }
+}
+

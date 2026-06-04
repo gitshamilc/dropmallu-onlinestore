@@ -359,20 +359,44 @@ function showProduct(p) {
   const body = $('#product-modal-body');
   if (!body || !productModal) return;
   const price = formatPrice(p.price);
+  
+  // Custom Amazon/Flipkart styling tags
+  const ratingStars = '★'.repeat(Math.round(p.rating || 4.5)) + '☆'.repeat(5 - Math.round(p.rating || 4.5));
+  const stockCount = Math.floor(Math.random() * 5) + 2;
+  
   body.innerHTML = `
     <div class="pdp-grid">
-      <div><img class="pdp-img" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';"></div>
-      <div class="pdp-info">
+      <div class="pdp-left">
+        <img class="pdp-img" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+      </div>
+      <div class="pdp-info pdp-right">
         ${p.badge ? `<span class="pdp-badge">${p.badge}</span>` : ''}
         <h2 class="pdp-title">${p.name}</h2>
-        <span class="pdp-price">${price}</span>
+        <div class="pdp-rating-row">
+          <span class="pdp-stars">${ratingStars}</span>
+          <span class="pdp-rating-val">${p.rating || 4.5}</span>
+          <span class="pdp-reviews-count">(${p.reviews || 20} Ratings)</span>
+        </div>
+        <div class="pdp-price-container">
+          <span class="pdp-price">${price}</span>
+          <span class="pdp-delivery-tag">FREE Delivery in 2-3 Days</span>
+        </div>
+        
         <p class="pdp-desc">${p.description}</p>
-        <div class="pdp-actions">
-          <button class="btn btn-primary" style="flex:1;" onclick="directBuy('${p.id}')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            Order via WhatsApp
+        
+        <div class="pdp-urgency-box">
+          <span class="pdp-stock-warning">Hurry! Only ${stockCount} left in stock.</span>
+        </div>
+
+        <div class="pdp-actions-container">
+          <button class="btn-pdp btn-pdp-cart" onclick="addToCart('${p.id}'); closeModals();">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            ADD TO CART
           </button>
-          <button class="btn btn-outline" onclick="addToCart('${p.id}'); closeModals();">Add to Cart</button>
+          <button class="btn-pdp btn-pdp-buynow" onclick="directBuy('${p.id}')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            BUY NOW
+          </button>
         </div>
       </div>
     </div>
