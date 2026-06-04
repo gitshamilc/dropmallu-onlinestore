@@ -10,6 +10,7 @@ if (typeof initializeStorage === 'function') {
   initializeStorage();
 }
 let blogs = [];
+let settings = null;
 let cart = [];
 let currentSlide = 0;
 let slideTimer = null;
@@ -84,12 +85,20 @@ async function init() {
   }
 
   try {
+    settings = (typeof getSettings === 'function' ? await getSettings() : null) || window.DEFAULT_SETTINGS;
+  } catch (e) {
+    console.error("Error fetching settings:", e);
+    settings = window.DEFAULT_SETTINGS;
+  }
+
+  try {
     const saved = localStorage.getItem('dropmallu_cart');
     if (saved) cart = JSON.parse(saved);
   } catch (e) {
     console.error("Cart loading error:", e);
   }
 
+  applyStorefrontSettings(settings);
   renderProducts(products);
   renderDealsGrid();
   startCountdown();
@@ -673,9 +682,10 @@ function startCountdown() {
   if (!hrsEl || !minsEl || !secsEl) return;
 
   let targetTime = localStorage.getItem('dropmallu_countdown_target');
+  const offsetHrs = (settings && typeof settings.timer_hours !== 'undefined') ? Number(settings.timer_hours) : 12;
   if (!targetTime || new Date(targetTime) <= new Date()) {
     const nextDate = new Date();
-    nextDate.setHours(nextDate.getHours() + 12);
+    nextDate.setHours(nextDate.getHours() + offsetHrs);
     targetTime = nextDate.toISOString();
     localStorage.setItem('dropmallu_countdown_target', targetTime);
   }
@@ -777,6 +787,50 @@ function cyclePedestalHeroImage() {
       heroImage.style.transform = 'translateY(0) scale(1)';
     }, 400);
   }, 7000);
+}
+
+function applyStorefrontSettings(s) {
+  if (!s) return;
+  const badge = $('#hero-badge');
+  const title = $('#hero-title');
+  const subtitle = $('#hero-subtitle');
+  const image = $('#pedestal-hero-image');
+
+  if (badge) badge.innerHTML = `<i data-lucide="shield-check"></i> ${s.hero_badge || 'Premium Collection'}`;
+  if (title) title.innerHTML = s.hero_title || 'Upgrade Your <br><span>Lifestyle</span>';
+  if (subtitle) subtitle.textContent = s.hero_subtitle || 'Discover trending gadgets, luxury watches, performance shoes and more.';
+  if (image && s.hero_image) image.src = s.hero_image;
+
+  const dealsTitle = $('#deals-title');
+  const dealsSubtitle = $('#deals-subtitle');
+  if (dealsTitle) dealsTitle.textContent = s.timer_title || '⚡ Deal of the Day';
+  if (dealsSubtitle) dealsSubtitle.textContent = s.timer_subtitle || 'Limited time offer, don\'t miss out!';
+
+  const b1Title = $('#promo-b1-title');
+  const b1Subtitle = $('#promo-b1-subtitle');
+  const b1Link = $('#promo-b1-link');
+  const b1Img = $('#promo-b1-img');
+  if (b1Title) b1Title.textContent = s.promo_b1_title || 'Smart Watches';
+  if (b1Subtitle) b1Subtitle.textContent = s.promo_b1_subtitle || 'Starting at ₹100';
+  if (b1Link) {
+    b1Link.dataset.cat = s.promo_b1_cat || 'watch';
+    b1Link.innerHTML = `Explore Now <i data-lucide="arrow-right"></i>`;
+  }
+  if (b1Img && s.promo_b1_image) b1Img.src = s.promo_b1_image;
+
+  const b2Title = $('#promo-b2-title');
+  const b2Subtitle = $('#promo-b2-subtitle');
+  const b2Link = $('#promo-b2-link');
+  const b2Img = $('#promo-b2-img');
+  if (b2Title) b2Title.textContent = s.promo_b2_title || 'Best Selling Shoes';
+  if (b2Subtitle) b2Subtitle.textContent = s.promo_b2_subtitle || 'Up to 50% Off';
+  if (b2Link) {
+    b2Link.dataset.cat = s.promo_b2_cat || 'shoe';
+    b2Link.innerHTML = `Shop Now <i data-lucide="arrow-right"></i>`;
+  }
+  if (b2Img && s.promo_b2_image) b2Img.src = s.promo_b2_image;
+
+  if (window.lucide) window.lucide.createIcons();
 }
 
 // ── Boot ─────────────────────────────────────────────────────────

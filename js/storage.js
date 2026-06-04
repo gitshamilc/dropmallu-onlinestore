@@ -625,13 +625,100 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
   }
 }
 
+const DEFAULT_SETTINGS = {
+  hero_badge: "Premium Collection",
+  hero_title: "Upgrade Your <br><span>Lifestyle</span>",
+  hero_subtitle: "Discover trending gadgets, luxury watches, performance shoes and more.",
+  hero_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+  
+  timer_hours: 12,
+  timer_title: "⚡ Deal of the Day",
+  timer_subtitle: "Limited time offer, don't miss out!",
+
+  promo_b1_title: "Smart Watches",
+  promo_b1_subtitle: "Starting at ₹100",
+  promo_b1_cat: "watch",
+  promo_b1_image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=300&q=80",
+
+  promo_b2_title: "Best Selling Shoes",
+  promo_b2_subtitle: "Up to 50% Off",
+  promo_b2_cat: "shoe",
+  promo_b2_image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80"
+};
+
+async function getSettings() {
+  if (isSupabaseConfigured) {
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/settings?select=*&limit=1`, {
+        headers: {
+          'apikey': CONFIG.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.length > 0) {
+          try {
+            localStorage.setItem("dropmallu_settings", JSON.stringify(data[0]));
+          } catch (e) {}
+          return data[0];
+        }
+      }
+    } catch (e) {
+      console.warn("Supabase settings fetch error, falling back to LocalStorage:", e);
+    }
+  }
+
+  try {
+    const local = localStorage.getItem("dropmallu_settings");
+    if (local) {
+      return JSON.parse(local);
+    }
+  } catch (e) {}
+  
+  try {
+    localStorage.setItem("dropmallu_settings", JSON.stringify(DEFAULT_SETTINGS));
+  } catch (e) {}
+  return DEFAULT_SETTINGS;
+}
+
+async function saveSettings(settings) {
+  if (isSupabaseConfigured) {
+    try {
+      // Force settings to have a fixed ID for single row update
+      const payload = { id: 1, ...settings };
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/settings`, {
+        method: 'POST',
+        headers: {
+          ...getSupabaseHeaders(),
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify([payload])
+      });
+      if (!res.ok) throw new Error("Failed to save settings to database");
+    } catch (err) {
+      console.error("Database settings save error:", err);
+      throw err;
+    }
+  }
+
+  try {
+    localStorage.setItem("dropmallu_settings", JSON.stringify(settings));
+  } catch (err) {
+    console.error("LocalStorage settings save error:", err);
+  }
+}
+
 // Initialize on script load
 initializeStorage();
 
 // Export to window for access in module scripts (like app.js)
 window.DEFAULT_PRODUCTS = DEFAULT_PRODUCTS;
 window.DEFAULT_BLOGS = DEFAULT_BLOGS;
+window.DEFAULT_SETTINGS = DEFAULT_SETTINGS;
 window.getProducts = getProducts;
 window.saveProducts = saveProducts;
 window.getBlogs = getBlogs;
+window.getSettings = getSettings;
+window.saveSettings = saveSettings;
 window.initializeStorage = initializeStorage;

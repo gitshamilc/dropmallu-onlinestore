@@ -16,14 +16,17 @@ const statBlogs = document.getElementById("stat-blogs");
 // Sidebar & Tabs
 const tabProducts = document.getElementById("tab-products");
 const tabBlogs = document.getElementById("tab-blogs");
+const tabSettings = document.getElementById("tab-settings");
 const sectionProducts = document.getElementById("section-products");
 const sectionBlogs = document.getElementById("section-blogs");
+const sectionSettings = document.getElementById("section-settings");
 
 // Forms & Modals
 const productFormModal = document.getElementById("product-form-modal");
 const blogFormModal = document.getElementById("blog-form-modal");
 const productForm = document.getElementById("product-form");
 const blogForm = document.getElementById("blog-form");
+const settingsForm = document.getElementById("settings-form");
 const prodFormTitle = document.getElementById("prod-form-title");
 const blogFormTitle = document.getElementById("blog-form-title");
 const signoutBtn = document.getElementById("signout-btn");
@@ -196,13 +199,15 @@ function renderBlogsTable() {
 }
 
 function setupListeners() {
-  if (tabProducts && tabBlogs) {
+  if (tabProducts && tabBlogs && tabSettings) {
     tabProducts.addEventListener("click", (e) => { e.preventDefault(); switchTab("products"); });
     tabBlogs.addEventListener("click", (e) => { e.preventDefault(); switchTab("blogs"); });
+    tabSettings.addEventListener("click", (e) => { e.preventDefault(); switchTab("settings"); });
   }
 
   if (productForm) productForm.addEventListener("submit", handleProductSubmit);
   if (blogForm) blogForm.addEventListener("submit", handleBlogSubmit);
+  if (settingsForm) settingsForm.addEventListener("submit", handleSettingsSubmit);
 
   if (signoutBtn) {
     signoutBtn.addEventListener("click", () => {
@@ -221,6 +226,21 @@ function setupListeners() {
   const fbImage = document.getElementById("fb-image");
   if (fbImage) {
     fbImage.addEventListener("change", (e) => handleImageUpload(e, "fb-image-preview", "fb-image-data"));
+  }
+
+  const sHeroImage = document.getElementById("s-hero-image");
+  if (sHeroImage) {
+    sHeroImage.addEventListener("change", (e) => handleImageUpload(e, "s-hero-image-preview", "s-hero-image-data"));
+  }
+
+  const sPromoB1Image = document.getElementById("s-promo-b1-image");
+  if (sPromoB1Image) {
+    sPromoB1Image.addEventListener("change", (e) => handleImageUpload(e, "s-promo-b1-image-preview", "s-promo-b1-image-data"));
+  }
+
+  const sPromoB2Image = document.getElementById("s-promo-b2-image");
+  if (sPromoB2Image) {
+    sPromoB2Image.addEventListener("change", (e) => handleImageUpload(e, "s-promo-b2-image-preview", "s-promo-b2-image-data"));
   }
 }
 
@@ -241,16 +261,23 @@ function handleImageUpload(e, previewId, dataId) {
 
 function switchTab(tab) {
   activeTab = tab;
+  tabProducts.classList.remove("active");
+  tabBlogs.classList.remove("active");
+  tabSettings.classList.remove("active");
+  sectionProducts.classList.remove("active");
+  sectionBlogs.classList.remove("active");
+  sectionSettings.classList.remove("active");
+
   if (tab === "products") {
     tabProducts.classList.add("active");
-    tabBlogs.classList.remove("active");
     sectionProducts.classList.add("active");
-    sectionBlogs.classList.remove("active");
-  } else {
-    tabProducts.classList.remove("active");
+  } else if (tab === "blogs") {
     tabBlogs.classList.add("active");
-    sectionProducts.classList.remove("active");
     sectionBlogs.classList.add("active");
+  } else if (tab === "settings") {
+    tabSettings.classList.add("active");
+    sectionSettings.classList.add("active");
+    loadSettingsIntoForm();
   }
 }
 
@@ -488,5 +515,94 @@ window.closeForm = function(modalId) {
     setTimeout(() => m.style.display = "none", 300);
   }
 };
+
+async function loadSettingsIntoForm() {
+  try {
+    showLoadingOverlay(true, "Loading storefront settings...");
+    const s = (typeof getSettings === "function" ? await getSettings() : null) || window.DEFAULT_SETTINGS;
+    
+    if (s) {
+      document.getElementById("s-hero-badge").value = s.hero_badge || "";
+      document.getElementById("s-hero-title").value = s.hero_title || "";
+      document.getElementById("s-hero-subtitle").value = s.hero_subtitle || "";
+      document.getElementById("s-hero-image-data").value = s.hero_image || "";
+      const hPreview = document.getElementById("s-hero-image-preview");
+      if (hPreview && s.hero_image) {
+        hPreview.src = s.hero_image;
+        hPreview.style.display = "block";
+      }
+
+      document.getElementById("s-timer-title").value = s.timer_title || "";
+      document.getElementById("s-timer-hours").value = s.timer_hours || 12;
+      document.getElementById("s-timer-subtitle").value = s.timer_subtitle || "";
+
+      document.getElementById("s-promo-b1-title").value = s.promo_b1_title || "";
+      document.getElementById("s-promo-b1-subtitle").value = s.promo_b1_subtitle || "";
+      document.getElementById("s-promo-b1-cat").value = s.promo_b1_cat || "watch";
+      document.getElementById("s-promo-b1-image-data").value = s.promo_b1_image || "";
+      const b1Preview = document.getElementById("s-promo-b1-image-preview");
+      if (b1Preview && s.promo_b1_image) {
+        b1Preview.src = s.promo_b1_image;
+        b1Preview.style.display = "block";
+      }
+
+      document.getElementById("s-promo-b2-title").value = s.promo_b2_title || "";
+      document.getElementById("s-promo-b2-subtitle").value = s.promo_b2_subtitle || "";
+      document.getElementById("s-promo-b2-cat").value = s.promo_b2_cat || "shoe";
+      document.getElementById("s-promo-b2-image-data").value = s.promo_b2_image || "";
+      const b2Preview = document.getElementById("s-promo-b2-image-preview");
+      if (b2Preview && s.promo_b2_image) {
+        b2Preview.src = s.promo_b2_image;
+        b2Preview.style.display = "block";
+      }
+    }
+  } catch (err) {
+    showToast("Error loading settings: " + err.message, "error");
+    console.error(err);
+  } finally {
+    showLoadingOverlay(false);
+  }
+}
+
+async function handleSettingsSubmit(e) {
+  e.preventDefault();
+  showLoadingOverlay(true, "Saving storefront settings...");
+  try {
+    const updatedSettings = {
+      hero_badge: document.getElementById("s-hero-badge").value.trim(),
+      hero_title: document.getElementById("s-hero-title").value.trim(),
+      hero_subtitle: document.getElementById("s-hero-subtitle").value.trim(),
+      hero_image: document.getElementById("s-hero-image-data").value.trim(),
+
+      timer_title: document.getElementById("s-timer-title").value.trim(),
+      timer_hours: Number(document.getElementById("s-timer-hours").value) || 12,
+      timer_subtitle: document.getElementById("s-timer-subtitle").value.trim(),
+
+      promo_b1_title: document.getElementById("s-promo-b1-title").value.trim(),
+      promo_b1_subtitle: document.getElementById("s-promo-b1-subtitle").value.trim(),
+      promo_b1_cat: document.getElementById("s-promo-b1-cat").value,
+      promo_b1_image: document.getElementById("s-promo-b1-image-data").value.trim(),
+
+      promo_b2_title: document.getElementById("s-promo-b2-title").value.trim(),
+      promo_b2_subtitle: document.getElementById("s-promo-b2-subtitle").value.trim(),
+      promo_b2_cat: document.getElementById("s-promo-b2-cat").value,
+      promo_b2_image: document.getElementById("s-promo-b2-image-data").value.trim()
+    };
+
+    if (typeof saveSettings === "function") {
+      await saveSettings(updatedSettings);
+    }
+    
+    // Clear countdown cache so next update generates dynamic offset timer
+    localStorage.removeItem('dropmallu_countdown_target');
+    
+    showToast("Storefront settings updated successfully!", "success");
+  } catch (err) {
+    showToast("Error saving settings: " + err.message, "error");
+    console.error(err);
+  } finally {
+    showLoadingOverlay(false);
+  }
+}
 
 document.addEventListener("DOMContentLoaded", initAdmin);

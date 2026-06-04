@@ -46,6 +46,9 @@
         <li class="nav-tab" id="tab-blogs">
           <a href="#"><i data-lucide="file-text"></i> Banners</a>
         </li>
+        <li class="nav-tab" id="tab-settings">
+          <a href="#"><i data-lucide="settings"></i> Customize Site</a>
+        </li>
       </ul>
 
       <div class="sidebar-bottom">
@@ -139,6 +142,140 @@
             </thead>
             <tbody id="blogs-tbody"></tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="section-settings" class="panel-section">
+        <div class="section-bar">
+          <div>
+            <h2>Customize Storefront</h2>
+            <p>Modify Hero text, Deal timers, and Promo banner images/links directly.</p>
+          </div>
+        </div>
+
+        <div class="glass" style="padding: 24px; border-radius: var(--radius-lg); margin-top: 16px;">
+          <form id="settings-form">
+            <!-- Hero Settings -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="layout" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Hero Pedestal Section</h3>
+              <div class="field">
+                <label for="s-hero-badge">Hero Badge Text</label>
+                <input type="text" id="s-hero-badge" placeholder="Premium Collection">
+              </div>
+              <div class="field">
+                <label for="s-hero-title">Hero Main Title (HTML supported)</label>
+                <input type="text" id="s-hero-title" placeholder="Upgrade Your &lt;br&gt;&lt;span&gt;Lifestyle&lt;/span&gt;">
+              </div>
+              <div class="field">
+                <label for="s-hero-subtitle">Hero Subtitle Description</label>
+                <textarea id="s-hero-subtitle" style="height: 60px;" placeholder="Discover trending gadgets..."></textarea>
+              </div>
+              <div class="field">
+                <label>Hero Pedestal Image</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <img id="s-hero-image-preview" src="" style="width:44px; height:44px; border-radius:6px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
+                  <input type="file" id="s-hero-image" accept="image/*" style="flex:1;">
+                  <input type="hidden" id="s-hero-image-data">
+                </div>
+              </div>
+            </div>
+
+            <!-- Countdown Deal settings -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="clock" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Deal of the Day Timer</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label for="s-timer-title">Deal Section Title</label>
+                  <input type="text" id="s-timer-title" placeholder="⚡ Deal of the Day">
+                </div>
+                <div class="field">
+                  <label for="s-timer-hours">Countdown Duration Offset (Hours)</label>
+                  <input type="number" id="s-timer-hours" min="1" max="168" placeholder="12">
+                </div>
+              </div>
+              <div class="field">
+                <label for="s-timer-subtitle">Deal Section Subtitle Description</label>
+                <input type="text" id="s-timer-subtitle" placeholder="Limited time offer, don't miss out!">
+              </div>
+            </div>
+
+            <!-- Promo Banner Cards settings -->
+            <div style="margin-bottom: 24px;">
+              <h3 style="border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; margin-bottom: 16px; color: var(--accent-gold); font-size: 16px;"><i data-lucide="image" style="vertical-align: middle; width: 18px; height: 18px; margin-right: 6px;"></i> Promotional Banners</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Banner 1 -->
+                <div style="padding: 12px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.01);">
+                  <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 14px;">Banner Card 1 (Left)</h4>
+                  <div class="field">
+                    <label for="s-promo-b1-title">Card Title</label>
+                    <input type="text" id="s-promo-b1-title" placeholder="Smart Watches">
+                  </div>
+                  <div class="field">
+                    <label for="s-promo-b1-subtitle">Card Subtitle Text</label>
+                    <input type="text" id="s-promo-b1-subtitle" placeholder="Starting at ₹100">
+                  </div>
+                  <div class="field">
+                    <label for="s-promo-b1-cat">Link Category Target</label>
+                    <select id="s-promo-b1-cat">
+                      <option value="all">All</option>
+                      <option value="watch">Watch</option>
+                      <option value="powerbank">Powerbank</option>
+                      <option value="shoe">Shoe</option>
+                      <option value="projector">Projector</option>
+                      <option value="gadgets">Gadgets</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Card Image</label>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <img id="s-promo-b1-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
+                      <input type="file" id="s-promo-b1-image" accept="image/*" style="flex:1;">
+                      <input type="hidden" id="s-promo-b1-image-data">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Banner 2 -->
+                <div style="padding: 12px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.01);">
+                  <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 14px;">Banner Card 2 (Right)</h4>
+                  <div class="field">
+                    <label for="s-promo-b2-title">Card Title</label>
+                    <input type="text" id="s-promo-b2-title" placeholder="Best Selling Shoes">
+                  </div>
+                  <div class="field">
+                    <label for="s-promo-b2-subtitle">Card Subtitle Text</label>
+                    <input type="text" id="s-promo-b2-subtitle" placeholder="Up to 50% Off">
+                  </div>
+                  <div class="field">
+                    <label for="s-promo-b2-cat">Link Category Target</label>
+                    <select id="s-promo-b2-cat">
+                      <option value="all">All</option>
+                      <option value="watch">Watch</option>
+                      <option value="powerbank">Powerbank</option>
+                      <option value="shoe">Shoe</option>
+                      <option value="projector">Projector</option>
+                      <option value="gadgets">Gadgets</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Card Image</label>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <img id="s-promo-b2-image-preview" src="" style="width:40px; height:40px; border-radius:4px; object-fit:cover; display:none; border:1px solid var(--border-glass);">
+                      <input type="file" id="s-promo-b2-image" accept="image/*" style="flex:1;">
+                      <input type="hidden" id="s-promo-b2-image-data">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-glass); padding-top: 16px;">
+              <button type="submit" class="action-btn" style="min-width: 150px; font-weight: 700;">
+                <i data-lucide="save"></i> Save Settings
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
