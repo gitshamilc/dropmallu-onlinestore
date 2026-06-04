@@ -14,6 +14,11 @@ create table if not exists products (
   badge text default '',
   rating numeric default 4.5,
   reviews integer default 0,
+  sku text default '',
+  inventory integer default 0,
+  stock_status text default '',
+  gallery text default '',
+  specs text default '',
   created_at timestamp with time zone default now()
 );
 
