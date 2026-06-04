@@ -272,13 +272,21 @@ const getSupabaseHeaders = () => ({
 
 // Initialize LocalStorage Data
 function initializeStorage() {
-  const currentProducts = JSON.parse(localStorage.getItem("dropmallu_products"));
-  // Force update if missing the new items
-  if (!currentProducts || currentProducts.length < 20 || currentProducts[10]?.id !== "p11") {
-    localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
+  try {
+    const currentProducts = JSON.parse(localStorage.getItem("dropmallu_products"));
+    // Force update if missing the new items
+    if (!currentProducts || currentProducts.length < 20 || currentProducts[10]?.id !== "p11") {
+      localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
+    }
+  } catch (e) {
+    console.warn("LocalStorage access error for products:", e);
   }
-  if (!localStorage.getItem("dropmallu_blogs")) {
-    localStorage.setItem("dropmallu_blogs", JSON.stringify(DEFAULT_BLOGS));
+  try {
+    if (!localStorage.getItem("dropmallu_blogs")) {
+      localStorage.setItem("dropmallu_blogs", JSON.stringify(DEFAULT_BLOGS));
+    }
+  } catch (e) {
+    console.warn("LocalStorage access error for blogs:", e);
   }
 }
 
@@ -297,12 +305,14 @@ async function getProducts() {
       // If database is empty, seed it with defaults and cache defaults
       if (data.length === 0) {
         await saveProducts(DEFAULT_PRODUCTS);
-        // After seeding, cache defaults locally
-        localStorage.setItem('dropmallu_products', JSON.stringify(DEFAULT_PRODUCTS));
+        try {
+          localStorage.setItem('dropmallu_products', JSON.stringify(DEFAULT_PRODUCTS));
+        } catch (e) {}
         return DEFAULT_PRODUCTS;
       }
-      // Cache fetched data
-      localStorage.setItem('dropmallu_products', JSON.stringify(data));
+      try {
+        localStorage.setItem('dropmallu_products', JSON.stringify(data));
+      } catch (e) {}
       return data;
     } catch (err) {
       console.error("Database error, falling back to LocalStorage:", err);
@@ -310,7 +320,13 @@ async function getProducts() {
   }
   
   initializeStorage();
-  return JSON.parse(localStorage.getItem("dropmallu_products"));
+  try {
+    const local = localStorage.getItem("dropmallu_products");
+    return (local ? JSON.parse(local) : DEFAULT_PRODUCTS) || DEFAULT_PRODUCTS;
+  } catch (err) {
+    console.error("LocalStorage load error, returning default constants:", err);
+    return DEFAULT_PRODUCTS;
+  }
 }
 
 async function saveProducts(products) {
@@ -344,9 +360,11 @@ async function saveProducts(products) {
     }
   }
 
-  // Also update LocalStorage cache after saving to Supabase
-  localStorage.setItem("dropmallu_products", JSON.stringify(products));
-  // Refresh local cache after successful save (no further action needed as above sets it)
+  try {
+    localStorage.setItem("dropmallu_products", JSON.stringify(products));
+  } catch (err) {
+    console.error("LocalStorage save error:", err);
+  }
 }
 
 async function deleteProductFromStorage(id, updatedProducts) {
@@ -366,7 +384,11 @@ async function deleteProductFromStorage(id, updatedProducts) {
       throw err;
     }
   }
-  localStorage.setItem("dropmallu_products", JSON.stringify(updatedProducts));
+  try {
+    localStorage.setItem("dropmallu_products", JSON.stringify(updatedProducts));
+  } catch (err) {
+    console.error("LocalStorage delete update error:", err);
+  }
 }
 
 // Blog Storage Accessors
@@ -392,7 +414,13 @@ async function getBlogs() {
   }
 
   initializeStorage();
-  return JSON.parse(localStorage.getItem("dropmallu_blogs"));
+  try {
+    const local = localStorage.getItem("dropmallu_blogs");
+    return (local ? JSON.parse(local) : DEFAULT_BLOGS) || DEFAULT_BLOGS;
+  } catch (err) {
+    console.error("LocalStorage load error for blogs, returning defaults:", err);
+    return DEFAULT_BLOGS;
+  }
 }
 
 async function saveBlogs(blogs) {
@@ -425,7 +453,11 @@ async function saveBlogs(blogs) {
     }
   }
 
-  localStorage.setItem("dropmallu_blogs", JSON.stringify(blogs));
+  try {
+    localStorage.setItem("dropmallu_blogs", JSON.stringify(blogs));
+  } catch (err) {
+    console.error("LocalStorage save error for blogs:", err);
+  }
 }
 
 async function deleteBlogFromStorage(id, updatedBlogs) {
@@ -445,7 +477,11 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
       throw err;
     }
   }
-  localStorage.setItem("dropmallu_blogs", JSON.stringify(updatedBlogs));
+  try {
+    localStorage.setItem("dropmallu_blogs", JSON.stringify(updatedBlogs));
+  } catch (err) {
+    console.error("LocalStorage delete update error for blogs:", err);
+  }
 }
 
 // Initialize on script load

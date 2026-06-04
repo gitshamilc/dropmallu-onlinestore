@@ -57,11 +57,26 @@ const mnavAccount = $('#mnav-account');
 
 // ── Init ─────────────────────────────────────────────────────────
 async function init() {
-  products = typeof getProducts === 'function' ? await getProducts() : [];
-  blogs = typeof getBlogs === 'function' ? await getBlogs() : [];
+  try {
+    products = (typeof getProducts === 'function' ? await getProducts() : []) || [];
+  } catch (e) {
+    console.error("Error fetching products:", e);
+    products = [];
+  }
 
-  const saved = localStorage.getItem('dropmallu_cart');
-  if (saved) cart = JSON.parse(saved);
+  try {
+    blogs = (typeof getBlogs === 'function' ? await getBlogs() : []) || [];
+  } catch (e) {
+    console.error("Error fetching blogs:", e);
+    blogs = [];
+  }
+
+  try {
+    const saved = localStorage.getItem('dropmallu_cart');
+    if (saved) cart = JSON.parse(saved);
+  } catch (e) {
+    console.error("Cart loading error:", e);
+  }
 
   renderProducts(products);
   refreshCart();
@@ -79,7 +94,7 @@ async function init() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
         // Reload products on any insert, update, delete
         getProducts().then(p => {
-          products = p;
+          products = p || [];
           renderProducts(products);
         }).catch(err => console.error('Realtime product update error:', err));
       })
@@ -93,7 +108,9 @@ function renderProducts(list) {
   if (!productGrid) return;
   productGrid.innerHTML = '';
 
-  if (list.length === 0) {
+  const safeList = Array.isArray(list) ? list : [];
+
+  if (safeList.length === 0) {
     productGrid.innerHTML = '<div class="no-results"><p>No products found.</p></div>';
     return;
   }
