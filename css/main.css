@@ -55,6 +55,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* ── Scrollbar ───────────────────────────────────────────────── */

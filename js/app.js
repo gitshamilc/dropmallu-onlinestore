@@ -84,6 +84,7 @@ async function init() {
   bindEvents();
   setupHeroScrolling();
   startCarousel();
+  setupDynamicBackground();
 
   // URL Hash Routing
   window.addEventListener('hashchange', checkUrlHash);
@@ -552,6 +553,44 @@ function observeReveals() {
 // ── Helpers ──────────────────────────────────────────────────────
 function formatPrice(n) {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n);
+}
+
+// ── Dynamic Scrolling Background Blending ────────────────────────
+function setupDynamicBackground() {
+  const colors = [
+    [4, 18, 10],    // #04120a - Forest Green (Hero Section)
+    [11, 30, 19],   // #0b1e13 - Deep Olive Green (Carousel Section)
+    [26, 30, 20],   // #1a1e14 - Gold-Olive Muted (Explore Catalog)
+    [3, 13, 7]      // #030d07 - Deep Velvet Green (Footer Section)
+  ];
+
+  const updateBg = () => {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollHeight <= 0) return;
+    const percent = Math.min(Math.max(window.scrollY / scrollHeight, 0), 1);
+    
+    const segmentCount = colors.length - 1;
+    const position = percent * segmentCount;
+    const index = Math.floor(position);
+    const fraction = position - index;
+    
+    let r, g, b;
+    if (index >= segmentCount) {
+      const c = colors[segmentCount];
+      r = c[0]; g = c[1]; b = c[2];
+    } else {
+      const c1 = colors[index];
+      const c2 = colors[index + 1];
+      r = Math.round(c1[0] + (c2[0] - c1[0]) * fraction);
+      g = Math.round(c1[1] + (c2[1] - c1[1]) * fraction);
+      b = Math.round(c1[2] + (c2[2] - c1[2]) * fraction);
+    }
+    
+    document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+  };
+
+  window.addEventListener('scroll', updateBg);
+  updateBg(); // Initialize background color on load
 }
 
 // ── Boot ─────────────────────────────────────────────────────────
