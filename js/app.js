@@ -59,7 +59,12 @@ const mnavAccount = $('#mnav-account');
 async function init() {
   await initSupabase();
   try {
-    products = (typeof getProducts === 'function' ? await getProducts() : []) || [];
+    const rawProducts = (typeof getProducts === 'function' ? await getProducts() : []) || [];
+    products = rawProducts.filter(p => p !== null && p !== undefined && p.id);
+    if (!products || products.length === 0) {
+      console.warn("Products from storage was empty, falling back to DEFAULT_PRODUCTS.");
+      products = (window.DEFAULT_PRODUCTS || []);
+    }
     // Sort products descending (newest additions / higher IDs first)
     products.sort((a, b) => {
       const numA = parseInt(String(a.id).replace(/\D/g, '')) || 0;
@@ -68,7 +73,7 @@ async function init() {
     });
   } catch (e) {
     console.error("Error fetching products:", e);
-    products = [];
+    products = window.DEFAULT_PRODUCTS || [];
   }
 
   try {
@@ -126,7 +131,7 @@ function renderProducts(list) {
     return;
   }
 
-  list.forEach((p, i) => {
+  safeList.forEach((p, i) => {
     const card = document.createElement('div');
     const dir = i % 2 === 0 ? 'reveal-left' : 'reveal-right';
     card.className = `product-card glass scroll-reveal ${dir}`;
@@ -697,16 +702,18 @@ function startCountdown() {
 
 function renderDealsGrid() {
   const grid = $('#deals-products-grid');
-  if (!grid || !products || products.length === 0) return;
+  let list = products;
+  if (!list || list.length === 0) {
+    list = window.DEFAULT_PRODUCTS || [];
+  }
+  if (!grid || list.length === 0) return;
   grid.innerHTML = '';
 
-  const deals = products.slice(0, 5);
+  const deals = list.slice(0, 5);
 
   deals.forEach((p, i) => {
     const card = document.createElement('div');
-    const delay = i * 0.05;
-    card.className = 'product-card glass scroll-reveal reveal-up';
-    card.style.transitionDelay = `${delay}s`;
+    card.className = 'product-card glass';
     
     const discountPercent = 20 + (i * 5);
     const originalPrice = Math.round(p.price / (1 - (discountPercent / 100)));

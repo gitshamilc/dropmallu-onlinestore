@@ -627,3 +627,11 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
 
 // Initialize on script load
 initializeStorage();
+
+// Export to window for access in module scripts (like app.js)
+window.DEFAULT_PRODUCTS = DEFAULT_PRODUCTS;
+window.DEFAULT_BLOGS = DEFAULT_BLOGS;
+window.getProducts = getProducts;
+window.saveProducts = saveProducts;
+window.getBlogs = getBlogs;
+window.initializeStorage = initializeStorage;
