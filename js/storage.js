@@ -382,21 +382,52 @@ const getSupabaseHeaders = () => ({
 
 // Initialize LocalStorage Data
 function initializeStorage() {
+  let needProductsReset = false;
   try {
-    const currentProducts = JSON.parse(localStorage.getItem("dropmallu_products"));
-    // Force update if missing the new items
-    if (!currentProducts || currentProducts.length < 30 || currentProducts[10]?.id !== "p11") {
-      localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
+    const local = localStorage.getItem("dropmallu_products");
+    if (!local) {
+      needProductsReset = true;
+    } else {
+      const currentProducts = JSON.parse(local);
+      if (!Array.isArray(currentProducts) || currentProducts.length < 30 || currentProducts[10]?.id !== "p11") {
+        needProductsReset = true;
+      }
     }
   } catch (e) {
-    console.warn("LocalStorage access error for products:", e);
+    needProductsReset = true;
   }
+
+  if (needProductsReset) {
+    try {
+      localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
+      console.log("DROPMALLU: Initialized 30 products catalog in localStorage.");
+    } catch (e) {
+      console.warn("LocalStorage write error for products:", e);
+    }
+  }
+
+  let needBlogsReset = false;
   try {
-    if (!localStorage.getItem("dropmallu_blogs")) {
-      localStorage.setItem("dropmallu_blogs", JSON.stringify(DEFAULT_BLOGS));
+    const local = localStorage.getItem("dropmallu_blogs");
+    if (!local) {
+      needBlogsReset = true;
+    } else {
+      const currentBlogs = JSON.parse(local);
+      if (!Array.isArray(currentBlogs) || currentBlogs.length === 0) {
+        needBlogsReset = true;
+      }
     }
   } catch (e) {
-    console.warn("LocalStorage access error for blogs:", e);
+    needBlogsReset = true;
+  }
+
+  if (needBlogsReset) {
+    try {
+      localStorage.setItem("dropmallu_blogs", JSON.stringify(DEFAULT_BLOGS));
+      console.log("DROPMALLU: Initialized banners catalog in localStorage.");
+    } catch (e) {
+      console.warn("LocalStorage write error for blogs:", e);
+    }
   }
 }
 

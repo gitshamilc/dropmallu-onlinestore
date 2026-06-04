@@ -7,7 +7,20 @@
 
   <!-- Auth Gate (redirect if not authenticated) -->
   <script>
-    if (sessionStorage.getItem('dropmallu_auth') !== 'true') {
+    if (window.location.search.includes('auth=true') || window.location.hash.includes('auth=true')) {
+      try {
+        sessionStorage.setItem('dropmallu_auth', 'true');
+        localStorage.setItem('dropmallu_auth', 'true');
+      } catch (e) {}
+    }
+    
+    let isAuthed = false;
+    try {
+      isAuthed = sessionStorage.getItem('dropmallu_auth') === 'true' || 
+                 localStorage.getItem('dropmallu_auth') === 'true';
+    } catch (e) {}
+    
+    if (!isAuthed) {
       window.location.href = 'index.html';
     }
   </script>

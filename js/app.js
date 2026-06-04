@@ -344,13 +344,18 @@ function handleLogin(e) {
   const id = $('#login-id')?.value.trim();
   const pass = $('#login-pass')?.value;
   if (id === 'dropmallu' && pass === 'dropmallu@321') {
-    sessionStorage.setItem('dropmallu_auth', 'true');
+    try {
+      sessionStorage.setItem('dropmallu_auth', 'true');
+      localStorage.setItem('dropmallu_auth', 'true');
+    } catch (e) {}
     closeModals();
-    window.location.href = 'admin.html';
+    window.location.href = 'admin.html?auth=true';
   } else {
     if (loginError) loginError.style.display = 'block';
-    $('#login-pass').value = '';
-    $('#login-pass').focus();
+    if ($('#login-pass')) {
+      $('#login-pass').value = '';
+      $('#login-pass').focus();
+    }
   }
 }
 
