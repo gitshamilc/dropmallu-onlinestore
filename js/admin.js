@@ -85,27 +85,29 @@ async function initAdmin() {
     setupListeners();
 
     // Supabase realtime subscriptions for products and banners
-    supabase
-      .channel('public:products')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
-        getProducts().then(p => {
-          adminProducts = p;
-          renderProductsTable();
-          renderStats();
-        }).catch(err => console.error('Realtime product update error:', err));
-      })
-      .subscribe();
+    if (supabase) {
+      supabase
+        .channel('public:products')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
+          getProducts().then(p => {
+            adminProducts = p;
+            renderProductsTable();
+            renderStats();
+          }).catch(err => console.error('Realtime product update error:', err));
+        })
+        .subscribe();
 
-    supabase
-      .channel('public:banners')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, payload => {
-        getBlogs().then(b => {
-          adminBlogs = b;
-          renderBlogsTable();
-          renderStats();
-        }).catch(err => console.error('Realtime banner update error:', err));
-      })
-      .subscribe();
+      supabase
+        .channel('public:banners')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, payload => {
+          getBlogs().then(b => {
+            adminBlogs = b;
+            renderBlogsTable();
+            renderStats();
+          }).catch(err => console.error('Realtime banner update error:', err));
+        })
+        .subscribe();
+    }
   } catch (err) {
     showToast("Failed to connect to database", "error");
     console.error(err);
@@ -308,13 +310,27 @@ async function handleProductSubmit(e) {
 
   showLoadingOverlay(true, "Saving product...");
   try {
+    const updatedProducts = [...adminProducts];
     if (editingItemId) {
-      const { error } = await supabase.from('products').update({ name, category, price, image, badge, description }).eq('id', editingItemId);
-      if (error) throw error;
+      const idx = updatedProducts.findIndex(p => p.id === editingItemId);
+      if (idx > -1) {
+        updatedProducts[idx] = { ...updatedProducts[idx], name, category, price, image, badge, description };
+      }
+      if (supabase) {
+        const { error } = await supabase.from('products').update({ name, category, price, image, badge, description }).eq('id', editingItemId);
+        if (error) throw error;
+      }
     } else {
       const id = "p_" + Date.now();
-      const { error } = await supabase.from('products').insert([{ id, name, category, price, image, badge, description, rating: 4.5, reviews: 0 }]);
-      if (error) throw error;
+      const newProduct = { id, name, category, price, image, badge, description, rating: 4.5, reviews: 0 };
+      updatedProducts.push(newProduct);
+      if (supabase) {
+        const { error } = await supabase.from('products').insert([newProduct]);
+        if (error) throw error;
+      }
+    }
+    if (typeof saveProducts === "function") {
+      await saveProducts(updatedProducts);
     }
     const b = await getProducts();
     adminProducts = b;
@@ -334,9 +350,16 @@ window.deleteProduct = async function(id) {
   if (confirm("Delete this product?")) {
     showLoadingOverlay(true, "Deleting product...");
     try {
-      const { error } = await supabase.from('products').delete().eq('id', id);
-      if (error) throw error;
-      adminProducts = adminProducts.filter(p => p.id !== id);
+      const updatedProducts = adminProducts.filter(p => p.id !== id);
+      if (supabase) {
+        const { error } = await supabase.from('products').delete().eq('id', id);
+        if (error) throw error;
+      } else if (typeof deleteProductFromStorage === "function") {
+        await deleteProductFromStorage(id, updatedProducts);
+      } else if (typeof saveProducts === "function") {
+        await saveProducts(updatedProducts);
+      }
+      adminProducts = updatedProducts;
       renderProductsTable();
       renderStats();
       showToast("Product deleted successfully!", "success");

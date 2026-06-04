@@ -1,0 +1,32 @@
+[
+  {
+    "id": "b1",
+    "title": "Why 4K Laser Projectors are Replacing Traditional TVs",
+    "author": "Rahul Sharma",
+    "date": "June 01, 2026",
+    "readTime": "4 min read",
+    "image": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80",
+    "summary": "Discover how portable high-resolution laser projectors are reshaping dynamic home theaters, offering screens of up to 150 inches that fit in small drawers.",
+    "content": "The landscape of home entertainment is shifting rapidly. For decades, the standard television was the centerpiece of the living room, growing larger and heavier year by year. However, standard panels hit a physical and aesthetic limit. This is where advanced 4K laser projectors step in. Offering display areas up to 150 inches while maintaining zero footprint when powered off, they represent the next standard. With ultra-short-throw technology, these compact devices sit just inches from your wall, delivering extremely sharp contrast and vibrant colors that rival premium OLED systems."
+  },
+  {
+    "id": "b2",
+    "title": "Understanding Power Delivery (PD) in Fast-Charging Powerbanks",
+    "author": "Anita Raj",
+    "date": "May 25, 2026",
+    "readTime": "5 min read",
+    "image": "https://images.unsplash.com/photo-1600541519463-ee100e3ad498?auto=format&fit=crop&w=600&q=80",
+    "summary": "Not all chargers are built equal. We simplify Power Delivery (PD) protocols and explain how fast external batteries keep modern laptops and phones safe.",
+    "content": "We live in a multi-device world. Carrying custom power adapters for laptops, tablets, and phones is a relic of the past. Modern fast-charging banks use 'Power Delivery' (PD), a smart protocol communicating between chargers and products to negotiate safe, optimized wattage levels. A premium powerbank like the VoltCore Pro can supply up to 100W of electricity via USB-C, meaning it can recharge your Apple Macbook or dynamic laptop at full speed while running smart safety mechanisms to prevent overheating."
+  },
+  {
+    "id": "b3",
+    "title": "The Dynamic Tech Inside Your Daily Sneakers",
+    "author": "Midhun C.",
+    "date": "May 18, 2026",
+    "readTime": "3 min read",
+    "image": "https://images.unsplash.com/photo-1556906781-9a412961c28c?auto=format&fit=crop&w=600&q=80",
+    "summary": "Streetwear meets aerospace engineering. We dive into carbon fiber shanks, nitrogen infusions, and why modern shoe design is a high-tech discipline.",
+    "content": "Sneaker design has transformed from basic aesthetic sketches to pure science. Today's premium footwear utilizes concepts borrowed directly from athletic track records and industrial aerospace frameworks. Dynamic carbon fiber plates inserted inside rubber midsoles act as springs, conserving kinetic energy with every step. Additionally, nitrogen-infusion processes expand foam material, creating ultra-light cushions that absorb impacts better and stay flexible for years."
+  }
+]

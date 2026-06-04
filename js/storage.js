@@ -285,10 +285,8 @@ function initializeStorage() {
 // Product Storage Accessors
 async function getProducts() {
   if (isSupabaseConfigured) {
-    // Ensure we don't use stale local cache before fetching fresh data
-    localStorage.removeItem('dropmallu_products');
     try {
-      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?select=*&order=created_at.asc`, {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?select=*`, {
         headers: {
           'apikey': CONFIG.SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
@@ -375,7 +373,7 @@ async function deleteProductFromStorage(id, updatedProducts) {
 async function getBlogs() {
   if (isSupabaseConfigured) {
     try {
-      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/banners?select=*&order=created_at.asc`, {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/banners?select=*`, {
         headers: {
           'apikey': CONFIG.SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`

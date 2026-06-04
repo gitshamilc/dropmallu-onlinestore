@@ -73,16 +73,18 @@ async function init() {
   window.addEventListener('hashchange', checkUrlHash);
   checkUrlHash();
   // Supabase realtime subscription for product changes
-  supabase
-    .channel('public:products')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
-      // Reload products on any insert, update, delete
-      getProducts().then(p => {
-        products = p;
-        renderProducts(products);
-      }).catch(err => console.error('Realtime product update error:', err));
-    })
-    .subscribe();
+  if (supabase) {
+    supabase
+      .channel('public:products')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, payload => {
+        // Reload products on any insert, update, delete
+        getProducts().then(p => {
+          products = p;
+          renderProducts(products);
+        }).catch(err => console.error('Realtime product update error:', err));
+      })
+      .subscribe();
+  }
 }
 
 
