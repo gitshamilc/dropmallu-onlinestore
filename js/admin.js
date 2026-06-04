@@ -74,9 +74,9 @@ function showToast(message, type = "success") {
 }
 
 async function initAdmin() {
-  await initSupabase();
-  showLoadingOverlay(true, "Loading database...");
   try {
+    showLoadingOverlay(true, "Loading database...");
+    await initSupabase();
     if (typeof getProducts === "function") adminProducts = await getProducts();
     if (typeof getBlogs === "function") adminBlogs = await getBlogs();
 
