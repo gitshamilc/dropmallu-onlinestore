@@ -125,29 +125,41 @@
 .scroll-reveal {
   opacity: 0;
   will-change: transform, opacity;
-  transition: transform 0.9s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.9s ease;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
 }
 
 .reveal-left {
-  transform: translateX(-70px) rotateY(15deg) scale(0.96);
+  transform: translateX(-40px) rotateY(8deg) scale(0.98);
 }
 
 .reveal-right {
-  transform: translateX(70px) rotateY(-15deg) scale(0.96);
+  transform: translateX(40px) rotateY(-8deg) scale(0.98);
+}
+
+.reveal-up {
+  transform: translateY(50px) scale(0.98);
 }
 
 .scroll-reveal.revealed {
   opacity: 1;
-  transform: translateX(0) rotateY(0) scale(1);
+  transform: translateX(0) translateY(0) rotateY(0) scale(1);
 }
 
-/* Simplified animation on mobile viewports for clean navigation */
+/* Staggered transition delays for card grids */
+.scroll-reveal.revealed:nth-child(2n) { transition-delay: 0.05s; }
+.scroll-reveal.revealed:nth-child(3n) { transition-delay: 0.1s; }
+.scroll-reveal.revealed:nth-child(4n) { transition-delay: 0.15s; }
+
+/* Mobile Viewport Scroll Optimizations (Faster & Smoother 2D Transitions) */
 @media (max-width: 768px) {
-  .reveal-left {
-    transform: translateY(40px) scale(0.98);
+  .scroll-reveal {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
   }
-  .reveal-right {
-    transform: translateY(40px) scale(0.98);
+  .reveal-left, .reveal-right {
+    transform: translateY(30px) scale(0.99); /* Disable 3D rotation on mobile to ensure 60fps */
+  }
+  .reveal-up {
+    transform: translateY(30px) scale(0.99);
   }
   .scroll-reveal.revealed {
     transform: translateY(0) scale(1);
