@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 // ── State ────────────────────────────────────────────────────────
-import { supabase } from "../supabase/client.js";
+import { supabase, initSupabase } from "../supabase/client.js";
 let products = [];
 // Force storage initialization to ensure default data
 if (typeof initializeStorage === 'function') {
@@ -57,6 +57,7 @@ const mnavAccount = $('#mnav-account');
 
 // ── Init ─────────────────────────────────────────────────────────
 async function init() {
+  await initSupabase();
   try {
     products = (typeof getProducts === 'function' ? await getProducts() : []) || [];
   } catch (e) {

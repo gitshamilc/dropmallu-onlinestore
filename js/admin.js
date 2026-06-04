@@ -1,6 +1,6 @@
 // DROPMALLU Admin Dashboard Javascript Logic
 
-import { supabase } from "../supabase/client.js";
+import { supabase, initSupabase } from "../supabase/client.js";
 
 let adminProducts = [];
 let adminBlogs = [];
@@ -74,6 +74,7 @@ function showToast(message, type = "success") {
 }
 
 async function initAdmin() {
+  await initSupabase();
   showLoadingOverlay(true, "Loading database...");
   try {
     if (typeof getProducts === "function") adminProducts = await getProducts();
