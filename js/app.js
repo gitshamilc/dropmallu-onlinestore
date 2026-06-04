@@ -80,11 +80,14 @@ async function init() {
   }
 
   renderProducts(products);
+  renderDealsGrid();
+  startCountdown();
   refreshCart();
   bindEvents();
   setupHeroScrolling();
   startCarousel();
   setupDynamicBackground();
+  cyclePedestalHeroImage();
 
   // URL Hash Routing
   window.addEventListener('hashchange', checkUrlHash);
@@ -179,6 +182,56 @@ function bindEvents() {
       applyFilters();
     });
   });
+
+  // Circular, Sidebar and Promo Categories
+  $$('.side-nav-list li a, .circ-cat-item, .promo-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const cat = btn.dataset.cat || btn.getAttribute('data-cat') || 'all';
+      
+      // Update active states
+      $$('.side-nav-list li').forEach(li => li.classList.remove('active'));
+      $$('.cat-btn').forEach(b => b.classList.remove('active'));
+      
+      const parentLi = btn.closest('li');
+      if (parentLi) parentLi.classList.add('active');
+      
+      const targetFilterBtn = $(`.cat-btn[data-cat="${cat}"]`);
+      if (targetFilterBtn) targetFilterBtn.classList.add('active');
+      
+      activeCategory = cat;
+      applyFilters();
+      
+      const exploreSec = $('#explore');
+      if (exploreSec) exploreSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Top Header Search Bar
+  const hSearchInput = $('#header-search-input');
+  const hSearchBtn = $('#header-search-btn');
+  const hSearchDropdown = $('#search-cat-dropdown');
+
+  if (hSearchBtn && hSearchInput) {
+    const triggerSearch = () => {
+      searchQuery = hSearchInput.value.toLowerCase().trim();
+      const cat = hSearchDropdown?.value || 'all';
+      activeCategory = cat;
+      
+      $$('.cat-btn').forEach(b => b.classList.remove('active'));
+      const targetFilterBtn = $(`.cat-btn[data-cat="${cat}"]`);
+      if (targetFilterBtn) targetFilterBtn.classList.add('active');
+      
+      applyFilters();
+      const exploreSec = $('#explore');
+      if (exploreSec) exploreSec.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    hSearchBtn.addEventListener('click', triggerSearch);
+    hSearchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') triggerSearch();
+    });
+  }
 
   // Cart
   if (cartToggle) cartToggle.addEventListener('click', openCart);
@@ -492,13 +545,21 @@ function checkUrlHash() {
 // ── Carousel ─────────────────────────────────────────────────────
 function startCarousel() {
   clearInterval(slideTimer);
+  if (!slides || slides.length === 0) return;
   slideTimer = setInterval(nextSlide, 5500);
 }
 
-function nextSlide() { goSlide((currentSlide + 1) % slides.length); }
-function prevSlide() { goSlide((currentSlide - 1 + slides.length) % slides.length); }
+function nextSlide() { 
+  if (!slides || slides.length === 0) return;
+  goSlide((currentSlide + 1) % slides.length); 
+}
+function prevSlide() { 
+  if (!slides || slides.length === 0) return;
+  goSlide((currentSlide - 1 + slides.length) % slides.length); 
+}
 
 function goSlide(idx) {
+  if (!slides || slides.length === 0) return;
   currentSlide = idx;
   slides.forEach((s, i) => s.classList.toggle('active', i === idx));
   dots.forEach((d, i) => d.classList.toggle('active', i === idx));
@@ -591,6 +652,118 @@ function setupDynamicBackground() {
 
   window.addEventListener('scroll', updateBg);
   updateBg(); // Initialize background color on load
+}
+
+// ── Deal of the Day Renderer & Countdown ─────────────────────────
+function startCountdown() {
+  const hrsEl = $('#timer-hrs');
+  const minsEl = $('#timer-mins');
+  const secsEl = $('#timer-secs');
+  if (!hrsEl || !minsEl || !secsEl) return;
+
+  let targetTime = localStorage.getItem('dropmallu_countdown_target');
+  if (!targetTime || new Date(targetTime) <= new Date()) {
+    const nextDate = new Date();
+    nextDate.setHours(nextDate.getHours() + 12);
+    targetTime = nextDate.toISOString();
+    localStorage.setItem('dropmallu_countdown_target', targetTime);
+  }
+
+  function update() {
+    const diff = new Date(targetTime) - new Date();
+    if (diff <= 0) {
+      localStorage.removeItem('dropmallu_countdown_target');
+      startCountdown();
+      return;
+    }
+    const hrs = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor((diff / (1000 * 60)) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+
+    hrsEl.textContent = String(hrs).padStart(2, '0');
+    minsEl.textContent = String(mins).padStart(2, '0');
+    secsEl.textContent = String(secs).padStart(2, '0');
+  }
+
+  setInterval(update, 1000);
+  update();
+}
+
+function renderDealsGrid() {
+  const grid = $('#deals-products-grid');
+  if (!grid || !products || products.length === 0) return;
+  grid.innerHTML = '';
+
+  const deals = products.slice(0, 5);
+
+  deals.forEach((p, i) => {
+    const card = document.createElement('div');
+    const delay = i * 0.05;
+    card.className = 'product-card glass scroll-reveal reveal-up';
+    card.style.transitionDelay = `${delay}s`;
+    
+    const discountPercent = 20 + (i * 5);
+    const originalPrice = Math.round(p.price / (1 - (discountPercent / 100)));
+
+    card.innerHTML = `
+      <span class="product-badge" style="background:#ef4444; color:#fff;">-${discountPercent}%</span>
+      <div class="product-img-wrap">
+        <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+      </div>
+      <div class="product-info">
+        <div class="product-meta">
+          <span class="product-cat">${p.category}</span>
+          <span class="product-rating" style="color:var(--primary);">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            ${p.rating || '4.5'}
+          </span>
+        </div>
+        <h3 class="product-name" style="font-size:13px; margin:4px 0; font-weight:600;">${p.name}</h3>
+        <div class="product-footer" style="margin-top:8px;">
+          <div style="display:flex; flex-direction:column;">
+            <span class="product-price" style="font-size:14px; font-weight:700; color:var(--primary);">${formatPrice(p.price)}</span>
+            <span class="original-price" style="text-decoration:line-through; font-size:10px; color:var(--text-secondary);">${formatPrice(originalPrice)}</span>
+          </div>
+          <button class="cart-add-btn" style="background:var(--accent-green); border-color:var(--accent-green); color:#fff; width:28px; height:28px;" title="Add to Cart" onclick="addToCartClick(event,'${p.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.cart-add-btn')) return;
+      showProduct(p);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// Cycle featured image in the main hero pedestal slider
+function cyclePedestalHeroImage() {
+  const heroImage = $('#pedestal-hero-image');
+  if (!heroImage || !products || products.length === 0) return;
+  
+  let currentIdx = 0;
+  // Use a subset of attractive watch / shoe items
+  const cycleItems = products.filter(p => p.category === 'watch' || p.category === 'shoe');
+  if (cycleItems.length === 0) return;
+  
+  setInterval(() => {
+    currentIdx = (currentIdx + 1) % cycleItems.length;
+    const nextItem = cycleItems[currentIdx];
+    
+    // Transition fade
+    heroImage.style.opacity = '0';
+    heroImage.style.transform = 'translateY(15px) scale(0.95)';
+    
+    setTimeout(() => {
+      heroImage.src = nextItem.image;
+      heroImage.style.opacity = '1';
+      heroImage.style.transform = 'translateY(0) scale(1)';
+    }, 400);
+  }, 7000);
 }
 
 // ── Boot ─────────────────────────────────────────────────────────

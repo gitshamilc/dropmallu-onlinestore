@@ -83,117 +83,268 @@
     <div class="geo-shape geo-2"></div>
     <div class="geo-shape geo-3"></div>
   </div>
-
-  <!-- ═══ Backdrop Dimmer (for cart drawer) ═══ -->
-  <div id="backdrop" class="backdrop-dimmer"></div>
+  <!-- ═══ Top Info Bar ═══ -->
+  <div class="top-bar">
+    <div class="top-bar-container">
+      <span class="top-bar-left">⚡ Free Delivery on orders above ₹499</span>
+      <div class="top-bar-right">
+        <a href="#explore">Download App</a>
+        <span class="divider">|</span>
+        <a href="#explore">Track Order</a>
+        <span class="divider">|</span>
+        <a href="https://wa.me/919895177154">Help & Support</a>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ Header ═══ -->
-  <header id="main-header">
-    <div class="nav-container">
+  <header id="main-header" class="premium-header">
+    <div class="nav-container header-main-row">
       <a href="#" class="logo">
         <i data-lucide="shield-check"></i>
         DROPMALLU<span class="dot">.</span>
+        <span class="verified-badge"><i data-lucide="check"></i> Verified Store</span>
       </a>
 
-      <nav class="nav-links" id="desktop-nav">
-        <a href="#" class="active">Home</a>
-        <a href="#explore">Products</a>
-        <a href="#deals">Featured</a>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="#explore" class="icon-btn" title="Search">
+      <!-- Premium Search Bar -->
+      <div class="header-search-wrap">
+        <div class="search-cat-select">
+          <select id="search-cat-dropdown">
+            <option value="all">All Categories</option>
+            <option value="watch">Watches</option>
+            <option value="powerbank">Powerbanks</option>
+            <option value="shoe">Shoes</option>
+            <option value="projector">Projectors</option>
+            <option value="gadgets">Gadgets</option>
+          </select>
+          <i data-lucide="chevron-down" class="dropdown-arrow-icon"></i>
+        </div>
+        <div class="search-input-wrap">
+          <input type="text" id="header-search-input" placeholder="Search for products, brands and more...">
+        </div>
+        <button id="header-search-btn" class="search-action-btn">
           <i data-lucide="search"></i>
-        </a>
-        <button id="cart-toggle" class="icon-btn" title="Cart">
-          <i data-lucide="shopping-bag"></i>
-          <span id="cart-badge" class="badge" style="display:none;">0</span>
         </button>
-        <button id="signin-trigger" class="signin-btn">
-          <i data-lucide="lock" style="width:14px;height:14px;"></i>
-          Sign In
+      </div>
+
+      <!-- Action Icons -->
+      <div class="nav-actions">
+        <a href="#" class="nav-action-link" id="action-track">
+          <i data-lucide="truck"></i>
+          <span>Track Order</span>
+        </a>
+        <a href="#" class="nav-action-link" id="action-wishlist">
+          <i data-lucide="heart"></i>
+          <span>Wishlist</span>
+        </a>
+        <button id="cart-toggle" class="icon-btn-cart">
+          <div class="cart-icon-wrap">
+            <i data-lucide="shopping-cart"></i>
+            <span id="cart-badge" class="badge" style="display:none;">0</span>
+          </div>
+          <span class="cart-label">Cart</span>
+        </button>
+        <button id="signin-trigger" class="signin-btn-account">
+          <i data-lucide="user"></i>
+          <div class="account-btn-text">
+            <span class="subtext">Sign In</span>
+            <span class="maintext">Account <i data-lucide="chevron-down"></i></span>
+          </div>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ═══ Hero Section ═══ -->
-  <section class="hero">
-    <div class="hero-container">
-      <div class="hero-text anim-fade-up">
-        <span class="hero-badge">
-          <i data-lucide="check-circle" style="width:12px;height:12px;"></i>
-          Verified online Store
-        </span>
-        <h1 class="hero-title">Premium <span>Gadget Hub</span></h1>
-        <p class="hero-desc">Discover curated high-quality tech, luxury watches, performance shoes and trending gadgets. Add items to cart and checkout instantly via WhatsApp.</p>
-        <div class="hero-btns">
-          <a href="#explore" class="btn btn-primary">
-            <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i>
-            Shop Catalog
-          </a>
-          <a href="#deals" class="btn btn-outline">View Offers</a>
-        </div>
+  <!-- ═══ Sub Navigation ═══ -->
+  <div class="sub-nav">
+    <div class="sub-nav-container">
+      <div class="categories-dropdown-btn">
+        <i data-lucide="menu"></i>
+        <span>Shop by Categories</span>
+        <i data-lucide="chevron-down"></i>
       </div>
+      <nav class="sub-nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#explore">Products</a>
+        <a href="#deals">Deals</a>
+        <a href="#explore">New Arrivals</a>
+        <a href="#explore">Featured</a>
+        <a href="#explore">Brands</a>
+      </nav>
+      <div class="deals-marquee">
+        <span>🔥 Today's Deal Up to 60% Off</span>
+      </div>
+    </div>
+  </div>
 
-      <div class="hero-visual anim-fade-up anim-delay-2">
-        <div class="scrolling-slideshow">
-          <!-- Track 1: Scrolls Down -->
-          <div class="scrolling-track track-down" id="hero-scroll-1">
-            <!-- Populated by JS -->
+  <!-- ═══ Main Content Layout ═══ -->
+  <main class="main-content-layout">
+    <div class="store-grid-container">
+      
+      <!-- Category Sidebar -->
+      <aside class="side-categories-panel glass">
+        <ul class="side-nav-list">
+          <li class="active"><a href="#explore" data-cat="all"><i data-lucide="smartphone"></i> Smartphones & Tablets <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="tv"></i> Electronics <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="watch"><i data-lucide="watch"></i> Watches <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="headphones"></i> Audio <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="laptop"></i> Computers & Accessories <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="gamepad-2"></i> Gaming <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="camera"></i> Cameras & Photography <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="home"></i> Home Appliances <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="gadgets"><i data-lucide="shopping-bag"></i> Lifestyle <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li><a href="#explore" data-cat="shoe"><i data-lucide="footprints"></i> Shoes <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+          <li class="more-cats"><a href="#explore" data-cat="all"><i data-lucide="layout-grid"></i> More Categories <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
+        </ul>
+      </aside>
+
+      <!-- Pedestal Hero Showcase Area -->
+      <section class="hero-pedestal-showcase glass">
+        <div class="hero-pedestal-content">
+          <span class="hero-green-badge"><i data-lucide="shield-check"></i> Premium Collection</span>
+          <h1 class="hero-main-title">Upgrade Your <br><span>Lifestyle</span></h1>
+          <p class="hero-subtitle">Discover trending gadgets, luxury watches, performance shoes and more.</p>
+          <div class="hero-buttons-row">
+            <a href="#explore" class="btn btn-primary-green">Shop Now <i data-lucide="arrow-right"></i></a>
+            <a href="#deals" class="btn btn-outline-white">View Offers</a>
           </div>
-          <!-- Track 2: Scrolls Up -->
-          <div class="scrolling-track track-up" id="hero-scroll-2">
+          
+          <!-- Bottom Badges Row -->
+          <div class="hero-bottom-badges">
+            <div class="hero-badge-item"><i data-lucide="check-circle"></i> 100% Authentic Products</div>
+            <div class="hero-badge-item"><i data-lucide="credit-card"></i> Secure Payments & COD</div>
+            <div class="hero-badge-item"><i data-lucide="rotate-ccw"></i> Easy Returns 7 Days</div>
+            <div class="hero-badge-item"><i data-lucide="truck"></i> Fast Delivery Across India</div>
           </div>
+        </div>
+
+        <div class="hero-pedestal-graphic">
+          <div class="pedestal-glow"></div>
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Featured Product Group" class="hero-graphic-image" id="pedestal-hero-image">
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══ Circular Quick Category Links ═══ -->
+  <div class="circular-categories-container scroll-reveal reveal-up">
+    <div class="circular-categories-row">
+      <a href="#explore" class="circ-cat-item" data-cat="all">
+        <div class="circ-icon-wrap" style="background:rgba(239,68,68,0.1); color:#ef4444;"><i data-lucide="percent"></i></div>
+        <span>Top Deals</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(59,130,246,0.1); color:#3b82f6;"><i data-lucide="smartphone"></i></div>
+        <span>Mobiles</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(245,158,11,0.1); color:#f59e0b;"><i data-lucide="tv"></i></div>
+        <span>Electronics</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="watch">
+        <div class="circ-icon-wrap" style="background:rgba(16,185,129,0.1); color:#10b981;"><i data-lucide="watch"></i></div>
+        <span>Watches</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(139,92,246,0.1); color:#8b5cf6;"><i data-lucide="headphones"></i></div>
+        <span>Audio</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="shoe">
+        <div class="circ-icon-wrap" style="background:rgba(236,72,153,0.1); color:#ec4899;"><i data-lucide="footprints"></i></div>
+        <span>Shoes</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(16,185,129,0.1); color:#10b981;"><i data-lucide="home"></i></div>
+        <span>Home</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(59,130,246,0.1); color:#3b82f6;"><i data-lucide="cable"></i></div>
+        <span>Accessories</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(245,158,11,0.1); color:#f59e0b;"><i data-lucide="laptop"></i></div>
+        <span>Laptops</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(239,68,68,0.1); color:#ef4444;"><i data-lucide="camera"></i></div>
+        <span>Cameras</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(139,92,246,0.1); color:#8b5cf6;"><i data-lucide="gamepad-2"></i></div>
+        <span>Gaming</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="gadgets">
+        <div class="circ-icon-wrap" style="background:rgba(236,72,153,0.1); color:#ec4899;"><i data-lucide="sparkles"></i></div>
+        <span>Beauty</span>
+      </a>
+      <a href="#explore" class="circ-cat-item" data-cat="all">
+        <div class="circ-icon-wrap" style="background:rgba(107,114,128,0.1); color:#6b7280;"><i data-lucide="layout-grid"></i></div>
+        <span>More</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ Deal of the Day Section ═══ -->
+  <section id="deals" class="deals-day-section glass scroll-reveal reveal-up">
+    <div class="deals-day-header">
+      <div class="deals-day-title-wrap">
+        <h2>⚡ Deal of the Day</h2>
+        <p class="subtitle">Limited time offer, don't miss out!</p>
+      </div>
+      <div class="countdown-timer-wrap">
+        <div class="countdown-box"><span id="timer-hrs">12</span><p>Hrs</p></div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-box"><span id="timer-mins">34</span><p>Mins</p></div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-box"><span id="timer-secs">56</span><p>Secs</p></div>
+      </div>
+      <a href="#explore" class="btn btn-outline-white btn-sm">View All Deals</a>
+    </div>
+    <div class="deals-products-grid" id="deals-products-grid">
+      <!-- Rendered by JS -->
     </div>
   </section>
 
-  <!-- ═══ Featured Carousel (Flipkart/Amazon Style) ═══ -->
-  <section id="deals" class="carousel-section scroll-reveal reveal-up">
-    <div class="carousel-container glass">
-      <div class="carousel-track" id="carousel-track">
-
-        <div class="carousel-slide active" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&w=1200&q=80');">
-          <div class="slide-content">
-            <span class="slide-badge">Tech Insights</span>
-            <h2 class="slide-title">4K Laser Projectors are Replacing Big Screen TVs</h2>
-            <p class="slide-desc">Mini portable laser systems deliver theater-quality displays up to 150 inches — reshaping home entertainment.</p>
-            <button class="btn btn-primary" onclick="openArticle('b1')">Read Analysis</button>
-          </div>
-        </div>
-
-        <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=1200&q=80');">
-          <div class="slide-content">
-            <span class="slide-badge">Charging Guide</span>
-            <h2 class="slide-title">Fast USB-C PD Charging: Protecting Battery Life</h2>
-            <p class="slide-desc">Not all powerbanks are equal. Learn PD protocols and keep your devices charged safely.</p>
-            <button class="btn btn-primary" onclick="openArticle('b2')">Read Guide</button>
-          </div>
-        </div>
-
-        <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(5,5,8,0.95) 38%, rgba(5,5,8,0.3) 100%), url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80');">
-          <div class="slide-content">
-            <span class="slide-badge">Lifestyle</span>
-            <h2 class="slide-title">Performance Footwear: Carbon Shanks & Nitrogen Foams</h2>
-            <p class="slide-desc">Streetwear meets aerospace engineering — the science inside daily sneakers.</p>
-            <button class="btn btn-primary" onclick="openArticle('b3')">Read Review</button>
-          </div>
-        </div>
-
+  <!-- ═══ Promo Banners Grid ═══ -->
+  <div class="promo-banners-grid">
+    <div class="promo-banner-card glass scroll-reveal reveal-up">
+      <div class="promo-banner-content">
+        <h3>Smart Watches</h3>
+        <p class="subtitle">Starting at ₹100</p>
+        <a href="#explore" class="promo-btn" data-cat="watch">Explore Now <i data-lucide="arrow-right"></i></a>
       </div>
-
-      <button class="carousel-btn prev" id="slide-prev" title="Previous"><i data-lucide="chevron-left"></i></button>
-      <button class="carousel-btn next" id="slide-next" title="Next"><i data-lucide="chevron-right"></i></button>
-
-      <div class="carousel-dots" id="carousel-dots">
-        <span class="dot active" data-idx="0"></span>
-        <span class="dot" data-idx="1"></span>
-        <span class="dot" data-idx="2"></span>
-      </div>
+      <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=300&q=80" alt="Smart Watches" class="promo-banner-img">
     </div>
-  </section>
+    
+    <div class="promo-banner-card glass scroll-reveal reveal-up">
+      <div class="promo-banner-content">
+        <h3>Best Selling Shoes</h3>
+        <p class="subtitle">Up to 50% Off</p>
+        <a href="#explore" class="promo-btn" data-cat="shoe">Shop Now <i data-lucide="arrow-right"></i></a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80" alt="Shoes Offer" class="promo-banner-img">
+    </div>
+  </div>
 
-  <!-- ═══ Explore Products ═══ -->
+  <!-- ═══ Top Brands Section ═══ -->
+  <div class="brands-section scroll-reveal reveal-up">
+    <div class="brands-header">
+      <h3>Top Brands</h3>
+      <p>100% Original Products</p>
+    </div>
+    <div class="brands-row">
+      <div class="brand-logo-card"><span>SAMSUNG</span></div>
+      <div class="brand-logo-card"><span>boAt</span></div>
+      <div class="brand-logo-card"><span>SONY</span></div>
+      <div class="brand-logo-card"><span>Noise</span></div>
+      <div class="brand-logo-card"><span>PUMA</span></div>
+      <div class="brand-logo-card"><span>DELL</span></div>
+      <a href="#explore" class="brand-logo-card view-all"><span>View All</span></a>
+    </div>
+  </div>
+
+  <!-- ═══ Explore Products Catalog ═══ -->
   <section id="explore" class="explore-section">
     <div class="section-header scroll-reveal reveal-up">
       <p class="section-tag">Catalog</p>
@@ -302,6 +453,38 @@
     </a>
   </nav>
 
+  <!-- ═══ Features Strip ═══ -->
+  <div class="features-strip scroll-reveal reveal-up">
+    <div class="feature-strip-item">
+      <i data-lucide="truck"></i>
+      <div>
+        <h4>Free Delivery</h4>
+        <p>On orders above ₹499</p>
+      </div>
+    </div>
+    <div class="feature-strip-item">
+      <i data-lucide="rotate-ccw"></i>
+      <div>
+        <h4>7 Days Return</h4>
+        <p>Easy return & refund</p>
+      </div>
+    </div>
+    <div class="feature-strip-item">
+      <i data-lucide="shield-check"></i>
+      <div>
+        <h4>Secure Payment</h4>
+        <p>100% secure & safe</p>
+      </div>
+    </div>
+    <div class="feature-strip-item">
+      <i data-lucide="tag"></i>
+      <div>
+        <h4>Best Price</h4>
+        <p>Guaranteed deals</p>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ Footer ═══ -->
   <footer class="scroll-reveal reveal-up">
     <div class="footer-grid">
@@ -310,47 +493,58 @@
           <i data-lucide="shield-check"></i>
           DROPMALLU<span class="dot">.</span>
         </a>
-        <p class="footer-brand-desc">Premium boutique tech store delivering high-quality gadgets, luxury watches and footwear directly via WhatsApp checkout.</p>
+        <p class="footer-brand-desc">Your one-stop destination for premium tech gadgets, watches, and smart accessories.</p>
         <div class="footer-socials">
+          <a href="#" class="icon-btn" title="Facebook"><i data-lucide="facebook"></i></a>
           <a href="#" class="icon-btn" title="Instagram"><i data-lucide="instagram"></i></a>
           <a href="#" class="icon-btn" title="Twitter"><i data-lucide="twitter"></i></a>
-          <a href="#" class="icon-btn" title="Facebook"><i data-lucide="facebook"></i></a>
+          <a href="#" class="icon-btn" title="Youtube"><i data-lucide="youtube"></i></a>
         </div>
       </div>
-      <div class="footer-col">
-        <h4>Catalog</h4>
-        <ul>
-          <li><a href="#explore">Luxury Watches</a></li>
-          <li><a href="#explore">Powerbanks</a></li>
-          <li><a href="#explore">Tech Shoes</a></li>
-          <li><a href="#explore">Projectors</a></li>
-        </ul>
+      
+      <!-- Newsletter Column -->
+      <div class="footer-col newsletter-col">
+        <h4>Newsletter</h4>
+        <p>Subscribe to get updates on exciting offers & deals.</p>
+        <div class="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="Enter your email">
+          <button id="newsletter-btn">Subscribe</button>
+        </div>
       </div>
+
       <div class="footer-col">
-        <h4>Resources</h4>
+        <h4>Customer Care</h4>
         <ul>
-          <li><a href="#deals">Featured Deals</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
+          <li><a href="https://wa.me/919895177154">Contact Us</a></li>
+          <li><a href="#explore">Track Order</a></li>
+          <li><a href="https://wa.me/919895177154">Returns & Refunds</a></li>
+          <li><a href="#">Shipping Policy</a></li>
           <li><a href="#">FAQs</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
-        <h4>Support</h4>
+        <h4>Company</h4>
         <ul>
-          <li><a href="https://wa.me/919895177154">WhatsApp</a></li>
-          <li><a href="mailto:support@dropmallu.com">Email Support</a></li>
-          <li><a href="#">Shipping Info</a></li>
-          <li><a href="#">Returns</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Sitemap</a></li>
         </ul>
       </div>
     </div>
+    
     <div class="footer-bottom">
       <p>&copy; 2026 DROPMALLU. All rights reserved.</p>
-      <p style="display:flex;align-items:center;gap:4px;">
-        Verified Merchant
-        <i data-lucide="check-circle" style="color:var(--primary);width:12px;height:12px;"></i>
-      </p>
+      
+      <!-- Mock Payment Badges -->
+      <div class="payment-badges-row">
+        <span class="pay-badge visa">VISA</span>
+        <span class="pay-badge mc">Mastercard</span>
+        <span class="pay-badge upi">UPI</span>
+        <span class="pay-badge gpay">GPay</span>
+      </div>
     </div>
   </footer>
 
