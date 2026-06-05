@@ -60,6 +60,7 @@ if ($supabaseUrl -and $supabaseKey) {
 # 3. Construct XML
 $xml = @"
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
@@ -112,6 +113,7 @@ if ($blogs.Count -gt 0) {
 $xml += "</urlset>`n"
 
 $sitemapPath = Join-Path $PSScriptRoot "sitemap.xml"
-# Write with UTF8 encoding explicitly
-[System.IO.File]::WriteAllText($sitemapPath, $xml, [System.Text.Encoding]::UTF8)
+# Write with UTF8 encoding explicitly (without BOM)
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllText($sitemapPath, $xml, $utf8NoBom)
 Write-Host "Successfully wrote sitemap.xml with $($products.Count) products and $($blogs.Count) blog entries!"

@@ -1,145 +1,206 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <!-- Core Pages -->
   <url>
     <loc>https://dropmallu.xyz/</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://dropmallu.xyz/index.html</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Products (Deep Links) -->
   <url>
+    <loc>https://dropmallu.xyz/#product-p_1780592772172</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://dropmallu.xyz/#product-p1</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p2</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p3</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p4</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p5</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p6</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p7</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p8</loc>
-    <lastmod>2026-06-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://dropmallu.xyz/#product-p9</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p10</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p11</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p12</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p13</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p14</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p15</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p16</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p17</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p18</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p19</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p2</loc>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#product-p20</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropmallu.xyz/#product-p_1780324768127</loc>
-    <lastmod>2026-06-02</lastmod>
+    <loc>https://dropmallu.xyz/#product-p21</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p22</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p23</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p24</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p25</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p26</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p27</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p28</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p29</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p3</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p30</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p4</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p5</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p6</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p7</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p8</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dropmallu.xyz/#product-p9</loc>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -147,19 +208,19 @@
   <!-- Blog Articles (Deep Links) -->
   <url>
     <loc>https://dropmallu.xyz/#blog-b1</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#blog-b2</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://dropmallu.xyz/#blog-b3</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
