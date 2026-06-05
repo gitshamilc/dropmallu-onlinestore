@@ -257,7 +257,7 @@ function bindEvents() {
       activeCategory = cat;
       applyFilters();
       
-      const exploreSec = $('#explore');
+      const exploreSec = $('#section-products');
       if (exploreSec) exploreSec.scrollIntoView({ behavior: 'smooth' });
     });
   });
@@ -278,13 +278,30 @@ function bindEvents() {
       if (targetFilterBtn) targetFilterBtn.classList.add('active');
       
       applyFilters();
-      const exploreSec = $('#explore');
+      const exploreSec = $('#section-products');
       if (exploreSec) exploreSec.scrollIntoView({ behavior: 'smooth' });
     };
 
     hSearchBtn.addEventListener('click', triggerSearch);
     hSearchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') triggerSearch();
+    });
+
+    // Instant live search as user types
+    hSearchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+
+  // Filter instantly when user changes header category dropdown
+  if (hSearchDropdown) {
+    hSearchDropdown.addEventListener('change', () => {
+      activeCategory = hSearchDropdown.value;
+      $$('.cat-btn').forEach(b => b.classList.remove('active'));
+      const targetFilterBtn = $(`.cat-btn[data-cat="${activeCategory}"]`);
+      if (targetFilterBtn) targetFilterBtn.classList.add('active');
+      applyFilters();
     });
   }
 
@@ -306,7 +323,7 @@ function bindEvents() {
 
   // Mobile nav
   if (mnavHome) mnavHome.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileActive(mnavHome); });
-  if (mnavExplore) mnavExplore.addEventListener('click', (e) => { e.preventDefault(); $('#explore')?.scrollIntoView({ behavior: 'smooth' }); setMobileActive(mnavExplore); });
+  if (mnavExplore) mnavExplore.addEventListener('click', (e) => { e.preventDefault(); $('#section-products')?.scrollIntoView({ behavior: 'smooth' }); setMobileActive(mnavExplore); });
   if (mnavCart) mnavCart.addEventListener('click', (e) => { e.preventDefault(); openCart(); });
   if (mnavAccount) mnavAccount.addEventListener('click', (e) => { e.preventDefault(); openSignin(); });
 
@@ -345,6 +362,40 @@ function bindEvents() {
       }
     });
   }
+
+  // View All Deals button inside deals header
+  const viewAllDealsBtn = $('a[href="#explore"].btn-sm');
+  if (viewAllDealsBtn) {
+    viewAllDealsBtn.addEventListener('click', () => {
+      activeCategory = 'deals';
+      $$('.cat-btn').forEach(b => b.classList.remove('active'));
+      const targetFilterBtn = $(`.cat-btn[data-cat="deals"]`);
+      if (targetFilterBtn) targetFilterBtn.classList.add('active');
+      applyFilters();
+    });
+  }
+
+  // Handle header sub nav links clicking
+  $$('.sub-nav-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const text = link.textContent.trim().toLowerCase();
+      if (text === 'new arrivals' || text === 'featured' || text === 'products') {
+        e.preventDefault();
+        activeCategory = 'all';
+        searchQuery = '';
+        const hSearchInput = $('#header-search-input');
+        const searchInput = $('#search-input');
+        if (hSearchInput) hSearchInput.value = '';
+        if (searchInput) searchInput.value = '';
+        $$('.cat-btn').forEach(b => b.classList.remove('active'));
+        const targetFilterBtn = $(`.cat-btn[data-cat="all"]`);
+        if (targetFilterBtn) targetFilterBtn.classList.add('active');
+        applyFilters();
+        const exploreSec = $('#section-products');
+        if (exploreSec) exploreSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 }
 
 function setMobileActive(el) {
@@ -355,12 +406,64 @@ function setMobileActive(el) {
 // ── Filters ──────────────────────────────────────────────────────
 function applyFilters() {
   let filtered = products;
-  if (activeCategory !== 'all') filtered = filtered.filter(p => p.category === activeCategory);
-  if (searchQuery) filtered = filtered.filter(p =>
-    p.name.toLowerCase().includes(searchQuery) ||
-    p.description.toLowerCase().includes(searchQuery) ||
-    p.category.toLowerCase().includes(searchQuery)
-  );
+  
+  if (activeCategory !== 'all') {
+    const active = activeCategory.toLowerCase().trim();
+    if (active === 'deals') {
+      filtered = filtered.filter(p => p.badge && p.badge.trim() !== '');
+    } else {
+      filtered = filtered.filter(p => {
+        if (!p.category) return false;
+        const cat = p.category.toLowerCase().trim();
+        
+        if (cat === active || cat.startsWith(active) || active.startsWith(cat)) {
+          return true;
+        }
+        
+        const name = (p.name || "").toLowerCase();
+        const desc = (p.description || "").toLowerCase();
+        
+        if (active === 'mobile' && (cat.includes('gadget') || name.includes('phone') || name.includes('mobile') || desc.includes('phone') || desc.includes('mobile'))) {
+          return true;
+        }
+        if (active === 'electronics' && (cat.includes('projector') || cat.includes('powerbank') || name.includes('projector') || name.includes('speaker') || name.includes('powerbank') || desc.includes('projector') || desc.includes('speaker') || desc.includes('powerbank'))) {
+          return true;
+        }
+        if (active === 'audio' && (name.includes('earbuds') || name.includes('headphones') || name.includes('speaker') || name.includes('audio') || desc.includes('earbuds') || desc.includes('headphones') || desc.includes('speaker') || desc.includes('audio'))) {
+          return true;
+        }
+        if (active === 'home' && (name.includes('projector') || name.includes('globe') || name.includes('levitating') || desc.includes('projector') || desc.includes('globe') || desc.includes('levitating'))) {
+          return true;
+        }
+        if (active === 'accessories' && (cat.includes('powerbank') || name.includes('cable') || name.includes('charger') || name.includes('dock') || name.includes('powerbank') || desc.includes('cable') || desc.includes('charger') || desc.includes('dock') || desc.includes('powerbank'))) {
+          return true;
+        }
+        if (active === 'laptop' && (name.includes('laptop') || name.includes('macbook') || name.includes('computer') || desc.includes('laptop') || desc.includes('macbook') || desc.includes('computer'))) {
+          return true;
+        }
+        if (active === 'camera' && (name.includes('camera') || name.includes('lens') || desc.includes('camera') || desc.includes('lens'))) {
+          return true;
+        }
+        if (active === 'gaming' && (name.includes('game') || name.includes('playstation') || name.includes('xbox') || name.includes('switch') || desc.includes('game') || desc.includes('playstation') || desc.includes('xbox') || desc.includes('switch'))) {
+          return true;
+        }
+        if (active === 'beauty' && (name.includes('sleep mask') || name.includes('face') || desc.includes('sleep mask') || desc.includes('face'))) {
+          return true;
+        }
+        
+        return false;
+      });
+    }
+  }
+  
+  if (searchQuery) {
+    filtered = filtered.filter(p =>
+      (p.name && p.name.toLowerCase().includes(searchQuery)) ||
+      (p.description && p.description.toLowerCase().includes(searchQuery)) ||
+      (p.category && p.category.toLowerCase().includes(searchQuery))
+    );
+  }
+  
   renderProducts(filtered);
 }
 
