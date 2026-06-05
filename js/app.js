@@ -18,6 +18,20 @@ let activeCategory = 'all';
 let searchQuery = '';
 
 // ── Helpers & Security Utilities ─────────────────────────────────
+function slugify(text) {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
+window.slugify = slugify;
+
 function escapeHTML(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/[&<>"']/g, function(m) {
@@ -130,6 +144,35 @@ async function init() {
   startCountdown();
   refreshCart();
   bindEvents();
+
+  // Load search and categories from URL parameters for cross-page navigation
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('search')) {
+      searchQuery = params.get('search').toLowerCase().trim();
+      const hSearchInput = $('#header-search-input');
+      const searchInput = $('#search-input');
+      if (hSearchInput) hSearchInput.value = params.get('search');
+      if (searchInput) searchInput.value = params.get('search');
+    }
+    if (params.has('cat')) {
+      activeCategory = params.get('cat');
+      const hSearchDropdown = $('#search-cat-dropdown');
+      if (hSearchDropdown) hSearchDropdown.value = activeCategory;
+      $$('.cat-btn').forEach(b => b.classList.remove('active'));
+      const targetFilterBtn = $(`.cat-btn[data-cat="${activeCategory}"]`);
+      if (targetFilterBtn) targetFilterBtn.classList.add('active');
+    }
+    if (params.has('search') || params.has('cat')) {
+      applyFilters();
+      setTimeout(() => {
+        $('#section-products')?.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+    }
+  } catch (e) {
+    console.error("Error reading search params on init:", e);
+  }
+
   setupHeroScrolling();
   startCarousel();
   setupDynamicBackground();
@@ -176,10 +219,14 @@ function renderProducts(list) {
   }
 
   safeList.forEach((p, i) => {
-    const card = document.createElement('div');
+    const card = document.createElement('a');
+    const slug = slugify(p.name);
+    card.href = `/product/${slug}`;
     const dir = i % 2 === 0 ? 'reveal-left' : 'reveal-right';
     card.className = `product-card glass scroll-reveal ${dir}`;
     card.dataset.id = escapeHTML(p.id);
+    card.style.textDecoration = 'none';
+    card.style.color = 'inherit';
 
     const price = formatPrice(p.price);
 
@@ -206,11 +253,6 @@ function renderProducts(list) {
         </div>
       </div>
     `;
-
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.cart-add-btn')) return;
-      showProduct(p);
-    });
 
     productGrid.appendChild(card);
   });
@@ -769,13 +811,15 @@ function checkUrlHash() {
     const id = hash.replace('#product-', '');
     const p = products.find(x => x.id === id);
     if (p) {
-      showProduct(p);
+      const slug = slugify(p.name);
+      window.location.replace(`/product/${slug}`);
     }
   } else if (hash.startsWith('#blog-')) {
     const id = hash.replace('#blog-', '');
     const b = blogs.find(x => x.id === id);
     if (b) {
-      window.openArticle(id);
+      const slug = slugify(b.title);
+      window.location.replace(`/blog/${slug}`);
     }
   } else {
     closeModals(true);
@@ -943,8 +987,12 @@ function renderDealsGrid() {
   const deals = list.slice(0, 5);
 
   deals.forEach((p, i) => {
-    const card = document.createElement('div');
+    const card = document.createElement('a');
+    const slug = slugify(p.name);
+    card.href = `/product/${slug}`;
     card.className = 'product-card glass';
+    card.style.textDecoration = 'none';
+    card.style.color = 'inherit';
     
     const discountPercent = 20 + (i * 5);
     const originalPrice = Math.round(p.price / (1 - (discountPercent / 100)));
@@ -974,11 +1022,6 @@ function renderDealsGrid() {
         </div>
       </div>
     `;
-
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.cart-add-btn')) return;
-      showProduct(p);
-    });
 
     grid.appendChild(card);
   });

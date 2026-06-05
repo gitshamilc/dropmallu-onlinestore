@@ -38,5 +38,10 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/product/:slug", "destination": "/product.html" },
+    { "source": "/category/:slug", "destination": "/category.html" },
+    { "source": "/blog/:slug", "destination": "/blog.html" }
   ]
 }
