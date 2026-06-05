@@ -17,6 +17,29 @@ let slideTimer = null;
 let activeCategory = 'all';
 let searchQuery = '';
 
+// ── Helpers & Security Utilities ─────────────────────────────────
+function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, function(m) {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#039;';
+      default: return m;
+    }
+  });
+}
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
 // ── DOM Refs ─────────────────────────────────────────────────────
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -128,6 +151,15 @@ async function init() {
       })
       .subscribe();
   }
+
+  // Register service worker for PWA support
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
 }
 
 
@@ -147,28 +179,28 @@ function renderProducts(list) {
     const card = document.createElement('div');
     const dir = i % 2 === 0 ? 'reveal-left' : 'reveal-right';
     card.className = `product-card glass scroll-reveal ${dir}`;
-    card.dataset.id = p.id;
+    card.dataset.id = escapeHTML(p.id);
 
     const price = formatPrice(p.price);
 
     card.innerHTML = `
-      ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+      ${p.badge ? `<span class="product-badge">${escapeHTML(p.badge)}</span>` : ''}
       <div class="product-img-wrap">
-        <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        <img class="product-img" src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
       </div>
       <div class="product-info">
         <div class="product-meta">
-          <span class="product-cat">${p.category}</span>
+          <span class="product-cat">${escapeHTML(p.category)}</span>
           <span class="product-rating">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            ${p.rating || '4.5'}
+            ${escapeHTML(p.rating || '4.5')}
           </span>
         </div>
-        <h3 class="product-name">${p.name}</h3>
-        <p class="product-desc">${p.description}</p>
+        <h3 class="product-name">${escapeHTML(p.name)}</h3>
+        <p class="product-desc">${escapeHTML(p.description)}</p>
         <div class="product-footer">
           <span class="product-price">${price}</span>
-          <button class="cart-add-btn" title="Add to Cart" onclick="addToCartClick(event,'${p.id}')">
+          <button class="cart-add-btn" title="Add to Cart" onclick="addToCartClick(event,'${escapeHTML(p.id)}')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
           </button>
         </div>
@@ -385,17 +417,17 @@ function refreshCart() {
     checkoutBtn.disabled = false;
     cartItemsEl.innerHTML = cart.map(item => `
       <div class="cart-item">
-        <img class="cart-item-img" src="${item.image}" alt="${item.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        <img class="cart-item-img" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
         <div class="cart-item-info">
-          <h4 class="cart-item-name">${item.name}</h4>
+          <h4 class="cart-item-name">${escapeHTML(item.name)}</h4>
           <span class="cart-item-price">${formatPrice(item.price)}</span>
           <div class="cart-item-qty">
-            <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+            <button class="qty-btn" onclick="changeQty('${escapeHTML(item.id)}',-1)">−</button>
             <span class="qty-val">${item.qty}</span>
-            <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+            <button class="qty-btn" onclick="changeQty('${escapeHTML(item.id)}',1)">+</button>
           </div>
         </div>
-        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" title="Remove">
+        <button class="cart-item-remove" onclick="removeFromCart('${escapeHTML(item.id)}')" title="Remove">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         </button>
       </div>
@@ -444,11 +476,12 @@ function openSignin() {
   signinModal.classList.add('active');
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
   e.preventDefault();
   const id = $('#login-id')?.value.trim();
   const pass = $('#login-pass')?.value;
-  if (id === 'dropmallu' && pass === 'dropmallu@321') {
+  const hash = await sha256(pass || '');
+  if (id === 'dropmallu' && hash === 'ea197929c33aa56b8f895c85e098d956f058af7dbca4cdb33bf183f9ffea04ff') {
     try {
       sessionStorage.setItem('dropmallu_auth', 'true');
       localStorage.setItem('dropmallu_auth', 'true');
@@ -508,7 +541,7 @@ function showProduct(p) {
   if (images.length > 1) {
     galleryHtml = '<div class="pdp-gallery-thumbs" style="display:flex; gap:8px; margin-top:12px; overflow-x:auto; padding-bottom:4px;">';
     images.forEach((img, idx) => {
-      galleryHtml += `<img src="${img}" style="width:50px; height:50px; border-radius:6px; object-fit:cover; border:2px solid ${idx === 0 ? 'var(--primary)' : 'transparent'}; cursor:pointer; background:rgba(255,255,255,0.05);" onclick="document.querySelector('.pdp-img').src='${img}'; document.querySelectorAll('.pdp-gallery-thumbs img').forEach(i => i.style.borderColor='transparent'); this.style.borderColor='var(--primary)';">`;
+      galleryHtml += `<img src="${escapeHTML(img)}" style="width:50px; height:50px; border-radius:6px; object-fit:cover; border:2px solid ${idx === 0 ? 'var(--primary)' : 'transparent'}; cursor:pointer; background:rgba(255,255,255,0.05);" onclick="document.querySelector('.pdp-img').src='${escapeHTML(img)}'; document.querySelectorAll('.pdp-gallery-thumbs img').forEach(i => i.style.borderColor='transparent'); this.style.borderColor='var(--primary)';">`;
     });
     galleryHtml += '</div>';
   }
@@ -521,7 +554,7 @@ function showProduct(p) {
     pairs.forEach(pair => {
       const parts = pair.split(':');
       if (parts.length >= 2) {
-        specsHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.02); padding-bottom:2px;"><strong>${parts[0].trim()}:</strong> <span style="color:var(--text-main);">${parts[1].trim()}</span></div>`;
+        specsHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.02); padding-bottom:2px;"><strong>${escapeHTML(parts[0].trim())}:</strong> <span style="color:var(--text-main);">${escapeHTML(parts[1].trim())}</span></div>`;
       }
     });
     specsHtml += '</div>';
@@ -530,36 +563,36 @@ function showProduct(p) {
   body.innerHTML = `
     <div class="pdp-grid">
       <div class="pdp-left">
-        <img class="pdp-img" src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        <img class="pdp-img" src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
         ${galleryHtml}
       </div>
       <div class="pdp-info pdp-right">
-        ${p.badge ? `<span class="pdp-badge">${p.badge}</span>` : ''}
-        <h2 class="pdp-title">${p.name}</h2>
+        ${p.badge ? `<span class="pdp-badge">${escapeHTML(p.badge)}</span>` : ''}
+        <h2 class="pdp-title">${escapeHTML(p.name)}</h2>
         <div class="pdp-rating-row">
           <span class="pdp-stars" style="color:#fbbf24; margin-right:5px;">${ratingStars}</span>
-          <span class="pdp-rating-val" style="font-weight:700; color:var(--primary); margin-right:5px;">${p.rating || 4.5}</span>
-          <span class="pdp-reviews-count" style="color:var(--text-sub);">(${p.reviews || 20} Ratings)</span>
+          <span class="pdp-rating-val" style="font-weight:700; color:var(--primary); margin-right:5px;">${escapeHTML(p.rating || 4.5)}</span>
+          <span class="pdp-reviews-count" style="color:var(--text-sub);">(${escapeHTML(p.reviews || 20)} Ratings)</span>
         </div>
         <div class="pdp-price-container">
           <span class="pdp-price">${price}</span>
           <span class="pdp-delivery-tag" style="color:var(--primary); font-size:12px; font-weight:600; margin-left:12px;">FREE Delivery in 2-3 Days</span>
         </div>
         
-        <p class="pdp-desc" style="margin-top:12px; line-height:1.5; font-size:13px; color:var(--text-sub);">${p.description}</p>
+        <p class="pdp-desc" style="margin-top:12px; line-height:1.5; font-size:13px; color:var(--text-sub);">${escapeHTML(p.description)}</p>
         
         ${specsHtml}
         
         <div class="pdp-urgency-box" style="margin-top:15px; margin-bottom:15px;">
-          <span class="pdp-stock-warning" style="${stockStyle}">${stockText}</span>
+          <span class="pdp-stock-warning" style="${stockStyle}">${escapeHTML(stockText)}</span>
         </div>
  
         <div class="pdp-actions-container">
-          <button class="btn-pdp btn-pdp-cart" onclick="addToCart('${p.id}'); closeModals();">
+          <button class="btn-pdp btn-pdp-cart" onclick="addToCart('${escapeHTML(p.id)}'); closeModals();">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             ADD TO CART
           </button>
-          <button class="btn-pdp btn-pdp-buynow" onclick="directBuy('${p.id}')">
+          <button class="btn-pdp btn-pdp-buynow" onclick="directBuy('${escapeHTML(p.id)}')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             BUY NOW
           </button>
@@ -588,19 +621,19 @@ window.openArticle = function(blogId) {
   const body = $('#blog-modal-body');
   body.innerHTML = `
     <div class="article-hero">
-      <img src="${b.image}" alt="${b.title}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+      <img src="${escapeHTML(b.image)}" alt="${escapeHTML(b.title)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
       <div class="article-hero-text">
-        <h2>${b.title}</h2>
+        <h2>${escapeHTML(b.title)}</h2>
         <div class="article-meta">
-          <span>${b.author}</span>
-          <span>${b.date}</span>
-          <span>${b.readTime}</span>
+          <span>${escapeHTML(b.author)}</span>
+          <span>${escapeHTML(b.date)}</span>
+          <span>${escapeHTML(b.readTime)}</span>
         </div>
       </div>
     </div>
     <div class="article-body">
-      <p class="lead">${b.summary}</p>
-      <p class="content">${b.content || 'Full article coming soon.'}</p>
+      <p class="lead">${escapeHTML(b.summary)}</p>
+      <p class="content">${escapeHTML(b.content || 'Full article coming soon.')}</p>
     </div>
   `;
   blogModal.classList.add('active');
@@ -684,8 +717,8 @@ function setupHeroScrolling() {
   items.forEach((p, i) => {
     const card = `
       <div class="scroll-card">
-        <img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
-        <div class="scroll-card-title" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name}</div>
+        <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        <div class="scroll-card-title" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHTML(p.name)}</div>
         <div class="scroll-card-price">${formatPrice(p.price)}</div>
       </div>
     `;
@@ -816,23 +849,23 @@ function renderDealsGrid() {
     card.innerHTML = `
       <span class="product-badge" style="background:#ef4444; color:#fff;">-${discountPercent}%</span>
       <div class="product-img-wrap">
-        <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
+        <img class="product-img" src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';">
       </div>
       <div class="product-info">
         <div class="product-meta">
-          <span class="product-cat">${p.category}</span>
+          <span class="product-cat">${escapeHTML(p.category)}</span>
           <span class="product-rating" style="color:var(--primary);">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            ${p.rating || '4.5'}
+            ${escapeHTML(p.rating || '4.5')}
           </span>
         </div>
-        <h3 class="product-name" style="font-size:13px; margin:4px 0; font-weight:600;">${p.name}</h3>
+        <h3 class="product-name" style="font-size:13px; margin:4px 0; font-weight:600;">${escapeHTML(p.name)}</h3>
         <div class="product-footer" style="margin-top:8px;">
           <div style="display:flex; flex-direction:column;">
             <span class="product-price" style="font-size:14px; font-weight:700; color:var(--primary);">${formatPrice(p.price)}</span>
             <span class="original-price" style="text-decoration:line-through; font-size:10px; color:var(--text-secondary);">${formatPrice(originalPrice)}</span>
           </div>
-          <button class="cart-add-btn" style="background:var(--accent-green); border-color:var(--accent-green); color:#fff; width:28px; height:28px;" title="Add to Cart" onclick="addToCartClick(event,'${p.id}')">
+          <button class="cart-add-btn" style="background:var(--accent-green); border-color:var(--accent-green); color:#fff; width:28px; height:28px;" title="Add to Cart" onclick="addToCartClick(event,'${escapeHTML(p.id)}')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
           </button>
         </div>
@@ -1022,13 +1055,13 @@ async function renderTestimonials() {
       card.style.cssText = 'background: var(--bg-card); border-radius: var(--radius-md); padding: 1.5rem; border: 1px solid var(--border-glass); margin: 10px; max-width: 320px; flex: 1 1 300px;';
       card.innerHTML = `
         <div class="testimonial-header" style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
-          <img src="${t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80'}" alt="${t.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <img src="${escapeHTML(t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80')}" alt="${escapeHTML(t.name)}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
           <div>
-            <h4 style="margin:0; font-size:14px; font-weight:600; color:var(--text-main);">${t.name}</h4>
+            <h4 style="margin:0; font-size:14px; font-weight:600; color:var(--text-main);">${escapeHTML(t.name)}</h4>
             <div class="testimonial-stars" style="color:#fbbf24; font-size:12px;">${stars}</div>
           </div>
         </div>
-        <p class="testimonial-review" style="font-size:13px; color:var(--text-sub); margin:0; line-height: 1.4; font-style: italic;">"${t.review}"</p>
+        <p class="testimonial-review" style="font-size:13px; color:var(--text-sub); margin:0; line-height: 1.4; font-style: italic;">"${escapeHTML(t.review)}"</p>
       `;
       container.appendChild(card);
     });
@@ -1053,9 +1086,9 @@ async function renderBrandsList() {
 
     brands.forEach(b => {
       const card = document.createElement('a');
-      card.href = b.link || '#explore';
+      card.href = escapeHTML(b.link || '#explore');
       card.className = 'brand-logo-card';
-      card.innerHTML = b.logo ? `<img src="${b.logo}" alt="${b.name}" style="max-height: 36px; max-width: 80px; object-fit: contain;">` : `<span>${b.name}</span>`;
+      card.innerHTML = b.logo ? `<img src="${escapeHTML(b.logo)}" alt="${escapeHTML(b.name)}" style="max-height: 36px; max-width: 80px; object-fit: contain;">` : `<span>${escapeHTML(b.name)}</span>`;
       container.appendChild(card);
     });
   } catch (e) {

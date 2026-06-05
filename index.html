@@ -13,6 +13,23 @@
   <link rel="canonical" href="https://dropmallu.xyz/">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://dropmallu.xyz/sitemap.xml">
 
+  <!-- ═══ Performance preconnects (Lighthouse Optimization) ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Preload Hero Image (LCP Optimization) -->
+  <link rel="preload" href="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" as="image" fetchpriority="high">
+
+  <!-- ═══ PWA Manifest & App Config ═══ -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b1e36">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#0b1e36">
+  <meta name="apple-mobile-web-app-title" content="DROPMALLU">
 
   <!-- ═══ Open Graph (Facebook / WhatsApp preview) ═══ -->
   <meta property="og:type" content="website">
@@ -110,7 +127,7 @@
       <!-- Premium Search Bar -->
       <div class="header-search-wrap">
         <div class="search-cat-select">
-          <select id="search-cat-dropdown">
+          <select id="search-cat-dropdown" aria-label="Select Category">
             <option value="all">All Categories</option>
             <option value="watch">Watches</option>
             <option value="powerbank">Powerbanks</option>
@@ -121,9 +138,9 @@
           <i data-lucide="chevron-down" class="dropdown-arrow-icon"></i>
         </div>
         <div class="search-input-wrap">
-          <input type="text" id="header-search-input" placeholder="Search for products, brands and more...">
+          <input type="text" id="header-search-input" placeholder="Search for products, brands and more..." aria-label="Search items">
         </div>
-        <button id="header-search-btn" class="search-action-btn">
+        <button id="header-search-btn" class="search-action-btn" aria-label="Search button">
           <i data-lucide="search"></i>
         </button>
       </div>
@@ -346,7 +363,7 @@
           <button class="cat-btn" data-cat="gadgets">Gadgets</button>
         </div>
         <div class="search-box">
-          <input type="text" id="search-input" placeholder="Search products...">
+          <input type="text" id="search-input" placeholder="Search products..." aria-label="Filter products">
           <i data-lucide="search"></i>
         </div>
       </div>
@@ -386,7 +403,7 @@
           <h2 id="newsletter-card-heading">Join the DROPMALLU Club</h2>
           <p id="newsletter-card-desc" style="margin-bottom: 1.5rem; opacity: 0.9;">Subscribe to receive dynamic updates on exclusive tech arrivals and discount drops.</p>
           <form id="newsletter-card-form" class="newsletter-card-form" style="display: flex; gap: 10px; max-width: 500px; margin: 0 auto;">
-            <input type="email" id="newsletter-card-email" placeholder="Enter your email" required style="flex: 1; padding: 12px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: #fff;">
+            <input type="email" id="newsletter-card-email" placeholder="Enter your email" required aria-label="Newsletter email address" style="flex: 1; padding: 12px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: #fff;">
             <button type="submit" id="newsletter-card-btn" class="btn btn-primary" style="padding: 12px 24px; border-radius: 8px; background: var(--primary); color: #0b1e36; border: none; font-weight: 600; cursor: pointer;">Subscribe</button>
           </form>
           <div id="newsletter-card-success" class="newsletter-success-msg" style="display:none; margin-top: 15px; color: #10b981; font-weight: 500;"></div>
@@ -531,7 +548,7 @@
         <h4>Newsletter</h4>
         <p>Subscribe to get updates on exciting offers & deals.</p>
         <div class="newsletter-form">
-          <input type="email" id="newsletter-email" placeholder="Enter your email">
+          <input type="email" id="newsletter-email" placeholder="Enter your email" aria-label="Footer newsletter email">
           <button id="newsletter-btn">Subscribe</button>
         </div>
       </div>

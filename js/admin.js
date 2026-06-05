@@ -7,6 +7,20 @@ let adminBlogs = [];
 let editingItemId = null;
 let activeTab = "products";
 
+function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>"']/g, function(m) {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#039;';
+      default: return m;
+    }
+  });
+}
+
 // DOM Elements
 const productsTbody = document.getElementById("products-tbody");
 const blogsTbody = document.getElementById("blogs-tbody");
@@ -141,20 +155,20 @@ function renderProductsTable() {
     row.innerHTML = `
       <td>
         <div class="thumb-cell">
-          <img class="thumb-img" src="${p.image}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80'">
+          <img class="thumb-img" src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80'">
           <div>
-            <div class="thumb-name">${p.name}</div>
-            <div class="thumb-id">${p.id}</div>
+            <div class="thumb-name">${escapeHTML(p.name)}</div>
+            <div class="thumb-id">${escapeHTML(p.id)}</div>
           </div>
         </div>
       </td>
-      <td><span class="cat-tag">${p.category}</span></td>
+      <td><span class="cat-tag">${escapeHTML(p.category)}</span></td>
       <td><span class="price-gold">${formattedPrice}</span></td>
-      <td><span style="color:var(--primary); font-weight:700; font-size:11px;">${p.badge || '-'}</span></td>
+      <td><span style="color:var(--primary); font-weight:700; font-size:11px;">${escapeHTML(p.badge || '-')}</span></td>
       <td>
         <div class="row-actions">
-          <button class="mini-btn edit" onclick="editProduct('${p.id}')" title="Edit"><i data-lucide="edit"></i></button>
-          <button class="mini-btn del" onclick="deleteProduct('${p.id}')" title="Delete"><i data-lucide="trash-2"></i></button>
+          <button class="mini-btn edit" onclick="editProduct('${escapeHTML(p.id)}')" title="Edit"><i data-lucide="edit"></i></button>
+          <button class="mini-btn del" onclick="deleteProduct('${escapeHTML(p.id)}')" title="Delete"><i data-lucide="trash-2"></i></button>
         </div>
       </td>
     `;
@@ -177,19 +191,19 @@ function renderBlogsTable() {
     row.innerHTML = `
       <td>
         <div class="thumb-cell">
-          <img class="thumb-img" src="${b.image}" alt="${b.title}" onerror="this.src='https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=80&q=80'">
+          <img class="thumb-img" src="${escapeHTML(b.image)}" alt="${escapeHTML(b.title)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=80&q=80'">
           <div>
-            <div class="thumb-name">${b.title}</div>
-            <div class="thumb-id">${b.author}</div>
+            <div class="thumb-name">${escapeHTML(b.title)}</div>
+            <div class="thumb-id">${escapeHTML(b.author)}</div>
           </div>
         </div>
       </td>
-      <td><span style="color:var(--text-secondary); font-size:12px;">${b.date}</span></td>
-      <td><span style="color:var(--text-secondary); font-size:12px;">${b.readTime}</span></td>
+      <td><span style="color:var(--text-secondary); font-size:12px;">${escapeHTML(b.date)}</span></td>
+      <td><span style="color:var(--text-secondary); font-size:12px;">${escapeHTML(b.readTime)}</span></td>
       <td>
         <div class="row-actions">
-          <button class="mini-btn edit" onclick="editBlog('${b.id}')" title="Edit"><i data-lucide="edit"></i></button>
-          <button class="mini-btn del" onclick="deleteBlog('${b.id}')" title="Delete"><i data-lucide="trash-2"></i></button>
+          <button class="mini-btn edit" onclick="editBlog('${escapeHTML(b.id)}')" title="Edit"><i data-lucide="edit"></i></button>
+          <button class="mini-btn del" onclick="deleteBlog('${escapeHTML(b.id)}')" title="Delete"><i data-lucide="trash-2"></i></button>
         </div>
       </td>
     `;
@@ -850,15 +864,15 @@ async function renderTestimonialsCMS() {
     item.style.cssText = "display:flex; align-items:center; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:8px;";
     item.innerHTML = `
       <div style="display:flex; align-items:center; gap:10px;">
-        <img src="${t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80'}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+        <img src="${escapeHTML(t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80')}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80';" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
         <div>
-          <div style="font-weight:600; font-size:13px; color:var(--text-primary);">${t.name}</div>
-          <div style="font-size:11px; color:var(--text-muted); max-width: 250px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;">${t.review}</div>
+          <div style="font-weight:600; font-size:13px; color:var(--text-primary);">${escapeHTML(t.name)}</div>
+          <div style="font-size:11px; color:var(--text-muted); max-width: 250px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(t.review)}</div>
         </div>
       </div>
       <div style="display:flex; gap:6px;">
-        <button type="button" class="mini-btn edit" onclick="editTestimonial('${t.id}')" style="padding:4px;"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
-        <button type="button" class="mini-btn del" onclick="deleteTestimonial('${t.id}')" style="padding:4px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+        <button type="button" class="mini-btn edit" onclick="editTestimonial('${escapeHTML(t.id)}')" style="padding:4px;"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
+        <button type="button" class="mini-btn del" onclick="deleteTestimonial('${escapeHTML(t.id)}')" style="padding:4px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
       </div>
     `;
     container.appendChild(item);
@@ -923,15 +937,15 @@ async function renderBrandsCMS() {
     item.style.cssText = "display:flex; align-items:center; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:8px;";
     item.innerHTML = `
       <div style="display:flex; align-items:center; gap:10px;">
-        ${b.logo ? `<img src="${b.logo}" style="max-height:24px; max-width:60px; object-fit:contain;">` : `<div style="font-weight:700; font-size:11px;">[TXT]</div>`}
+        ${b.logo ? `<img src="${escapeHTML(b.logo)}" onerror="this.onerror=null;this.style.display='none';" style="max-height:24px; max-width:60px; object-fit:contain;">` : `<div style="font-weight:700; font-size:11px;">[TXT]</div>`}
         <div>
-          <div style="font-weight:600; font-size:13px;">${b.name}</div>
-          <div style="font-size:10px; color:var(--text-muted);">${b.link || '#'}</div>
+          <div style="font-weight:600; font-size:13px;">${escapeHTML(b.name)}</div>
+          <div style="font-size:10px; color:var(--text-muted);">${escapeHTML(b.link || '#')}</div>
         </div>
       </div>
       <div style="display:flex; gap:6px;">
-        <button type="button" class="mini-btn edit" onclick="editBrand('${b.id}')" style="padding:4px;"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
-        <button type="button" class="mini-btn del" onclick="deleteBrand('${b.id}')" style="padding:4px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+        <button type="button" class="mini-btn edit" onclick="editBrand('${escapeHTML(b.id)}')" style="padding:4px;"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
+        <button type="button" class="mini-btn del" onclick="deleteBrand('${escapeHTML(b.id)}')" style="padding:4px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
       </div>
     `;
     container.appendChild(item);
@@ -994,9 +1008,9 @@ async function renderMediaLibraryGrid() {
     card.style.cssText = "position:relative; border-radius:6px; border:1px solid var(--border-glass); background:rgba(0,0,0,0.3); overflow:hidden; aspect-ratio: 1; display:flex; align-items:center; justify-content:center; cursor:pointer;";
     
     card.innerHTML = `
-      <img src="${item.url}" style="width:100%; height:100%; object-fit:cover;">
+      <img src="${escapeHTML(item.url)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&q=80';" style="width:100%; height:100%; object-fit:cover;">
       <div style="position:absolute; top:2px; right:2px; display:flex; gap:2px;">
-        <button type="button" class="mini-btn del" onclick="event.stopPropagation(); deleteMedia('${item.id}')" style="padding:2px; background:rgba(220,38,38,0.85);"><i data-lucide="x" style="width:10px; height:10px; color:#fff;"></i></button>
+        <button type="button" class="mini-btn del" onclick="event.stopPropagation(); deleteMedia('${escapeHTML(item.id)}')" style="padding:2px; background:rgba(220,38,38,0.85);"><i data-lucide="x" style="width:10px; height:10px; color:#fff;"></i></button>
       </div>
     `;
     container.appendChild(card);
