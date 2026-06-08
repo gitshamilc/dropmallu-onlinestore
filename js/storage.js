@@ -636,8 +636,8 @@ const DEFAULT_SETTINGS = {
   theme_shadows: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
 
   hero_badge: "Premium Collection",
-  hero_title: "Upgrade Your <br><span>Lifestyle</span>",
-  hero_subtitle: "Discover trending gadgets, luxury watches, performance shoes and more.",
+  hero_title: "Shop Trending <br><span>Products Online</span>",
+  hero_subtitle: "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.",
   hero_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
   hero_image_tablet: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80",
   hero_image_mobile: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80",
@@ -674,8 +674,8 @@ const DEFAULT_SETTINGS = {
   footer_contact_email: "support@dropmallu.xyz",
   footer_contact_address: "Kochi, Kerala, India",
 
-  seo_home_title: "DROPMALLU — Premium Boutique Storefront",
-  seo_home_desc: "Shop custom gadgets, smart project tools, luxury watches, and carbon fiber shoes. WhatsApp quick checkouts.",
+  seo_home_title: "DROPMALLU — Shop Trending Products Online",
+  seo_home_desc: "Shop trending products online including gadgets, luxury watches, iPhone cases, and performance shoes at DROPMALLU. Verified Store. Free Shipping.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
   seo_home_canonical: "https://dropmallu.xyz"
 };
@@ -722,6 +722,14 @@ async function getSettings() {
     const local = localStorage.getItem("dropmallu_settings");
     if (local) {
       const parsed = JSON.parse(local);
+      // Auto-migration for new SEO defaults
+      if (parsed.seo_home_title === "DROPMALLU — Premium Boutique Storefront" || !parsed.seo_home_title) {
+        parsed.seo_home_title = "DROPMALLU — Shop Trending Products Online";
+        parsed.seo_home_desc = "Shop trending products online including gadgets, luxury watches, iPhone cases, and performance shoes at DROPMALLU. Verified Store. Free Shipping.";
+        parsed.hero_title = "Shop Trending <br><span>Products Online</span>";
+        parsed.hero_subtitle = "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.";
+        localStorage.setItem("dropmallu_settings", JSON.stringify(parsed));
+      }
       return { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (e) {}
