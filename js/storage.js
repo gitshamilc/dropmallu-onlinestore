@@ -74,7 +74,8 @@ function initializeStorage() {
       needProductsReset = true;
     } else {
       const currentProducts = JSON.parse(local);
-      if (!Array.isArray(currentProducts) || currentProducts.length === 0) {
+      const containsOldDefaults = currentProducts.some(p => p && p.id === 'p1');
+      if (!Array.isArray(currentProducts) || currentProducts.length === 0 || containsOldDefaults) {
         needProductsReset = true;
       }
     }
