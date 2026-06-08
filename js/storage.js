@@ -674,8 +674,8 @@ const DEFAULT_SETTINGS = {
   footer_contact_email: "support@dropmallu.xyz",
   footer_contact_address: "Kochi, Kerala, India",
 
-  seo_home_title: "DROPMALLU — Shop Trending Products Online",
-  seo_home_desc: "Shop trending products online including gadgets, luxury watches, iPhone cases, and performance shoes at DROPMALLU. Verified Store. Free Shipping.",
+  seo_home_title: "DropMallu – Discover Trending Products, Gadgets & Everyday Essentials",
+  seo_home_desc: "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
   seo_home_canonical: "https://dropmallu.xyz"
 };
@@ -723,9 +723,9 @@ async function getSettings() {
     if (local) {
       const parsed = JSON.parse(local);
       // Auto-migration for new SEO defaults
-      if (parsed.seo_home_title === "DROPMALLU — Premium Boutique Storefront" || !parsed.seo_home_title) {
-        parsed.seo_home_title = "DROPMALLU — Shop Trending Products Online";
-        parsed.seo_home_desc = "Shop trending products online including gadgets, luxury watches, iPhone cases, and performance shoes at DROPMALLU. Verified Store. Free Shipping.";
+      if (parsed.seo_home_title === "DROPMALLU — Premium Boutique Storefront" || parsed.seo_home_title === "DROPMALLU — Shop Trending Products Online" || !parsed.seo_home_title) {
+        parsed.seo_home_title = "DropMallu – Discover Trending Products, Gadgets & Everyday Essentials";
+        parsed.seo_home_desc = "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.";
         parsed.hero_title = "Shop Trending <br><span>Products Online</span>";
         parsed.hero_subtitle = "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.";
         localStorage.setItem("dropmallu_settings", JSON.stringify(parsed));
