@@ -165,6 +165,14 @@ function hydrateMetadata(b) {
   let ogUrl = $('meta[property="og:url"]');
   if (ogUrl) ogUrl.content = canonicalUrl;
 
+  // Twitter Card tags
+  let twTitle = $('meta[name="twitter:title"]');
+  if (twTitle) twTitle.content = b.title;
+  let twDesc = $('meta[name="twitter:description"]');
+  if (twDesc) twDesc.content = b.summary;
+  let twImg = $('meta[name="twitter:image"]');
+  if (twImg) twImg.content = b.image;
+
   // JSON-LD NewsArticle Schema
   const articleSchema = {
     "@context": "https://schema.org",

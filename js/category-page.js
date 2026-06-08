@@ -216,6 +216,12 @@ function hydrateMetadata(slug) {
   let ogUrl = $('meta[property="og:url"]');
   if (ogUrl) ogUrl.content = canonicalUrl;
 
+  // Twitter Card tags
+  let twTitle = $('meta[name="twitter:title"]');
+  if (twTitle) twTitle.content = `${meta.title} — DROPMALLU`;
+  let twDesc = $('meta[name="twitter:description"]');
+  if (twDesc) twDesc.content = meta.desc;
+
   // Breadcrumb Schema
   const breadcrumbSchema = {
     "@context": "https://schema.org",

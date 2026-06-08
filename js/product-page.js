@@ -165,6 +165,14 @@ function hydrateMetadata(p) {
   let ogUrl = $('meta[property="og:url"]');
   if (ogUrl) ogUrl.content = canonicalUrl;
 
+  // Twitter Card tags
+  let twTitle = $('meta[name="twitter:title"]');
+  if (twTitle) twTitle.content = `${p.name} — DROPMALLU`;
+  let twDesc = $('meta[name="twitter:description"]');
+  if (twDesc) twDesc.content = p.description.substring(0, 160);
+  let twImg = $('meta[name="twitter:image"]');
+  if (twImg) twImg.content = p.image;
+
   // JSON-LD Product Schema
   const productSchema = {
     "@context": "https://schema.org",

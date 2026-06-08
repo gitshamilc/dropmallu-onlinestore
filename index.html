@@ -15,20 +15,55 @@
   <link rel="canonical" href="https://dropmallu.xyz/">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="https://dropmallu.xyz/sitemap.xml">
 
-  <!-- ═══ Structured Data (JSON-LD Schema) ═══ -->
+  <!-- ═══ Structured Data (JSON-LD Schema Graph) ═══ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "OnlineStore",
-    "name": "DROPMALLU",
-    "url": "https://dropmallu.xyz/",
-    "logo": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=192&q=80",
-    "description": "Curated premium lifestyle boutique offering direct-to-consumer tech accessories, custom project displays, and smart gadgets.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+91-98951-77154",
-      "contactType": "customer service"
-    }
+    "@graph": [
+      {
+        "@type": "OnlineStore",
+        "@id": "https://dropmallu.xyz/#store",
+        "name": "DropMallu",
+        "url": "https://dropmallu.xyz/",
+        "logo": "https://dropmallu.xyz/image/logo.png",
+        "image": "https://dropmallu.xyz/image/logo.png",
+        "description": "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.",
+        "telephone": "+91 98951 77154",
+        "priceRange": "INR",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Kochi",
+          "addressLocality": "Kochi",
+          "addressRegion": "Kerala",
+          "postalCode": "682001",
+          "addressCountry": "IN"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91 98951 77154",
+          "contactType": "customer service",
+          "availableLanguage": ["English", "Malayalam"]
+        },
+        "sameAs": [
+          "https://www.instagram.com/dropmallu?igsh=N204dTdiMjFlMHds&utm_source=qr",
+          "https://github.com/gitshamilc/dropmallu-onlinestore"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://dropmallu.xyz/#website",
+        "name": "DropMallu",
+        "url": "https://dropmallu.xyz/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://dropmallu.xyz/?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
   }
   </script>
 
@@ -53,38 +88,19 @@
   <!-- ═══ Open Graph (Facebook / WhatsApp preview) ═══ -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="DROPMALLU">
-  <meta property="og:title" content="DROPMALLU — Premium Gadgets & Lifestyle Store">
-  <meta property="og:description" content="Curated tech gadgets, iPhone cases, luxury watches, powerbanks and shoes. Order instantly via WhatsApp.">
+  <meta property="og:title" content="DropMallu – Discover Trending Products, Gadgets & Everyday Essentials">
+  <meta property="og:description" content="Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.">
   <meta property="og:url" content="https://dropmallu.xyz/">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:image" content="https://dropmallu.xyz/image/logo.png">
   <meta property="og:locale" content="en_IN">
 
   <!-- ═══ Twitter Card ═══ -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DROPMALLU — Premium Gadgets & Lifestyle Store">
-  <meta name="twitter:description" content="Curated tech gadgets, iPhone cases, luxury watches & more. WhatsApp checkout.">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80">
+  <meta name="twitter:title" content="DropMallu – Discover Trending Products, Gadgets & Everyday Essentials">
+  <meta name="twitter:description" content="Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.">
+  <meta name="twitter:image" content="https://dropmallu.xyz/image/logo.png">
 
-  <!-- ═══ JSON-LD Structured Data (Google Shopping / Rich Results) ═══ -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "OnlineStore",
-    "name": "DROPMALLU",
-    "url": "https://dropmallu.xyz/",
-    "description": "Premium boutique online store for gadgets, iPhone cases, luxury watches, powerbanks, shoes and projectors in India.",
-    "logo": "https://dropmallu.xyz/favicon.ico",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+91-9895177154",
-      "contactType": "customer service",
-      "availableLanguage": ["English", "Malayalam"]
-    },
-    "sameAs": [
-      "https://github.com/gitshamilc/dropmallu-onlinestore"
-    ]
-  }
-  </script>
+  <!-- Consolidated JSON-LD schemas moved to Graph block in header -->
 
   <!-- ═══ Favicon ═══ -->
   <link rel="icon" type="image/png" href="/image/logo.png">

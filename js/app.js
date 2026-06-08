@@ -1072,7 +1072,24 @@ function applyStorefrontSettings(s) {
   if (s.theme_shadows) root.style.setProperty('--shadow-card', s.theme_shadows);
 
   // SEO updates
-  if (s.seo_home_title) document.title = s.seo_home_title;
+  if (s.seo_home_title) {
+    document.title = s.seo_home_title;
+    let ogTitle = $('meta[property="og:title"]');
+    if (!ogTitle) {
+      ogTitle = document.createElement('meta');
+      ogTitle.setAttribute('property', 'og:title');
+      document.head.appendChild(ogTitle);
+    }
+    ogTitle.content = s.seo_home_title;
+
+    let twTitle = $('meta[name="twitter:title"]');
+    if (!twTitle) {
+      twTitle = document.createElement('meta');
+      twTitle.name = 'twitter:title';
+      document.head.appendChild(twTitle);
+    }
+    twTitle.content = s.seo_home_title;
+  }
   let metaDesc = $('meta[name="description"]');
   if (s.seo_home_desc) {
     if (!metaDesc) {
@@ -1081,6 +1098,22 @@ function applyStorefrontSettings(s) {
       document.head.appendChild(metaDesc);
     }
     metaDesc.content = s.seo_home_desc;
+
+    let ogDesc = $('meta[property="og:description"]');
+    if (!ogDesc) {
+      ogDesc = document.createElement('meta');
+      ogDesc.setAttribute('property', 'og:description');
+      document.head.appendChild(ogDesc);
+    }
+    ogDesc.content = s.seo_home_desc;
+
+    let twDesc = $('meta[name="twitter:description"]');
+    if (!twDesc) {
+      twDesc = document.createElement('meta');
+      twDesc.name = 'twitter:description';
+      document.head.appendChild(twDesc);
+    }
+    twDesc.content = s.seo_home_desc;
   }
   let ogImage = $('meta[property="og:image"]');
   if (s.seo_home_og_image) {
@@ -1090,6 +1123,14 @@ function applyStorefrontSettings(s) {
       document.head.appendChild(ogImage);
     }
     ogImage.content = s.seo_home_og_image;
+
+    let twImage = $('meta[name="twitter:image"]');
+    if (!twImage) {
+      twImage = document.createElement('meta');
+      twImage.name = 'twitter:image';
+      document.head.appendChild(twImage);
+    }
+    twImage.content = s.seo_home_og_image;
   }
 
   // Footer text overrides
