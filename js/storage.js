@@ -667,7 +667,7 @@ const DEFAULT_SETTINGS = {
   footer_logo_text: "DROPMALLU",
   footer_about_content: "Curated premium lifestyle boutique offering direct-to-consumer tech accessories, custom project displays, and smart gadgets.",
   footer_social_facebook: "https://facebook.com",
-  footer_social_instagram: "https://instagram.com",
+  footer_social_instagram: "https://www.instagram.com/dropmallu?igsh=N204dTdiMjFlMHds&utm_source=qr",
   footer_social_twitter: "https://twitter.com",
   footer_social_youtube: "https://youtube.com",
   footer_contact_phone: "+91 98951 77154",
