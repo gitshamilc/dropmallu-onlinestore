@@ -438,6 +438,53 @@ function bindEvents() {
       }
     });
   });
+
+  // Logo 5-click Merchant Mode toggle
+  const headerLogoEl = $('#main-header .logo');
+  if (headerLogoEl) {
+    let logoClicks = 0;
+    let lastLogoClick = 0;
+    headerLogoEl.addEventListener('click', (e) => {
+      const now = Date.now();
+      if (now - lastLogoClick < 1500) {
+        logoClicks++;
+      } else {
+        logoClicks = 1;
+      }
+      lastLogoClick = now;
+
+      if (logoClicks >= 5) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const enabled = localStorage.getItem('admin_mode_enabled') === 'true';
+        const desktopSignin = document.getElementById('signin-trigger');
+        const mobileSignin = document.getElementById('mnav-account');
+        
+        if (enabled) {
+          localStorage.setItem('admin_mode_enabled', 'false');
+          if (desktopSignin) desktopSignin.style.setProperty('display', 'none', 'important');
+          if (mobileSignin) mobileSignin.style.setProperty('display', 'none', 'important');
+          alert("🔒 Merchant Mode Disabled! Sign In option is now hidden.");
+        } else {
+          localStorage.setItem('admin_mode_enabled', 'true');
+          if (desktopSignin) desktopSignin.style.setProperty('display', 'flex', 'important');
+          if (mobileSignin) mobileSignin.style.setProperty('display', 'flex', 'important');
+          alert("🔒 Merchant Mode Enabled! Sign In option is now visible.");
+        }
+        logoClicks = 0;
+      } else {
+        // Prevent navigating home if clicked on homepage
+        const isHomepage = window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname === '';
+        if (isHomepage) {
+          e.preventDefault();
+          if (logoClicks === 1) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      }
+    });
+  }
 }
 
 function setMobileActive(el) {
@@ -1197,6 +1244,17 @@ function applyStorefrontSettings(s) {
     b2Link.innerHTML = `Shop Now <i data-lucide="arrow-right"></i>`;
   }
   if (b2Img && s.promo_b2_image) b2Img.src = s.promo_b2_image;
+
+  // Apply merchant mode visibility
+  const adminModeEnabled = localStorage.getItem('admin_mode_enabled') === 'true';
+  const desktopSignin = document.getElementById('signin-trigger');
+  const mobileSignin = document.getElementById('mnav-account');
+  if (desktopSignin) {
+    desktopSignin.style.setProperty('display', adminModeEnabled ? 'flex' : 'none', adminModeEnabled ? 'important' : '');
+  }
+  if (mobileSignin) {
+    mobileSignin.style.setProperty('display', adminModeEnabled ? 'flex' : 'none', adminModeEnabled ? 'important' : '');
+  }
 
   if (window.lucide) window.lucide.createIcons();
 }
