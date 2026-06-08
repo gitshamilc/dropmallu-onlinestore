@@ -1390,15 +1390,13 @@ footer {
 }
 
 .scroll-reveal {
-  opacity: 0;
-  will-change: transform, opacity;
-  transition: transform 0.8s var(--ease), opacity 0.8s ease;
+  opacity: 1;
 }
-.reveal-left  { transform: translateX(-60px) rotateY(12deg) scale(0.97); }
-.reveal-right { transform: translateX(60px) rotateY(-12deg) scale(0.97); }
+.reveal-left  { transform: none; }
+.reveal-right { transform: none; }
 .scroll-reveal.revealed {
   opacity: 1;
-  transform: translateX(0) rotateY(0) scale(1);
+  transform: none;
 }
 
 /* Entrance animations */

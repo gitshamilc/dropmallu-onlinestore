@@ -121,47 +121,31 @@
   transform: scale(1.05);
 }
 
-/* 3D Parallax Scrolling Glide Transitions */
+/* 3D Parallax Scrolling Glide Transitions (Reverted to Normal) */
 .scroll-reveal {
-  opacity: 0;
-  will-change: transform, opacity;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  opacity: 1;
 }
 
-.reveal-left {
-  transform: translateX(-40px) rotateY(8deg) scale(0.98);
-}
-
-.reveal-right {
-  transform: translateX(40px) rotateY(-8deg) scale(0.98);
-}
-
-.reveal-up {
-  transform: translateY(50px) scale(0.98);
+.reveal-left, .reveal-right, .reveal-up {
+  transform: none;
 }
 
 .scroll-reveal.revealed {
   opacity: 1;
-  transform: translateX(0) translateY(0) rotateY(0) scale(1);
+  transform: none;
 }
 
 /* Staggered transition delays for card grids */
-.scroll-reveal.revealed:nth-child(2n) { transition-delay: 0.05s; }
-.scroll-reveal.revealed:nth-child(3n) { transition-delay: 0.1s; }
-.scroll-reveal.revealed:nth-child(4n) { transition-delay: 0.15s; }
+.scroll-reveal.revealed:nth-child(2n) { transition-delay: 0s; }
+.scroll-reveal.revealed:nth-child(3n) { transition-delay: 0s; }
+.scroll-reveal.revealed:nth-child(4n) { transition-delay: 0s; }
 
-/* Mobile Viewport Scroll Optimizations (Faster & Smoother 2D Transitions) */
+/* Mobile Viewport Scroll Optimizations (Reverted to Normal) */
 @media (max-width: 768px) {
-  .scroll-reveal {
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
-  }
-  .reveal-left, .reveal-right {
-    transform: translateY(30px) scale(0.99); /* Disable 3D rotation on mobile to ensure 60fps */
-  }
-  .reveal-up {
-    transform: translateY(30px) scale(0.99);
+  .reveal-left, .reveal-right, .reveal-up {
+    transform: none;
   }
   .scroll-reveal.revealed {
-    transform: translateY(0) scale(1);
+    transform: none;
   }
 }
