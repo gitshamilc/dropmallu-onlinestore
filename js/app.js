@@ -144,7 +144,7 @@ async function init() {
   createScrollProgressBar();
   pruneEmptyCategories();
   initDynamicScrollBackground();
-  initHeroFrameAnimation();
+  initScroll3DCanvas();
   await renderHomepageSectionsOrder();
   await renderTestimonials();
   await renderBrandsList();
@@ -185,6 +185,7 @@ async function init() {
   setupHeroScrolling();
   startCarousel();
   setupDynamicBackground();
+  cyclePedestalHeroImage();
 
   // URL Hash Routing
   window.addEventListener('hashchange', checkUrlHash);
@@ -203,8 +204,7 @@ async function init() {
       .subscribe();
   }
 
-  // Register service worker for PWA support (Disabled during updates)
-  /*
+  // Register service worker for PWA support
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
@@ -212,7 +212,6 @@ async function init() {
         .catch(err => console.error('Service Worker registration failed:', err));
     });
   }
-  */
 }
 
 
@@ -1084,7 +1083,31 @@ function renderDealsGrid() {
   });
 }
 
-
+// Cycle featured image in the main hero pedestal slider
+function cyclePedestalHeroImage() {
+  const heroImage = $('#pedestal-hero-image');
+  if (!heroImage || !products || products.length === 0) return;
+  
+  let currentIdx = 0;
+  // Use a subset of attractive watch / shoe items
+  const cycleItems = products.filter(p => p.category === 'watch' || p.category === 'shoe');
+  if (cycleItems.length === 0) return;
+  
+  setInterval(() => {
+    currentIdx = (currentIdx + 1) % cycleItems.length;
+    const nextItem = cycleItems[currentIdx];
+    
+    // Transition fade
+    heroImage.style.opacity = '0';
+    heroImage.style.transform = 'translateY(15px) scale(0.95)';
+    
+    setTimeout(() => {
+      heroImage.src = nextItem.image;
+      heroImage.style.opacity = '1';
+      heroImage.style.transform = 'translateY(0) scale(1)';
+    }, 400);
+  }, 7000);
+}
 
 function applyStorefrontSettings(s) {
   if (!s) return;
@@ -1455,112 +1478,263 @@ function pruneEmptyCategories() {
   }
 }
 
-function initHeroFrameAnimation() {
-  const canvas = document.getElementById('hero-frame-canvas');
-  if (!canvas) return;
+function initScroll3DCanvas() {
+  if (document.getElementById('scroll-3d-canvas')) return;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'scroll-3d-canvas';
+  document.body.appendChild(canvas);
 
-  const track = document.getElementById('hero');
-  const overlay = document.querySelector('.hero-scroll-content');
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = 460;
+  let height = canvas.height = 460;
 
-  const frameFiles = ["frame_002.jpg","frame_003.jpg","frame_004.jpg","frame_005.jpg","frame_006.jpg","frame_007.jpg","frame_008.jpg","frame_009.jpg","frame_010.jpg","frame_011.jpg","frame_012.jpg","frame_014.jpg","frame_015.jpg","frame_016.jpg","frame_017.jpg","frame_018.jpg","frame_019.jpg","frame_020.jpg","frame_021.jpg","frame_022.jpg","frame_023.jpg","frame_024.jpg","frame_025.jpg","frame_026.jpg","frame_027.jpg","frame_028.jpg","frame_029.jpg","frame_030.jpg","frame_032.jpg","frame_033.jpg","frame_034.jpg","frame_035.jpg","frame_036.jpg","frame_037.jpg","frame_038.jpg","frame_039.jpg","frame_040.jpg","frame_041.jpg","frame_042.jpg","frame_043.jpg","frame_044.jpg","frame_045.jpg","frame_046.jpg","frame_048.jpg","frame_049.jpg","frame_050.jpg","frame_051.jpg","frame_052.jpg","frame_053.jpg","frame_054.jpg","frame_055.jpg","frame_056.jpg","frame_057.jpg","frame_058.jpg","frame_059.jpg","frame_060.jpg","frame_061.jpg","frame_062.jpg","frame_064.jpg","frame_065.jpg","frame_066.jpg","frame_067.jpg","frame_068.jpg","frame_069.jpg","frame_070.jpg","frame_071.jpg","frame_072.jpg","frame_073.jpg","frame_074.jpg","frame_075.jpg","frame_076.jpg","frame_077.jpg","frame_078.jpg","frame_079.jpg","frame_080.jpg","frame_081.jpg","frame_082.jpg","frame_083.jpg","frame_084.jpg","frame_085.jpg","frame_086.jpg","frame_087.jpg","frame_088.jpg","frame_089.jpg","frame_090.jpg","frame_091.jpg","frame_092.jpg","frame_093.jpg","frame_094.jpg","frame_095.jpg","frame_096.jpg","frame_097.jpg","frame_098.jpg","frame_099.jpg","frame_100.jpg","frame_101.jpg","frame_102.jpg","frame_103.jpg","frame_104.jpg","frame_105.jpg","frame_106.jpg","frame_107.jpg","frame_108.jpg","frame_109.jpg","frame_110.jpg","frame_111.jpg","frame_112.jpg","frame_113.jpg","frame_114.jpg","frame_115.jpg","frame_116.jpg","frame_117.jpg","frame_118.jpg","frame_119.jpg","frame_120.jpg","frame_121.jpg","frame_122.jpg","frame_123.jpg","frame_124.jpg","frame_125.jpg","frame_126.jpg","frame_127.jpg","frame_128.jpg","frame_129.jpg","frame_130.jpg","frame_131.jpg","frame_132.jpg","frame_133.jpg","frame_134.jpg","frame_135.jpg","frame_136.jpg","frame_137.jpg","frame_138.jpg","frame_139.jpg","frame_140.jpg","frame_141.jpg","frame_142.jpg","frame_143.jpg","frame_144.jpg","frame_145.jpg","frame_146.jpg","frame_147.jpg","frame_148.jpg","frame_149.jpg","frame_150.jpg","frame_151.jpg","frame_152.jpg","frame_153.jpg","frame_155.jpg","frame_156.jpg","frame_157.jpg","frame_158.jpg","frame_159.jpg","frame_160.jpg","frame_162.jpg","frame_163.jpg","frame_164.jpg","frame_165.jpg","frame_166.jpg","frame_167.jpg","frame_168.jpg","frame_169.jpg","frame_170.jpg","frame_171.jpg","frame_172.jpg","frame_173.jpg","frame_174.jpg","frame_175.jpg","frame_176.jpg","frame_177.jpg","frame_178.jpg","frame_179.jpg","frame_180.jpg","frame_181.jpg","frame_183.jpg","frame_185.jpg","frame_186.jpg","frame_190.jpg","frame_191.jpg","frame_193.jpg","frame_195.jpg","frame_196.jpg","frame_197.jpg","frame_199.jpg","frame_201.jpg","frame_202.jpg","frame_205.jpg","frame_206.jpg","frame_207.jpg","frame_210.jpg","frame_211.jpg","frame_212.jpg","frame_215.jpg","frame_216.jpg","frame_218.jpg","frame_222.jpg","frame_223.jpg","frame_225.jpg"];
-  const totalFrames = frameFiles.length;
-  const images = [];
-  let currentFrameIndex = 0;
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = canvas.width = rect.width * window.devicePixelRatio;
+    height = canvas.height = rect.height * window.devicePixelRatio;
+  }
+  window.addEventListener('resize', resize);
+  resize();
 
-  // Preload all frames
-  frameFiles.forEach((filename, index) => {
-    const img = new Image();
-    img.src = `image/hero-frames/${filename}`;
-    img.onload = () => {
-      if (index === 0 && currentFrameIndex === 0) {
-        drawFrame(0);
-      }
-    };
-    images[index] = img;
+  let scrollProgress = 0;
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll > 0) {
+      scrollProgress = scrollY / maxScroll;
+    }
+    draw();
   });
 
-  function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    drawFrame(currentFrameIndex);
+  // Define 3D wireframe geometries
+  
+  // 1. Box Model (open container, bottom center at y=0.3, size=0.6)
+  const boxVertices = [
+    [-0.3, 0.55, -0.3], [0.3, 0.55, -0.3], [0.3, 0.55, 0.3], [-0.3, 0.55, 0.3],
+    [-0.3, 0.05, -0.3], [0.3, 0.05, -0.3], [0.3, 0.05, 0.3], [-0.3, 0.05, 0.3]
+  ];
+  const boxEdges = [
+    [0, 1], [1, 2], [2, 3], [3, 0], // bottom face
+    [4, 5], [5, 6], [6, 7], [7, 4], // top rim
+    [0, 4], [1, 5], [2, 6], [3, 7]  // vertical pillars
+  ];
+
+  // 2. Phone Model
+  const phoneVertices = [
+    [-0.08, -0.16, -0.012], [0.08, -0.16, -0.012], [0.08, 0.16, -0.012], [-0.08, 0.16, -0.012],
+    [-0.08, -0.16, 0.012],  [0.08, -0.16, 0.012],  [0.08, 0.16, 0.012],  [-0.08, 0.16, 0.012]
+  ];
+  const phoneEdges = [
+    [0, 1], [1, 2], [2, 3], [3, 0], // back
+    [4, 5], [5, 6], [6, 7], [7, 4], // front
+    [0, 4], [1, 5], [2, 6], [3, 7]  // depths
+  ];
+
+  // 3. Watch Model
+  const watchVertices = [];
+  const watchEdges = [];
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * Math.PI) / 4;
+    const cosVal = Math.cos(angle) * 0.07;
+    const sinVal = Math.sin(angle) * 0.07;
+    watchVertices.push([cosVal, sinVal, -0.015]); // front
   }
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * Math.PI) / 4;
+    const cosVal = Math.cos(angle) * 0.07;
+    const sinVal = Math.sin(angle) * 0.07;
+    watchVertices.push([cosVal, sinVal, 0.015]);  // back
+  }
+  for (let i = 0; i < 8; i++) {
+    watchEdges.push([i, (i + 1) % 8]);
+    watchEdges.push([i + 8, ((i + 1) % 8) + 8]);
+    watchEdges.push([i, i + 8]);
+  }
+  const baseIdx = watchVertices.length;
+  watchVertices.push([-0.025, -0.07, 0], [0.025, -0.07, 0], [-0.025, -0.15, 0], [0.025, -0.15, 0]); // top strap
+  watchVertices.push([-0.025, 0.07, 0], [0.025, 0.07, 0], [-0.025, 0.15, 0], [0.025, 0.15, 0]);  // bottom strap
+  watchEdges.push(
+    [baseIdx, baseIdx + 2], [baseIdx + 1, baseIdx + 3], [baseIdx + 2, baseIdx + 3],
+    [baseIdx + 4, baseIdx + 6], [baseIdx + 5, baseIdx + 7], [baseIdx + 6, baseIdx + 7]
+  );
 
-  function drawFrame(index) {
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  // 4. Earpods Model
+  const podVertices = [
+    [-0.02, -0.06, 0], [-0.02, 0.02, 0],
+    [-0.04, -0.09, -0.02], [0.0, -0.09, -0.02], [0.0, -0.06, 0.02], [-0.04, -0.06, 0.02],
+    [0.02, -0.04, -0.01], [0.02, 0.04, -0.01],
+    [0.0, -0.07, -0.03], [0.04, -0.07, -0.03], [0.04, -0.04, 0.01], [0.0, -0.04, 0.01]
+  ];
+  const podEdges = [
+    [0, 1],
+    [2, 3], [3, 4], [4, 5], [5, 2], [0, 4], [1, 5],
+    [6, 7],
+    [8, 9], [9, 10], [10, 11], [11, 8], [6, 10], [7, 11]
+  ];
 
-    let img = images[index];
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      // Find closest loaded frame
-      for (let i = index - 1; i >= 0; i--) {
-        if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
-          img = images[i];
-          break;
-        }
+  // 5. Game Controller Model
+  const gamepadVertices = [
+    [-0.14, -0.06, -0.02], [-0.06, -0.08, -0.02], [0.06, -0.08, -0.02], [0.14, -0.06, -0.02],
+    [0.14, 0.04, -0.02],   [0.06, 0.06, -0.02],  [-0.06, 0.06, -0.02], [-0.14, 0.04, -0.02],
+    [-0.14, -0.06, 0.02],  [-0.06, -0.08, 0.02],  [0.06, -0.08, 0.02],  [0.14, -0.06, 0.02],
+    [0.14, 0.04, 0.02],    [0.06, 0.06, 0.02],   [-0.06, 0.06, 0.02],  [-0.14, 0.04, 0.02],
+    [-0.12, 0.04, 0], [-0.16, 0.12, 0],
+    [0.12, 0.04, 0],  [0.16, 0.12, 0]
+  ];
+  const gamepadEdges = [
+    [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 0],
+    [8, 9], [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15], [15, 8],
+    [0, 8], [1, 9], [2, 10], [3, 11], [4, 12], [5, 13], [6, 14], [7, 15],
+    [16, 17], [18, 19]
+  ];
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    const scale = Math.min(width, height) * 0.32;
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const lidProgress = Math.min(1, Math.max(0, scrollProgress * 2.5));
+    const lidAngle = lidProgress * Math.PI * 0.75;
+
+    const floatProgress = Math.min(1, Math.max(0, (scrollProgress - 0.2) / 0.8));
+    const opacity = Math.min(1, floatProgress * 3);
+
+    const globalAngleX = 0.5;
+    const globalAngleY = scrollProgress * Math.PI * 1.5 + 0.4;
+
+    const cosGX = Math.cos(globalAngleX), sinGX = Math.sin(globalAngleX);
+    const cosGY = Math.cos(globalAngleY), sinGY = Math.sin(globalAngleY);
+
+    function project(x, y, z, tx = 0, ty = 0, tz = 0, rotX = 0, rotY = 0) {
+      let x1 = x, y1 = y, z1 = z;
+      if (rotY !== 0) {
+        const cosLY = Math.cos(rotY), sinLY = Math.sin(rotY);
+        const rx = x1 * cosLY - z1 * sinLY;
+        const rz = x1 * sinLY + z1 * cosLY;
+        x1 = rx; z1 = rz;
       }
-      if (!img || !img.complete || img.naturalWidth === 0) {
-        for (let i = index + 1; i < totalFrames; i++) {
-          if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
-            img = images[i];
-            break;
-          }
-        }
+      if (rotX !== 0) {
+        const cosLX = Math.cos(rotX), sinLX = Math.sin(rotX);
+        const ry = y1 * cosLX - z1 * sinLX;
+        const rz = y1 * sinLX + z1 * cosLX;
+        y1 = ry; z1 = rz;
       }
+
+      const gx = x1 + tx;
+      const gy = y1 + ty;
+      const gz = z1 + tz;
+
+      const rx1 = gx * cosGY - gz * sinGY;
+      const rz1 = gx * sinGY + gz * cosGY;
+
+      const ry2 = gy * cosGX - rz1 * sinGX;
+      const rz2 = gy * sinGX + rz1 * cosGX;
+
+      const cameraDist = 3.2;
+      const f = 2.0 / (cameraDist + rz2);
+
+      return {
+        x: rx1 * scale * f + cx,
+        y: ry2 * scale * f + cy,
+        z: rz2
+      };
     }
 
-    if (img && img.complete && img.naturalWidth > 0) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const cw = canvas.width;
-      const ch = canvas.height;
-      const iw = img.naturalWidth;
-      const ih = img.naturalHeight;
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#fbc02d';
 
-      const scale = Math.max(cw / iw, ch / ih);
-      const nw = iw * scale;
-      const nh = ih * scale;
-      const cx = (cw - nw) / 2;
-      const cy = (ch - nh) / 2;
+    function drawModel(pts, edges, modelOpacity, strokeStyle = primaryColor, lineWidth = 1.5) {
+      ctx.lineWidth = lineWidth * window.devicePixelRatio;
+      ctx.strokeStyle = strokeStyle;
+      ctx.globalAlpha = modelOpacity;
 
-      ctx.drawImage(img, cx, cy, nw, nh);
-    }
-  }
-
-  function handleScroll() {
-    if (!track) return;
-    const rect = track.getBoundingClientRect();
-    const scrollableHeight = track.offsetHeight - window.innerHeight;
-    if (scrollableHeight <= 0) return;
-
-    let progress = -rect.top / scrollableHeight;
-    progress = Math.max(0, Math.min(1, progress));
-
-    const frameIndex = Math.floor(progress * (totalFrames - 1));
-    currentFrameIndex = frameIndex;
-
-    drawFrame(frameIndex);
-
-    // Fade the overlay text
-    if (overlay) {
-      const fadeProgress = Math.max(0, Math.min(1, progress / 0.35));
-      overlay.style.opacity = (1 - fadeProgress).toFixed(2);
-      overlay.style.pointerEvents = fadeProgress >= 1 ? 'none' : 'auto';
-    }
-  }
-
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  let tick = false;
-  window.addEventListener('scroll', () => {
-    if (!tick) {
-      requestAnimationFrame(() => {
-        handleScroll();
-        tick = false;
+      edges.forEach(edge => {
+        const p1 = pts[edge[0]];
+        const p2 = pts[edge[1]];
+        if (!p1 || !p2) return;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
       });
-      tick = true;
+
+      ctx.globalAlpha = modelOpacity * 0.9;
+      pts.forEach(p => {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.5 * window.devicePixelRatio, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = strokeStyle;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5 * window.devicePixelRatio, 0, Math.PI * 2);
+        ctx.globalAlpha = modelOpacity * 0.25;
+        ctx.fill();
+        ctx.globalAlpha = modelOpacity * 0.9;
+      });
     }
-  }, { passive: true });
+
+    const projectedBox = boxVertices.map(v => project(v[0], v[1], v[2]));
+    drawModel(projectedBox, boxEdges, 0.45);
+
+    const leftLidVertices = [
+      [-0.3, 0.05, 0.3],
+      [-0.3, 0.05, -0.3],
+      [-0.3 - 0.3 * Math.cos(lidAngle), 0.05 - 0.3 * Math.sin(lidAngle), 0.3],
+      [-0.3 - 0.3 * Math.cos(lidAngle), 0.05 - 0.3 * Math.sin(lidAngle), -0.3]
+    ];
+    const lidEdges = [[0, 1], [1, 3], [3, 2], [2, 0]];
+    const projectedLeftLid = leftLidVertices.map(v => project(v[0], v[1], v[2]));
+    drawModel(projectedLeftLid, lidEdges, 0.45);
+
+    const rightLidVertices = [
+      [0.3, 0.05, 0.3],
+      [0.3, 0.05, -0.3],
+      [0.3 + 0.3 * Math.cos(lidAngle), 0.05 - 0.3 * Math.sin(lidAngle), 0.3],
+      [0.3 + 0.3 * Math.cos(lidAngle), 0.05 - 0.3 * Math.sin(lidAngle), -0.3]
+    ];
+    const projectedRightLid = rightLidVertices.map(v => project(v[0], v[1], v[2]));
+    drawModel(projectedRightLid, lidEdges, 0.45);
+
+    if (floatProgress > 0) {
+      const phoneTx = -0.08 - 0.38 * floatProgress;
+      const phoneTy = 0.25 - 1.25 * floatProgress;
+      const phoneTz = -0.05;
+      const phoneRotY = floatProgress * Math.PI * 1.8;
+      const phoneRotX = 0.2;
+      const projectedPhone = phoneVertices.map(v => project(v[0], v[1], v[2], phoneTx, phoneTy, phoneTz, phoneRotX, phoneRotY));
+      drawModel(projectedPhone, phoneEdges, opacity * 0.7);
+
+      const watchTx = 0.08 + 0.38 * floatProgress;
+      const watchTy = 0.25 - 0.95 * floatProgress;
+      const watchTz = -0.05;
+      const watchRotY = -floatProgress * Math.PI * 1.4;
+      const watchRotX = -0.2;
+      const projectedWatch = watchVertices.map(v => project(v[0], v[1], v[2], watchTx, watchTy, watchTz, watchRotX, watchRotY));
+      drawModel(projectedWatch, watchEdges, opacity * 0.7);
+
+      const podTx = -0.04 - 0.18 * floatProgress;
+      const podTy = 0.25 - 1.55 * floatProgress;
+      const podTz = 0.15;
+      const podRotY = floatProgress * Math.PI * 2.5;
+      const podRotX = 0.4;
+      const projectedPods = podVertices.map(v => project(v[0], v[1], v[2], podTx, podTy, podTz, podRotX, podRotY));
+      drawModel(projectedPods, podEdges, opacity * 0.7);
+
+      const padTx = 0.04 + 0.18 * floatProgress;
+      const padTy = 0.25 - 1.1 * floatProgress;
+      const padTz = 0.15;
+      const padRotY = -floatProgress * Math.PI * 2.0;
+      const padRotX = 0.1;
+      const projectedGamepad = gamepadVertices.map(v => project(v[0], v[1], v[2], padTx, padTy, padTz, padRotX, padRotY));
+      drawModel(projectedGamepad, gamepadEdges, opacity * 0.7);
+    }
+
+    ctx.globalAlpha = 1.0;
+  }
+
+  draw();
 }
 
 // ── Boot ─────────────────────────────────────────────────────────
