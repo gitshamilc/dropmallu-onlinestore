@@ -607,7 +607,15 @@ function initDynamicScrollBackground() {
   document.body.classList.add('active-sec-hero');
   document.body.classList.add('theme-dark-scroll');
 
+  const updateLogoRotation = () => {
+    const logoImg = document.querySelector('#main-header .logo img');
+    if (logoImg) {
+      logoImg.style.transform = `rotate(${window.scrollY * 0.08}deg)`;
+    }
+  };
+
   window.addEventListener('scroll', () => {
+    updateLogoRotation();
     const scrollY = window.scrollY;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll <= 0) return;
@@ -642,6 +650,9 @@ function initDynamicScrollBackground() {
     // Toggle dark mode classes
     document.body.classList.toggle('theme-dark-scroll', true); // Detail pages stay dark theme readable
   });
+
+  // Run initial rotation check
+  updateLogoRotation();
 }
 
 function initLogoInteractions() {

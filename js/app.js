@@ -1292,11 +1292,11 @@ async function renderTestimonials() {
       return;
     }
 
-    testimonials.forEach(t => {
+    testimonials.forEach((t, i) => {
       const stars = '★'.repeat(t.rating || 5) + '☆'.repeat(Math.max(0, 5 - (t.rating || 5)));
       const card = document.createElement('div');
-      card.className = 'testimonial-card glass scroll-reveal reveal-up';
-      card.style.cssText = 'background: var(--bg-card); border-radius: var(--radius-md); padding: 1.5rem; border: 1px solid var(--border-glass); margin: 10px; max-width: 320px; flex: 1 1 300px;';
+      card.className = 'testimonial-card glass';
+      card.style.cssText = 'position: absolute; width: calc(100% - 40px); max-width: 450px; background: var(--bg-card); border-radius: var(--radius-md); padding: 1.8rem; border: 1px solid var(--border-glass); opacity: 0; transform: scale(0.95); transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s; visibility: hidden; z-index: 1; box-sizing: border-box;';
       card.innerHTML = `
         <div class="testimonial-header" style="display:flex; align-items:center; gap: 12px; margin-bottom: 12px;">
           <img src="${escapeHTML(t.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&q=80')}" alt="${escapeHTML(t.name)}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
@@ -1310,7 +1310,38 @@ async function renderTestimonials() {
       container.appendChild(card);
     });
 
-    container.style.cssText = 'display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 0;';
+    container.style.cssText = 'position: relative; min-height: 200px; display: flex; justify-content: center; align-items: center; width: 100%; margin: 0 auto; overflow: hidden;';
+
+    const cards = container.querySelectorAll('.testimonial-card');
+    if (cards.length > 0) {
+      let activeIndex = 0;
+      const showCard = (index) => {
+        cards.forEach((c, idx) => {
+          if (idx === index) {
+            c.style.opacity = '1';
+            c.style.visibility = 'visible';
+            c.style.transform = 'scale(1)';
+            c.style.zIndex = '2';
+          } else {
+            c.style.opacity = '0';
+            c.style.visibility = 'hidden';
+            c.style.transform = 'scale(0.95)';
+            c.style.zIndex = '1';
+          }
+        });
+      };
+
+      // Show the first card immediately
+      showCard(activeIndex);
+
+      // Start dynamic transitions
+      if (cards.length > 1) {
+        setInterval(() => {
+          activeIndex = (activeIndex + 1) % cards.length;
+          showCard(activeIndex);
+        }, 5000); // Cycle every 5 seconds
+      }
+    }
   } catch (e) {
     console.error("Testimonial render error:", e);
   }
@@ -1353,7 +1384,15 @@ function initDynamicScrollBackground() {
   document.body.classList.add('active-sec-hero');
   document.body.classList.add('theme-dark-scroll');
 
+  const updateLogoRotation = () => {
+    const logoImg = document.querySelector('#main-header .logo img');
+    if (logoImg) {
+      logoImg.style.transform = `rotate(${window.scrollY * 0.08}deg)`;
+    }
+  };
+
   window.addEventListener('scroll', () => {
+    updateLogoRotation();
     const scrollY = window.scrollY;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll <= 0) return;
@@ -1386,6 +1425,9 @@ function initDynamicScrollBackground() {
     const darkSections = ['hero', 'categories', 'deals', 'explore', 'testimonials', 'brands', 'footer'];
     document.body.classList.toggle('theme-dark-scroll', darkSections.includes(activeId));
   });
+
+  // Run initial rotation check
+  updateLogoRotation();
 }
 
 function pruneEmptyCategories() {
