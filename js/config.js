@@ -1,4 +1,4 @@
-// DROPMALLU Global Configuration System
+// DROPYMART Global Configuration System
 window.CONFIG = {
   // To enable global database sync, create a free project at supabase.com,
   // create the tables using the SQL editor, and fill in the credentials below.

@@ -1,6 +1,6 @@
 {
-  "name": "DROPMALLU Online Store",
-  "short_name": "DROPMALLU",
+  "name": "DROPYMART Online Store",
+  "short_name": "DROPYMART",
   "description": "Curated premium lifestyle boutique offering direct-to-consumer tech accessories, custom project displays, and smart gadgets.",
   "start_url": "./index.html",
   "display": "standalone",

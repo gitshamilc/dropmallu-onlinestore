@@ -1,4 +1,4 @@
-// DROPMALLU Store Storage Manager
+// DROPYMART Store Storage Manager
 
 const CONFIG = window.CONFIG;
 
@@ -69,7 +69,7 @@ const getSupabaseHeaders = () => ({
 function initializeStorage() {
   let needProductsReset = false;
   try {
-    const local = localStorage.getItem("dropmallu_products");
+    const local = localStorage.getItem("dropymart_products");
     if (!local) {
       needProductsReset = true;
     } else {
@@ -85,8 +85,8 @@ function initializeStorage() {
 
   if (needProductsReset) {
     try {
-      localStorage.setItem("dropmallu_products", JSON.stringify(DEFAULT_PRODUCTS));
-      console.log("DROPMALLU: Initialized products catalog in localStorage.");
+      localStorage.setItem("dropymart_products", JSON.stringify(DEFAULT_PRODUCTS));
+      console.log("DROPYMART: Initialized products catalog in localStorage.");
     } catch (e) {
       console.warn("LocalStorage write error for products:", e);
     }
@@ -94,7 +94,7 @@ function initializeStorage() {
 
   let needBlogsReset = false;
   try {
-    const local = localStorage.getItem("dropmallu_blogs");
+    const local = localStorage.getItem("dropymart_blogs");
     if (!local) {
       needBlogsReset = true;
     } else {
@@ -109,8 +109,8 @@ function initializeStorage() {
 
   if (needBlogsReset) {
     try {
-      localStorage.setItem("dropmallu_blogs", JSON.stringify(DEFAULT_BLOGS));
-      console.log("DROPMALLU: Initialized banners catalog in localStorage.");
+      localStorage.setItem("dropymart_blogs", JSON.stringify(DEFAULT_BLOGS));
+      console.log("DROPYMART: Initialized banners catalog in localStorage.");
     } catch (e) {
       console.warn("LocalStorage write error for blogs:", e);
     }
@@ -133,12 +133,12 @@ async function getProducts() {
       if (data.length === 0) {
         await saveProducts(DEFAULT_PRODUCTS);
         try {
-          localStorage.setItem('dropmallu_products', JSON.stringify(DEFAULT_PRODUCTS));
+          localStorage.setItem('dropymart_products', JSON.stringify(DEFAULT_PRODUCTS));
         } catch (e) {}
         return DEFAULT_PRODUCTS;
       }
       try {
-        localStorage.setItem('dropmallu_products', JSON.stringify(data));
+        localStorage.setItem('dropymart_products', JSON.stringify(data));
       } catch (e) {}
       return data;
     } catch (err) {
@@ -148,7 +148,7 @@ async function getProducts() {
   
   initializeStorage();
   try {
-    const local = localStorage.getItem("dropmallu_products");
+    const local = localStorage.getItem("dropymart_products");
     return (local ? JSON.parse(local) : DEFAULT_PRODUCTS) || DEFAULT_PRODUCTS;
   } catch (err) {
     console.error("LocalStorage load error, returning default constants:", err);
@@ -188,7 +188,7 @@ async function saveProducts(products) {
   }
 
   try {
-    localStorage.setItem("dropmallu_products", JSON.stringify(products));
+    localStorage.setItem("dropymart_products", JSON.stringify(products));
   } catch (err) {
     console.error("LocalStorage save error:", err);
   }
@@ -212,7 +212,7 @@ async function deleteProductFromStorage(id, updatedProducts) {
     }
   }
   try {
-    localStorage.setItem("dropmallu_products", JSON.stringify(updatedProducts));
+    localStorage.setItem("dropymart_products", JSON.stringify(updatedProducts));
   } catch (err) {
     console.error("LocalStorage delete update error:", err);
   }
@@ -242,7 +242,7 @@ async function getBlogs() {
 
   initializeStorage();
   try {
-    const local = localStorage.getItem("dropmallu_blogs");
+    const local = localStorage.getItem("dropymart_blogs");
     return (local ? JSON.parse(local) : DEFAULT_BLOGS) || DEFAULT_BLOGS;
   } catch (err) {
     console.error("LocalStorage load error for blogs, returning defaults:", err);
@@ -281,7 +281,7 @@ async function saveBlogs(blogs) {
   }
 
   try {
-    localStorage.setItem("dropmallu_blogs", JSON.stringify(blogs));
+    localStorage.setItem("dropymart_blogs", JSON.stringify(blogs));
   } catch (err) {
     console.error("LocalStorage save error for blogs:", err);
   }
@@ -305,7 +305,7 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
     }
   }
   try {
-    localStorage.setItem("dropmallu_blogs", JSON.stringify(updatedBlogs));
+    localStorage.setItem("dropymart_blogs", JSON.stringify(updatedBlogs));
   } catch (err) {
     console.error("LocalStorage delete update error for blogs:", err);
   }
@@ -344,26 +344,26 @@ const DEFAULT_SETTINGS = {
   promo_b2_cat: "shoe",
   promo_b2_image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80",
 
-  newsletter_heading: "Join the DROPMALLU Club",
+  newsletter_heading: "Join the DROPYMART Club",
   newsletter_desc: "Subscribe to receive dynamic updates on exclusive tech arrivals and discount drops.",
   newsletter_bg: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&q=80",
   newsletter_success_msg: "Thank you for subscribing! Check WhatsApp for welcome offers.",
   newsletter_provider: "mailchimp",
 
-  footer_logo_text: "DROPMALLU",
+  footer_logo_text: "DROPYMART",
   footer_about_content: "Curated premium lifestyle boutique offering direct-to-consumer tech accessories, custom project displays, and smart gadgets.",
   footer_social_facebook: "https://facebook.com",
-  footer_social_instagram: "https://www.instagram.com/dropmallu?igsh=N204dTdiMjFlMHds&utm_source=qr",
+  footer_social_instagram: "https://www.instagram.com/dropymart?igsh=N204dTdiMjFlMHds&utm_source=qr",
   footer_social_twitter: "https://twitter.com",
   footer_social_youtube: "https://youtube.com",
   footer_contact_phone: "+91 98951 77154",
-  footer_contact_email: "support@dropmallu.xyz",
+  footer_contact_email: "support@dropymart.xyz",
   footer_contact_address: "Kochi, Kerala, India",
 
-  seo_home_title: "DropMallu – Discover Trending Products, Gadgets & Everyday Essentials",
-  seo_home_desc: "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.",
+  seo_home_title: "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials",
+  seo_home_desc: "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at Dropymart. Enjoy secure payments, fast delivery, and unbeatable value on every order.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-  seo_home_canonical: "https://dropmallu.xyz"
+  seo_home_canonical: "https://dropymart.xyz"
 };
 
 const DEFAULT_HOMEPAGE_SECTIONS = [
@@ -405,30 +405,30 @@ const DEFAULT_MEDIA = [
 
 async function getSettings() {
   try {
-    const local = localStorage.getItem("dropmallu_settings");
+    const local = localStorage.getItem("dropymart_settings");
     if (local) {
       const parsed = JSON.parse(local);
       // Auto-migration for new SEO defaults
-      if (parsed.seo_home_title === "DROPMALLU — Premium Boutique Storefront" || parsed.seo_home_title === "DROPMALLU — Shop Trending Products Online" || !parsed.seo_home_title) {
-        parsed.seo_home_title = "DropMallu – Discover Trending Products, Gadgets & Everyday Essentials";
-        parsed.seo_home_desc = "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at DropMallu. Enjoy secure payments, fast delivery, and unbeatable value on every order.";
+      if (parsed.seo_home_title === "DROPYMART — Premium Boutique Storefront" || parsed.seo_home_title === "DROPYMART — Shop Trending Products Online" || !parsed.seo_home_title) {
+        parsed.seo_home_title = "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials";
+        parsed.seo_home_desc = "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at Dropymart. Enjoy secure payments, fast delivery, and unbeatable value on every order.";
         parsed.hero_title = "Shop Trending <br><span>Products Online</span>";
         parsed.hero_subtitle = "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.";
-        localStorage.setItem("dropmallu_settings", JSON.stringify(parsed));
+        localStorage.setItem("dropymart_settings", JSON.stringify(parsed));
       }
       return { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (e) {}
   
   try {
-    localStorage.setItem("dropmallu_settings", JSON.stringify(DEFAULT_SETTINGS));
+    localStorage.setItem("dropymart_settings", JSON.stringify(DEFAULT_SETTINGS));
   } catch (e) {}
   return DEFAULT_SETTINGS;
 }
 
 async function saveSettings(settings) {
   try {
-    localStorage.setItem("dropmallu_settings", JSON.stringify(settings));
+    localStorage.setItem("dropymart_settings", JSON.stringify(settings));
   } catch (err) {
     console.error("LocalStorage settings save error:", err);
   }
@@ -436,7 +436,7 @@ async function saveSettings(settings) {
 
 async function getHomepageSections() {
   try {
-    const local = localStorage.getItem("dropmallu_sections");
+    const local = localStorage.getItem("dropymart_sections");
     return local ? JSON.parse(local) : DEFAULT_HOMEPAGE_SECTIONS;
   } catch (e) {
     return DEFAULT_HOMEPAGE_SECTIONS;
@@ -445,13 +445,13 @@ async function getHomepageSections() {
 
 async function saveHomepageSections(sections) {
   try {
-    localStorage.setItem("dropmallu_sections", JSON.stringify(sections));
+    localStorage.setItem("dropymart_sections", JSON.stringify(sections));
   } catch (e) {}
 }
 
 async function getTestimonials() {
   try {
-    const local = localStorage.getItem("dropmallu_testimonials");
+    const local = localStorage.getItem("dropymart_testimonials");
     return local ? JSON.parse(local) : DEFAULT_TESTIMONIALS;
   } catch (e) {
     return DEFAULT_TESTIMONIALS;
@@ -460,13 +460,13 @@ async function getTestimonials() {
 
 async function saveTestimonials(t) {
   try {
-    localStorage.setItem("dropmallu_testimonials", JSON.stringify(t));
+    localStorage.setItem("dropymart_testimonials", JSON.stringify(t));
   } catch (e) {}
 }
 
 async function getBrands() {
   try {
-    const local = localStorage.getItem("dropmallu_brands");
+    const local = localStorage.getItem("dropymart_brands");
     return local ? JSON.parse(local) : DEFAULT_BRANDS;
   } catch (e) {
     return DEFAULT_BRANDS;
@@ -475,13 +475,13 @@ async function getBrands() {
 
 async function saveBrands(b) {
   try {
-    localStorage.setItem("dropmallu_brands", JSON.stringify(b));
+    localStorage.setItem("dropymart_brands", JSON.stringify(b));
   } catch (e) {}
 }
 
 async function getFlashSales() {
   try {
-    const local = localStorage.getItem("dropmallu_flash");
+    const local = localStorage.getItem("dropymart_flash");
     return local ? JSON.parse(local) : DEFAULT_FLASH_SALES;
   } catch (e) {
     return DEFAULT_FLASH_SALES;
@@ -490,13 +490,13 @@ async function getFlashSales() {
 
 async function saveFlashSales(f) {
   try {
-    localStorage.setItem("dropmallu_flash", JSON.stringify(f));
+    localStorage.setItem("dropymart_flash", JSON.stringify(f));
   } catch (e) {}
 }
 
 async function getMediaItems() {
   try {
-    const local = localStorage.getItem("dropmallu_media");
+    const local = localStorage.getItem("dropymart_media");
     return local ? JSON.parse(local) : DEFAULT_MEDIA;
   } catch (e) {
     return DEFAULT_MEDIA;
@@ -505,7 +505,7 @@ async function getMediaItems() {
 
 async function saveMediaItems(m) {
   try {
-    localStorage.setItem("dropmallu_media", JSON.stringify(m));
+    localStorage.setItem("dropymart_media", JSON.stringify(m));
   } catch (e) {}
 }
 

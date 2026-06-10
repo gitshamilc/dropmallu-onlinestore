@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   DROPMALLU — Dedicated Blog Detail Page Hydrator
+   DROPYMART — Dedicated Blog Detail Page Hydrator
    ═══════════════════════════════════════════════════════════════ */
 
 // ── State ────────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ async function initBlogPage() {
     
     // Load cart
     try {
-      const saved = localStorage.getItem('dropmallu_cart');
+      const saved = localStorage.getItem('dropymart_cart');
       if (saved) cart = JSON.parse(saved);
     } catch (e) {
       console.error("Cart loading error:", e);
@@ -84,6 +84,7 @@ async function initBlogPage() {
     createScrollProgressBar();
     initDynamicScrollBackground();
     initLogoInteractions();
+    initScroll3DCanvas();
     refreshCart();
     bindEvents();
     
@@ -135,10 +136,10 @@ function applyThemeSettings(s) {
 
 // ── Hydrate SEO & Schema metadata ───────────────────────────────
 function hydrateMetadata(b) {
-  const canonicalUrl = `https://dropmallu.xyz/blog/${slugify(b.title)}`;
+  const canonicalUrl = `https://dropymart.xyz/blog/${slugify(b.title)}`;
   
   // Set title
-  document.title = `${b.title} — Insights & Tech News | DROPMALLU`;
+  document.title = `${b.title} — Insights & Tech News | DROPYMART`;
   
   // Update Meta Description
   let metaDesc = $('meta[name="description"]');
@@ -185,15 +186,15 @@ function hydrateMetadata(b) {
     "datePublished": new Date(b.date).toISOString().split('T')[0] + "T08:00:00+05:30",
     "author": [{
       "@type": "Person",
-      "name": b.author || "DROPMALLU Writer",
-      "url": "https://dropmallu.xyz/"
+      "name": b.author || "DROPYMART Writer",
+      "url": "https://dropymart.xyz/"
     }],
     "publisher": {
       "@type": "Organization",
-      "name": "DROPMALLU",
+      "name": "DROPYMART",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://dropmallu.xyz/favicon.ico"
+        "url": "https://dropymart.xyz/favicon.ico"
       }
     },
     "description": b.summary
@@ -208,13 +209,13 @@ function hydrateMetadata(b) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://dropmallu.xyz/"
+        "item": "https://dropymart.xyz/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Blog",
-        "item": "https://dropmallu.xyz/#section-newsletter"
+        "item": "https://dropymart.xyz/#section-newsletter"
       },
       {
         "@type": "ListItem",
@@ -338,7 +339,7 @@ window.changeQty = function(id, delta) {
 };
 
 function refreshCart() {
-  localStorage.setItem('dropmallu_cart', JSON.stringify(cart));
+  localStorage.setItem('dropymart_cart', JSON.stringify(cart));
   
   const cartBadge = $('#cart-badge');
   const cartItemsEl = $('#cart-items');
@@ -412,7 +413,7 @@ function doCheckout() {
     total += cost;
     lines += `${i + 1}. *${item.name}* (Qty: ${item.qty}) — ₹${cost.toLocaleString('en-IN')}\n`;
   });
-  const msg = `Hi! I want to order from DROPMALLU:\n\n${lines}\n*Total:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm!`;
+  const msg = `Hi! I want to order from DROPYMART:\n\n${lines}\n*Total:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm!`;
   window.open(`https://wa.me/919895177154?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -463,6 +464,8 @@ function createScrollProgressBar() {
 }
 
 function initDynamicScrollBackground() {
+  document.body.classList.add('active-sec-hero');
+
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -475,39 +478,28 @@ function initDynamicScrollBackground() {
       progressBar.style.width = `${progress * 100}%`;
     }
 
-    // Determine target background and orb colors based on progress
-    let targetBg;
-    let orb1Color, orb2Color, orb3Color;
-    if (progress < 0.25) {
-      targetBg = settings?.theme_bg_dark || '#0b1e36';
-      orb1Color = 'rgba(16, 185, 129, 0.15)';
-      orb2Color = 'rgba(251, 192, 45, 0.1)';
-      orb3Color = 'rgba(5, 150, 105, 0.08)';
-    } else if (progress < 0.65) {
-      targetBg = '#111827';
-      orb1Color = 'rgba(139, 92, 246, 0.15)'; // violet
-      orb2Color = 'rgba(244, 63, 94, 0.1)';   // rose
-      orb3Color = 'rgba(59, 130, 246, 0.08)';  // blue
-    } else {
-      targetBg = '#022c22';
-      orb1Color = 'rgba(16, 185, 129, 0.25)'; // bright emerald
-      orb2Color = 'rgba(251, 192, 45, 0.15)'; // gold
-      orb3Color = 'rgba(52, 211, 153, 0.12)'; // mint
+    // Determine active section and toggle classes
+    // Note: Detail pages typically only have main content and a footer.
+    const sectionIds = ['hero', 'explore', 'footer'];
+    const triggerY = scrollY + window.innerHeight / 3;
+    
+    let activeId = 'hero';
+    for (const id of sectionIds) {
+      const el = document.getElementById(id) || (id === 'footer' ? document.querySelector('footer') : null);
+      if (!el) continue;
+      if (triggerY >= el.offsetTop) {
+        activeId = id;
+      }
     }
-
-    // Apply color smooth transition
-    document.body.style.transition = 'background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease';
-    document.body.style.backgroundColor = targetBg;
-
-    // Apply orb color custom properties
-    const root = document.documentElement;
-    root.style.setProperty('--orb-1-color', orb1Color);
-    root.style.setProperty('--orb-2-color', orb2Color);
-    root.style.setProperty('--orb-3-color', orb3Color);
+    
+    // Toggle active classes
+    const allSectionIds = ['hero', 'categories', 'deals', 'explore', 'testimonials', 'brands', 'footer'];
+    allSectionIds.forEach(id => {
+      document.body.classList.toggle(`active-sec-${id}`, id === activeId);
+    });
 
     // Toggle dark mode classes
-    const isDarkBg = targetBg === '#111827' || targetBg === '#022c22';
-    document.body.classList.toggle('theme-dark-scroll', isDarkBg);
+    document.body.classList.toggle('theme-dark-scroll', true); // Detail pages stay dark theme readable
   });
 }
 
@@ -547,6 +539,124 @@ function initLogoInteractions() {
       }
     });
   }
+}
+
+function initScroll3DCanvas() {
+  if (document.getElementById('scroll-3d-canvas')) return;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'scroll-3d-canvas';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = 460;
+  let height = canvas.height = 460;
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = canvas.width = rect.width * window.devicePixelRatio;
+    height = canvas.height = rect.height * window.devicePixelRatio;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const vertices = [
+    [0, -1.2, 0],
+    [0.7, 0, 0.7], [0.7, 0, -0.7], [-0.7, 0, -0.7], [-0.7, 0, 0.7],
+    [0.9, -0.4, 0], [0, -0.4, 0.9], [-0.9, -0.4, 0], [0, -0.4, -0.9],
+    [0, 1.2, 0]
+  ];
+
+  const edges = [
+    [0, 1], [0, 2], [0, 3], [0, 4],
+    [0, 5], [0, 6], [0, 7], [0, 8],
+    [1, 2], [2, 3], [3, 4], [4, 1],
+    [1, 9], [2, 9], [3, 9], [4, 9],
+    [5, 9], [6, 9], [7, 9], [8, 9],
+    [5, 6], [6, 7], [7, 8], [8, 5]
+  ];
+
+  let scrollProgress = 0;
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll > 0) {
+      scrollProgress = scrollY / maxScroll;
+    }
+    draw();
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    const scale = Math.min(width, height) * 0.35;
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const angleX = scrollProgress * Math.PI * 3 + 0.5;
+    const angleY = scrollProgress * Math.PI * 5 + 0.8;
+    const angleZ = scrollProgress * Math.PI * 2;
+
+    const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+    const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+    const cosZ = Math.cos(angleZ), sinZ = Math.sin(angleZ);
+
+    const projected = [];
+
+    vertices.forEach(v => {
+      let x1 = v[0] * cosY - v[2] * sinY;
+      let z1 = v[0] * sinY + v[2] * cosY;
+
+      let y2 = v[1] * cosX - z1 * sinX;
+      let z2 = v[1] * sinX + z1 * cosX;
+
+      let x3 = x1 * cosZ - y2 * sinZ;
+      let y3 = x1 * sinZ + y2 * cosZ;
+
+      const depth = 2.5;
+      const f = 1.8 / (depth + z2);
+      
+      projected.push({
+        x: x3 * scale * f + cx,
+        y: y3 * scale * f + cy,
+        z: z2
+      });
+    });
+
+    ctx.lineWidth = 1.5 * window.devicePixelRatio;
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#fbc02d';
+
+    edges.forEach(edge => {
+      const p1 = projected[edge[0]];
+      const p2 = projected[edge[1]];
+      const avgZ = (p1.z + p2.z) / 2;
+      const opacity = Math.max(0.15, 0.65 - avgZ * 0.3);
+      
+      ctx.strokeStyle = primaryColor;
+      ctx.globalAlpha = opacity;
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    });
+
+    ctx.globalAlpha = 0.9;
+    projected.forEach(p => {
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3.5 * window.devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = primaryColor;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 7 * window.devicePixelRatio, 0, Math.PI * 2);
+      ctx.globalAlpha = 0.25;
+      ctx.fill();
+      ctx.globalAlpha = 0.9;
+    });
+    ctx.globalAlpha = 1.0;
+  }
+
+  draw();
 }
 
 // ── Boot ─────────────────────────────────────────────────────────

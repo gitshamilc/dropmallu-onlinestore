@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dropmallu-cache-v2';
+const CACHE_NAME = 'dropymart-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

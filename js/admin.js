@@ -1,4 +1,4 @@
-// DROPMALLU Admin Dashboard Javascript Logic
+// DROPYMART Admin Dashboard Javascript Logic
 
 import { supabase, initSupabase } from "../supabase/client.js";
 
@@ -295,7 +295,7 @@ function setupListeners() {
   if (signoutBtn) {
     signoutBtn.addEventListener("click", () => {
       if (confirm("Sign out from Admin Panel?")) {
-        sessionStorage.removeItem("dropmallu_auth");
+        sessionStorage.removeItem("dropymart_auth");
         window.location.href = "index.html";
       }
     });
@@ -793,7 +793,7 @@ async function handleSettingsSubmit(e) {
       await saveSettings(updatedSettings);
     }
     
-    localStorage.removeItem('dropmallu_countdown_target');
+    localStorage.removeItem('dropymart_countdown_target');
     showToast("Storefront & Theme CMS settings saved successfully!", "success");
   } catch (err) {
     showToast("Error saving settings: " + err.message, "error");

@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DROPMALLU — Admin Dashboard</title>
+  <title>DROPYMART — Admin Dashboard</title>
 
   <!-- Auth Gate (redirect if not authenticated) -->
   <script>
     if (window.location.search.includes('auth=true') || window.location.hash.includes('auth=true')) {
       try {
-        sessionStorage.setItem('dropmallu_auth', 'true');
-        localStorage.setItem('dropmallu_auth', 'true');
+        sessionStorage.setItem('dropymart_auth', 'true');
+        localStorage.setItem('dropymart_auth', 'true');
       } catch (e) {}
     }
     
     let isAuthed = false;
     try {
-      isAuthed = sessionStorage.getItem('dropmallu_auth') === 'true' || 
-                 localStorage.getItem('dropmallu_auth') === 'true';
+      isAuthed = sessionStorage.getItem('dropymart_auth') === 'true' || 
+                 localStorage.getItem('dropymart_auth') === 'true';
     } catch (e) {}
     
     if (!isAuthed) {
@@ -41,7 +41,7 @@
     <aside class="sidebar glass">
       <div class="sidebar-brand">
         <i data-lucide="shield-check" style="color:var(--primary);"></i>
-        DROPMALLU<span class="dot">.</span>
+        DROPYMART<span class="dot">.</span>
       </div>
 
       <ul class="sidebar-nav">
@@ -239,7 +239,7 @@
                 <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="globe"></i> Search Engine Optimization (SEO)</h3>
                 <div class="field">
                   <label for="s-seo-home-title">Home Meta Title Tags</label>
-                  <input type="text" id="s-seo-home-title" placeholder="DROPMALLU — Premium Boutique Storefront">
+                  <input type="text" id="s-seo-home-title" placeholder="DROPYMART — Premium Boutique Storefront">
                 </div>
                 <div class="field">
                   <label for="s-seo-home-desc">Home Meta Description</label>
@@ -247,7 +247,7 @@
                 </div>
                 <div class="field">
                   <label for="s-seo-home-canonical">Canonical Site URL</label>
-                  <input type="text" id="s-seo-home-canonical" placeholder="https://dropmallu.xyz">
+                  <input type="text" id="s-seo-home-canonical" placeholder="https://dropymart.xyz">
                 </div>
                 <div class="field">
                   <label for="s-seo-home-og-image">OG Image URL (Social Previews)</label>
@@ -403,7 +403,7 @@
                 <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="mail"></i> Newsletter Integrations</h3>
                 <div class="field">
                   <label for="s-newsletter-heading">Subscription Title</label>
-                  <input type="text" id="s-newsletter-heading" placeholder="Join the DROPMALLU Club">
+                  <input type="text" id="s-newsletter-heading" placeholder="Join the DROPYMART Club">
                 </div>
                 <div class="field">
                   <label for="s-newsletter-desc">Short Subtext Description</label>
@@ -428,7 +428,7 @@
                 <h3 style="margin-bottom:16px; color:var(--accent-gold); font-size:16px;"><i data-lucide="bookmark"></i> Store Footer Branding & Handles</h3>
                 <div class="field">
                   <label for="s-footer-logo-text">Footer Brand Name Text</label>
-                  <input type="text" id="s-footer-logo-text" placeholder="DROPMALLU">
+                  <input type="text" id="s-footer-logo-text" placeholder="DROPYMART">
                 </div>
                 <div class="field">
                   <label for="s-footer-about-content">Footer About Description</label>
