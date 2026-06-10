@@ -314,12 +314,12 @@ async function deleteBlogFromStorage(id, updatedBlogs) {
 const DEFAULT_SETTINGS = {
   theme_primary: "#fbc02d",
   theme_primary_hover: "#f9a825",
-  theme_bg_dark: "#f3f5f8",
-  theme_bg_surface: "#ffffff",
-  theme_text_primary: "#1f2937",
-  theme_text_secondary: "#4b5563",
+  theme_bg_dark: "#081220",
+  theme_bg_surface: "#0d1624",
+  theme_text_primary: "#ffffff",
+  theme_text_secondary: "#e2e8f0",
   theme_border_radius: "14px",
-  theme_shadows: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+  theme_shadows: "0 4px 20px -2px rgba(255, 255, 255, 0.05)",
 
   hero_badge: "Premium Collection",
   hero_title: "Shop Trending <br><span>Products Online</span>",
@@ -409,11 +409,33 @@ async function getSettings() {
     if (local) {
       const parsed = JSON.parse(local);
       // Auto-migration for new SEO defaults
+      let modified = false;
       if (parsed.seo_home_title === "DROPYMART — Premium Boutique Storefront" || parsed.seo_home_title === "DROPYMART — Shop Trending Products Online" || !parsed.seo_home_title) {
         parsed.seo_home_title = "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials";
         parsed.seo_home_desc = "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at Dropymart. Enjoy secure payments, fast delivery, and unbeatable value on every order.";
         parsed.hero_title = "Shop Trending <br><span>Products Online</span>";
         parsed.hero_subtitle = "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.";
+        modified = true;
+      }
+      // Migrate old light theme values to the premium dark theme values
+      if (parsed.theme_bg_dark === "#f3f5f8") {
+        parsed.theme_bg_dark = "#081220";
+        modified = true;
+      }
+      if (parsed.theme_bg_surface === "#ffffff") {
+        parsed.theme_bg_surface = "#0d1624";
+        modified = true;
+      }
+      if (parsed.theme_text_primary === "#1f2937") {
+        parsed.theme_text_primary = "#ffffff";
+        modified = true;
+      }
+      if (parsed.theme_text_secondary === "#4b5563") {
+        parsed.theme_text_secondary = "#e2e8f0";
+        modified = true;
+      }
+      
+      if (modified) {
         localStorage.setItem("dropymart_settings", JSON.stringify(parsed));
       }
       return { ...DEFAULT_SETTINGS, ...parsed };
