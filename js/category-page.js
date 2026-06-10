@@ -100,6 +100,9 @@ async function initCategoryPage() {
     renderProductsList(categoryProducts);
     
     // Setup general interactions
+    createScrollProgressBar();
+    initDynamicScrollBackground();
+    initLogoInteractions();
     refreshCart();
     bindEvents();
     
@@ -483,6 +486,101 @@ function bindEvents() {
       if (emailInput && emailInput.value) {
         alert(settings?.newsletter_success_msg || "Thank you for subscribing!");
         emailInput.value = '';
+      }
+    });
+  }
+}
+
+// ── Scroll Progress, Theme Transitions & Logo Functions ──────────────
+function createScrollProgressBar() {
+  if (document.getElementById('scroll-progress-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress-bar';
+  document.body.appendChild(bar);
+}
+
+function initDynamicScrollBackground() {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
+    const progress = scrollY / maxScroll;
+    
+    // Update progress bar width
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (progressBar) {
+      progressBar.style.width = `${progress * 100}%`;
+    }
+
+    // Determine target background and orb colors based on progress
+    let targetBg;
+    let orb1Color, orb2Color, orb3Color;
+    if (progress < 0.25) {
+      targetBg = settings?.theme_bg_dark || '#0b1e36';
+      orb1Color = 'rgba(16, 185, 129, 0.15)';
+      orb2Color = 'rgba(251, 192, 45, 0.1)';
+      orb3Color = 'rgba(5, 150, 105, 0.08)';
+    } else if (progress < 0.65) {
+      targetBg = '#111827';
+      orb1Color = 'rgba(139, 92, 246, 0.15)'; // violet
+      orb2Color = 'rgba(244, 63, 94, 0.1)';   // rose
+      orb3Color = 'rgba(59, 130, 246, 0.08)';  // blue
+    } else {
+      targetBg = '#022c22';
+      orb1Color = 'rgba(16, 185, 129, 0.25)'; // bright emerald
+      orb2Color = 'rgba(251, 192, 45, 0.15)'; // gold
+      orb3Color = 'rgba(52, 211, 153, 0.12)'; // mint
+    }
+
+    // Apply color smooth transition
+    document.body.style.transition = 'background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease';
+    document.body.style.backgroundColor = targetBg;
+
+    // Apply orb color custom properties
+    const root = document.documentElement;
+    root.style.setProperty('--orb-1-color', orb1Color);
+    root.style.setProperty('--orb-2-color', orb2Color);
+    root.style.setProperty('--orb-3-color', orb3Color);
+
+    // Toggle dark mode classes
+    const isDarkBg = targetBg === '#111827' || targetBg === '#022c22';
+    document.body.classList.toggle('theme-dark-scroll', isDarkBg);
+  });
+}
+
+function initLogoInteractions() {
+  const logoImg = document.querySelector('#main-header .logo img');
+  if (logoImg) {
+    logoImg.classList.add('logo-spin-load');
+    setTimeout(() => logoImg.classList.remove('logo-spin-load'), 850);
+  }
+
+  const headerLogoEl = document.querySelector('#main-header .logo');
+  if (headerLogoEl) {
+    let logoClicks = 0;
+    let lastLogoClick = 0;
+    headerLogoEl.addEventListener('click', (e) => {
+      const now = Date.now();
+      if (now - lastLogoClick < 1500) {
+        logoClicks++;
+      } else {
+        logoClicks = 1;
+      }
+      lastLogoClick = now;
+
+      if (logoClicks >= 5) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const enabled = localStorage.getItem('admin_mode_enabled') === 'true';
+        if (enabled) {
+          localStorage.setItem('admin_mode_enabled', 'false');
+          alert("🔒 Merchant Mode Disabled! Sign In option is now hidden.");
+        } else {
+          localStorage.setItem('admin_mode_enabled', 'true');
+          alert("🔒 Merchant Mode Enabled! Sign In option is now visible.");
+        }
+        logoClicks = 0;
       }
     });
   }

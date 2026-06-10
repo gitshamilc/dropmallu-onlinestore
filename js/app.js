@@ -136,6 +136,14 @@ async function init() {
   }
 
   applyStorefrontSettings(settings);
+  const logoImg = document.querySelector('#main-header .logo img');
+  if (logoImg) {
+    logoImg.classList.add('logo-spin-load');
+    setTimeout(() => logoImg.classList.remove('logo-spin-load'), 850);
+  }
+  createScrollProgressBar();
+  pruneEmptyCategories();
+  initDynamicScrollBackground();
   await renderHomepageSectionsOrder();
   await renderTestimonials();
   await renderBrandsList();
@@ -1338,6 +1346,146 @@ async function renderBrandsList() {
     });
   } catch (e) {
     console.error("Brands row render error:", e);
+  }
+}
+
+// ── Scroll Progress & Dynamic Background Functions ───────────────────
+function createScrollProgressBar() {
+  if (document.getElementById('scroll-progress-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress-bar';
+  document.body.appendChild(bar);
+}
+
+function initDynamicScrollBackground() {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
+    const progress = scrollY / maxScroll;
+    
+    // Update progress bar width
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (progressBar) {
+      progressBar.style.width = `${progress * 100}%`;
+    }
+
+    // Determine target background and orb colors based on progress
+    let targetBg;
+    let orb1Color, orb2Color, orb3Color;
+    if (progress < 0.25) {
+      // Top section: Premium Navy theme
+      targetBg = settings?.theme_bg_dark || '#0b1e36';
+      orb1Color = 'rgba(16, 185, 129, 0.15)';
+      orb2Color = 'rgba(251, 192, 45, 0.1)';
+      orb3Color = 'rgba(5, 150, 105, 0.08)';
+    } else if (progress < 0.65) {
+      // Middle section: Dark Charcoal/Slate
+      targetBg = '#111827';
+      orb1Color = 'rgba(139, 92, 246, 0.15)'; // violet
+      orb2Color = 'rgba(244, 63, 94, 0.1)';   // rose
+      orb3Color = 'rgba(59, 130, 246, 0.08)';  // blue
+    } else {
+      // Bottom section: Elegant Emerald green
+      targetBg = '#022c22';
+      orb1Color = 'rgba(16, 185, 129, 0.25)'; // bright emerald
+      orb2Color = 'rgba(251, 192, 45, 0.15)'; // gold
+      orb3Color = 'rgba(52, 211, 153, 0.12)'; // mint
+    }
+
+    // Apply color smooth transition
+    document.body.style.transition = 'background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease';
+    document.body.style.backgroundColor = targetBg;
+
+    // Apply orb color custom properties
+    const root = document.documentElement;
+    root.style.setProperty('--orb-1-color', orb1Color);
+    root.style.setProperty('--orb-2-color', orb2Color);
+    root.style.setProperty('--orb-3-color', orb3Color);
+
+    // Toggle dark mode classes for text/glass contrasts
+    const isDarkBg = targetBg === '#111827' || targetBg === '#022c22';
+    document.body.classList.toggle('theme-dark-scroll', isDarkBg);
+  });
+}
+
+function pruneEmptyCategories() {
+  const activeCats = new Set(products.map(p => (p.category || '').toLowerCase().trim()));
+
+  // 1. Prune header search dropdown
+  const hSearchDropdown = document.getElementById('search-cat-dropdown');
+  if (hSearchDropdown) {
+    Array.from(hSearchDropdown.options).forEach(opt => {
+      const val = opt.value.toLowerCase().trim();
+      if (val !== 'all' && val !== 'deals' && !activeCats.has(val)) {
+        opt.style.display = 'none';
+      } else {
+        opt.style.display = '';
+      }
+    });
+  }
+
+  // 2. Prune sub-navigation links
+  const subNavLinks = document.querySelectorAll('.sub-nav-links a');
+  subNavLinks.forEach(link => {
+    const cat = link.getAttribute('data-cat') || link.getAttribute('href')?.split('/').pop() || '';
+    const cleanCat = cat.toLowerCase().trim();
+    if (cleanCat && cleanCat !== 'all' && cleanCat !== 'deals') {
+      const isMatch = cleanCat === 'watches' || cleanCat === 'watch' ? activeCats.has('watch') : activeCats.has(cleanCat);
+      if (!isMatch) {
+        link.style.display = 'none';
+      } else {
+        link.style.display = '';
+      }
+    } else {
+      link.style.display = '';
+    }
+  });
+
+  // 3. Prune circular quick category links
+  const circCatItems = document.querySelectorAll('.circ-cat-item');
+  circCatItems.forEach(item => {
+    const cat = item.getAttribute('data-cat') || item.getAttribute('href')?.split('/').pop() || '';
+    const cleanCat = cat.toLowerCase().trim();
+    if (cleanCat && cleanCat !== 'all' && cleanCat !== 'deals') {
+      const isMatch = cleanCat === 'watches' || cleanCat === 'watch' ? activeCats.has('watch') : activeCats.has(cleanCat);
+      if (!isMatch) {
+        item.style.display = 'none';
+      } else {
+        item.style.display = '';
+      }
+    } else {
+      item.style.display = '';
+    }
+  });
+
+  // 4. Prune catalog category filter buttons
+  const catFilterBtns = document.querySelectorAll('.cat-btn');
+  catFilterBtns.forEach(btn => {
+    const cat = btn.getAttribute('data-cat') || '';
+    const cleanCat = cat.toLowerCase().trim();
+    if (cleanCat && cleanCat !== 'all' && cleanCat !== 'deals') {
+      const isMatch = cleanCat === 'watches' || cleanCat === 'watch' ? activeCats.has('watch') : activeCats.has(cleanCat);
+      if (!isMatch) {
+        btn.style.display = 'none';
+      } else {
+        btn.style.display = '';
+      }
+    } else {
+      btn.style.display = '';
+    }
+  });
+
+  // 5. Hide promo banners if the target category has 0 items
+  const b1Card = document.getElementById('promo-b1-card');
+  const b2Card = document.getElementById('promo-b2-card');
+  if (b1Card && settings?.promo_b1_cat) {
+    const isMatch = activeCats.has(settings.promo_b1_cat.toLowerCase().trim());
+    b1Card.style.display = isMatch ? '' : 'none';
+  }
+  if (b2Card && settings?.promo_b2_cat) {
+    const isMatch = activeCats.has(settings.promo_b2_cat.toLowerCase().trim());
+    b2Card.style.display = isMatch ? '' : 'none';
   }
 }
 
