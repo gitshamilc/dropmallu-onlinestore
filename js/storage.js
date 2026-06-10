@@ -360,8 +360,8 @@ const DEFAULT_SETTINGS = {
   footer_contact_email: "support@dropymart.store",
   footer_contact_address: "Kochi, Kerala, India",
 
-  seo_home_title: "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials",
-  seo_home_desc: "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at Dropymart. Enjoy secure payments, fast delivery, and unbeatable value on every order.",
+  seo_home_title: "DropyMart – Shop Trending Products, Gadgets, Electronics & Home Essentials Online",
+  seo_home_desc: "Explore the latest gadgets, electronics, home essentials, fashion accessories, and trending products at DropyMart. Enjoy secure shopping, exclusive deals, affordable prices, and fast delivery across India.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
   seo_home_canonical: "https://dropymart.store"
 };
@@ -410,9 +410,9 @@ async function getSettings() {
       const parsed = JSON.parse(local);
       // Auto-migration for new SEO defaults
       let modified = false;
-      if (parsed.seo_home_title === "DROPYMART — Premium Boutique Storefront" || parsed.seo_home_title === "DROPYMART — Shop Trending Products Online" || !parsed.seo_home_title) {
-        parsed.seo_home_title = "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials";
-        parsed.seo_home_desc = "Shop the latest trending products, smart gadgets, home essentials, lifestyle accessories, and viral finds at Dropymart. Enjoy secure payments, fast delivery, and unbeatable value on every order.";
+      if (parsed.seo_home_title === "DROPYMART — Premium Boutique Storefront" || parsed.seo_home_title === "DROPYMART — Shop Trending Products Online" || parsed.seo_home_title === "Dropymart – Discover Trending Products, Gadgets & Everyday Essentials" || !parsed.seo_home_title) {
+        parsed.seo_home_title = "DropyMart – Shop Trending Products, Gadgets, Electronics & Home Essentials Online";
+        parsed.seo_home_desc = "Explore the latest gadgets, electronics, home essentials, fashion accessories, and trending products at DropyMart. Enjoy secure shopping, exclusive deals, affordable prices, and fast delivery across India.";
         parsed.hero_title = "Shop Trending <br><span>Products Online</span>";
         parsed.hero_subtitle = "Discover the best trending products, luxury watches, tech gadgets, and lifestyle essentials online.";
         modified = true;
