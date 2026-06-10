@@ -107,7 +107,7 @@ $xml = @"
 "@
 
 # Category pages
-$categories = @("watch", "powerbank", "shoe", "projector", "gadgets", "deals", "all")
+$categories = @("watch", "powerbank", "shoe", "projector", "gadgets", "deals", "all", "mobile", "electronics", "audio", "home", "accessories", "laptop", "camera", "gaming", "beauty")
 $xml += "`n  <!-- Categories -->`n"
 foreach ($cat in $categories) {
     $xml += @"
