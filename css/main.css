@@ -2459,8 +2459,9 @@ footer {
     display: none; /* Hide category select on mobile search bar to save width space */
   }
   .logo {
-    justify-content: space-between;
-    width: 100%;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: auto !important;
   }
   .nav-actions {
     display: flex !important;
@@ -2612,20 +2613,30 @@ footer {
   color: #ffc72c !important;
 }
 
-/* Circular quick links light background card format */
+/* Circular quick links premium gold/yellow translucent theme */
 .circular-categories-container {
-  background: #ffffff !important;
+  background: rgba(251, 192, 45, 0.06) !important;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(251, 192, 45, 0.2) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(12px) -webkit-backdrop-filter: blur(12px) !important;
+  padding: 16px 24px !important;
 }
 .circ-icon-wrap {
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  background: rgba(251, 192, 45, 0.08) !important;
+  border: 1px solid rgba(251, 192, 45, 0.25) !important;
 }
 .circ-cat-item span {
-  color: #374151 !important;
+  color: #e2e8f0 !important;
   font-weight: 600 !important;
+  transition: color 0.3s ease !important;
+}
+.circ-cat-item:hover span {
+  color: #fbc02d !important;
+}
+.circ-cat-item:hover .circ-icon-wrap {
+  background: rgba(251, 192, 45, 0.22) !important;
+  border-color: #fbc02d !important;
 }
 
 /* Deal of the day section */
