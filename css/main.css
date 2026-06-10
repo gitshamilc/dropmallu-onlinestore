@@ -133,56 +133,7 @@ body {
   50% { transform: translate(30px, -50px) scale(1.2); }
 }
 
-/* 3D Floating Shapes (scroll-driven) */
-.scroll-3d-scene {
-  position: fixed;
-  inset: 0;
-  z-index: -5;
-  pointer-events: none;
-  perspective: 1000px;
-}
 
-.geo-shape {
-  position: absolute;
-  border: 1px solid rgba(59, 130, 246, 0.06);
-  transform-style: preserve-3d;
-}
-.geo-shape::before,
-.geo-shape::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px dashed rgba(6, 182, 212, 0.04);
-}
-
-.geo-1 {
-  width: 100px; height: 100px;
-  top: 20%; left: 8%;
-  animation: spinGeo 30s linear infinite;
-}
-.geo-1::before { transform: translateZ(50px); }
-.geo-1::after  { transform: translateZ(-50px); }
-
-.geo-2 {
-  width: 140px; height: 140px;
-  top: 60%; right: 10%;
-  animation: spinGeo 40s linear infinite reverse;
-  border-color: rgba(6, 182, 212, 0.05);
-}
-.geo-2::before { transform: translateZ(70px); }
-.geo-2::after  { transform: translateZ(-70px); }
-
-.geo-3 {
-  width: 80px; height: 80px;
-  bottom: 15%; left: 20%;
-  animation: spinGeo 22s linear infinite;
-}
-.geo-3::before { transform: translateZ(40px); }
-.geo-3::after  { transform: translateZ(-40px); }
-
-@keyframes spinGeo {
-  to { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
-}
 
 /* ── Glassmorphism ───────────────────────────────────────────── */
 .glass {
@@ -2901,36 +2852,92 @@ body.active-sec-footer {
   --orb-3-color: rgba(75, 85, 99, 0.1);
 }
 
-/* ═══ 3D Canvas Scroll Background ═══ */
-#scroll-3d-canvas {
-  position: fixed;
-  top: 55%;
-  right: 6%;
-  transform: translateY(-50%);
-  width: 460px;
-  height: 460px;
-  z-index: -2;
-  pointer-events: none;
-  opacity: 0.35;
-  filter: drop-shadow(0 0 20px rgba(251, 192, 45, 0.08));
-  transition: opacity 0.5s ease;
+/* ═══ Scroll-Linked Hero Frame Animation ═══ */
+.hero-scroll-track {
+  position: relative;
+  height: 240vh;
+  background: #020617;
+  z-index: 10;
 }
-@media (max-width: 992px) {
-  #scroll-3d-canvas {
-    width: 320px;
-    height: 320px;
-    right: 3%;
-    opacity: 0.22;
-  }
+.hero-sticky-viewport {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#hero-frame-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+.hero-scroll-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+  padding: 24px;
+}
+.hero-scroll-content {
+  max-width: 800px;
+  text-align: center;
+  color: #fff;
+  pointer-events: auto;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero-scroll-content .hero-badge {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-scroll-content .hero-title {
+  text-shadow: 0 4px 24px rgba(0,0,0,0.85);
+  font-size: clamp(32px, 5.5vw, 64px);
+  margin-bottom: 24px;
+}
+.hero-scroll-content .hero-desc {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.85);
+  font-size: clamp(14px, 1.8vw, 17px);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 620px;
+  margin-bottom: 36px;
+}
+.hero-scroll-content .hero-btns {
+  justify-content: center;
 }
 @media (max-width: 768px) {
-  #scroll-3d-canvas {
-    width: 250px;
-    height: 250px;
-    top: 50%;
-    right: 50%;
-    transform: translate(50%, -50%);
-    opacity: 0.12;
+  .hero-scroll-track {
+    height: 200vh;
+  }
+  .hero-scroll-content .hero-title {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+  .hero-scroll-content .hero-desc {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
 }
 

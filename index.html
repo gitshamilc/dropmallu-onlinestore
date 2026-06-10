@@ -113,11 +113,23 @@
       localStorage.removeItem('dropymart_auth');
     }
   } catch (e) {}
+  
+  // Force unregister service worker to clear cache during updates
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      for (let reg of registrations) {
+        reg.unregister().then(() => {
+          console.log('Unregistered service worker successfully');
+          window.location.reload();
+        });
+      }
+    });
+  }
   </script>
 
   <!-- ═══ Styles ═══ -->
-  <link rel="stylesheet" href="css/animations.css?v=5">
-  <link rel="stylesheet" href="css/main.css?v=5">
+  <link rel="stylesheet" href="css/animations.css?v=12">
+  <link rel="stylesheet" href="css/main.css?v=12">
 
   <!-- ═══ Lucide Icons ═══ -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -131,12 +143,7 @@
     <div class="ambient-orb orb-3"></div>
   </div>
 
-  <!-- ═══ 3D Scroll Geometries ═══ -->
-  <div class="scroll-3d-scene" id="scroll3d">
-    <div class="geo-shape geo-1"></div>
-    <div class="geo-shape geo-2"></div>
-    <div class="geo-shape geo-3"></div>
-  </div>
+
   <!-- ═══ Top Info Bar ═══ -->
   <div class="top-bar">
     <div class="top-bar-container">
@@ -221,54 +228,22 @@
 
   <!-- ═══ Main Content Layout ═══ -->
   <div id="homepage-sections-container">
-    <main id="section-hero" class="main-content-layout">
-      <div class="store-grid-container">
-        
-        <!-- Category Sidebar -->
-        <aside class="side-categories-panel glass">
-          <ul class="side-nav-list">
-            <li class="active"><a href="/category/all" data-cat="all"><i data-lucide="smartphone"></i> Smartphones & Tablets <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="tv"></i> Electronics <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/watch" data-cat="watch"><i data-lucide="watch"></i> Watches <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="headphones"></i> Audio <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="laptop"></i> Computers & Accessories <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="gamepad-2"></i> Gaming <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="camera"></i> Cameras & Photography <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="home"></i> Home Appliances <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/gadgets" data-cat="gadgets"><i data-lucide="shopping-bag"></i> Lifestyle <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li><a href="/category/shoe" data-cat="shoe"><i data-lucide="footprints"></i> Shoes <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-            <li class="more-cats"><a href="/category/all" data-cat="all"><i data-lucide="layout-grid"></i> More Categories <i data-lucide="chevron-right" class="arrow-right"></i></a></li>
-          </ul>
-        </aside>
-
-        <!-- Pedestal Hero Showcase Area -->
-        <section class="hero-pedestal-showcase glass">
-          <div class="hero-pedestal-content">
-            <span class="hero-green-badge" id="hero-badge"><i data-lucide="shield-check"></i> Premium Collection</span>
-            <h1 class="hero-main-title" id="hero-title">Upgrade Your <br><span>Lifestyle</span></h1>
-            <p class="hero-subtitle" id="hero-subtitle">Discover trending gadgets, luxury watches, performance shoes and more.</p>
-            <div class="hero-buttons-row">
-              <a href="#explore" class="btn btn-primary-green">Shop Now <i data-lucide="arrow-right"></i></a>
-              <a href="#deals" class="btn btn-outline-white">View Offers</a>
-            </div>
-            
-            <!-- Bottom Badges Row -->
-            <div class="hero-bottom-badges">
-              <div class="hero-badge-item"><i data-lucide="check-circle"></i> 100% Authentic Products</div>
-              <div class="hero-badge-item"><i data-lucide="credit-card"></i> Secure Payments & COD</div>
-              <div class="hero-badge-item"><i data-lucide="rotate-ccw"></i> Easy Returns 7 Days</div>
-              <div class="hero-badge-item"><i data-lucide="truck"></i> Fast Delivery Across India</div>
+    <div id="hero" class="hero-scroll-track">
+      <div class="hero-sticky-viewport">
+        <canvas id="hero-frame-canvas"></canvas>
+        <div class="hero-scroll-overlay">
+          <div class="hero-scroll-content">
+            <span class="hero-badge" id="hero-badge"><i data-lucide="sparkles"></i> Welcome to Dropymart</span>
+            <h1 class="hero-title" id="hero-title">Shop Trending Products Online</h1>
+            <p class="hero-desc" id="hero-subtitle">Discover trending gadgets, luxury watches, performance shoes, and more.</p>
+            <div class="hero-btns">
+              <a href="#section-categories" class="btn btn-primary-green">Shop Now <i data-lucide="arrow-right"></i></a>
+              <a href="#section-categories" class="btn btn-outline-white">View Offers</a>
             </div>
           </div>
-
-          <div class="hero-pedestal-graphic">
-            <div class="pedestal-glow"></div>
-            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Featured Product Group" class="hero-graphic-image" id="pedestal-hero-image">
-          </div>
-        </section>
-
+        </div>
       </div>
-    </main>
+    </div>
 
     <!-- ═══ Circular Quick Category Links ═══ -->
     <div id="section-categories" class="circular-categories-container scroll-reveal reveal-up">
@@ -622,9 +597,9 @@
   </a>
 
   <!-- ═══ Scripts ═══ -->
-  <script src="js/config.js?v=5"></script>
-  <script src="js/storage.js?v=5"></script>
-  <script type="module" src="js/app.js?v=5"></script>
+  <script src="js/config.js?v=12"></script>
+  <script src="js/storage.js?v=12"></script>
+  <script type="module" src="js/app.js?v=12"></script>
   <script>lucide.createIcons();</script>
 
   <!-- ═══ Dynamic JSON-LD Products ═══ -->
