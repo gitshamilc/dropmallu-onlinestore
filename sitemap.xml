@@ -5,86 +5,86 @@
 
   <!-- Core Pages -->
   <url>
-    <loc>https://dropymart.xyz/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://dropymart.xyz/index.html</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/index.html</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Categories -->
   <url>
-    <loc>https://dropymart.xyz/category/watch</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/watch</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/powerbank</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/powerbank</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/shoe</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/shoe</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/projector</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/projector</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/gadgets</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/gadgets</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/deals</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/deals</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/category/all</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/category/all</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Products (Clean SEO URLs) -->
   <url>
-    <loc>https://dropymart.xyz/product/watch-test-20</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/product/watch-test-20</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Blog Articles (Clean SEO URLs) -->
   <url>
-    <loc>https://dropymart.xyz/blog/why-4k-laser-projectors-are-replacing-traditional-tvs</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/blog/why-4k-laser-projectors-are-replacing-traditional-tvs</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/blog/understanding-power-delivery-pd-in-fast-charging-powerbanks</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/blog/understanding-power-delivery-pd-in-fast-charging-powerbanks</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://dropymart.xyz/blog/the-dynamic-tech-inside-your-daily-sneakers</loc>
-    <lastmod>2026-06-08</lastmod>
+    <loc>https://dropymart.store/blog/the-dynamic-tech-inside-your-daily-sneakers</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

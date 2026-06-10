@@ -135,7 +135,7 @@ function applyThemeSettings(s) {
 
 // ── Hydrate SEO & Schema metadata ───────────────────────────────
 function hydrateMetadata(p) {
-  const canonicalUrl = `https://dropymart.xyz/product/${slugify(p.name)}`;
+  const canonicalUrl = `https://dropymart.store/product/${slugify(p.name)}`;
   
   // Set title
   document.title = `${p.name} — Buy Premium ${p.category.charAt(0).toUpperCase() + p.category.slice(1)} | DROPYMART`;
@@ -197,7 +197,7 @@ function hydrateMetadata(p) {
       "seller": {
         "@type": "Organization",
         "name": "DROPYMART",
-        "url": "https://dropymart.xyz/"
+        "url": "https://dropymart.store/"
       }
     },
     "aggregateRating": {
@@ -216,13 +216,13 @@ function hydrateMetadata(p) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://dropymart.xyz/"
+        "item": "https://dropymart.store/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": p.category.charAt(0).toUpperCase() + p.category.slice(1),
-        "item": `https://dropymart.xyz/category/${p.category}`
+        "item": `https://dropymart.store/category/${p.category}`
       },
       {
         "@type": "ListItem",

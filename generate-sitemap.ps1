@@ -1,7 +1,7 @@
 # generate-sitemap.ps1
 Write-Host "Generating dynamic sitemap via PowerShell..."
 
-$siteUrl = "https://dropymart.xyz"
+$siteUrl = "https://dropymart.store"
 $today = (Get-Date).ToString("yyyy-MM-dd")
 
 # Helper function to generate clean URL slug matching JS utility
