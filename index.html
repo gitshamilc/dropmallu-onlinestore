@@ -622,43 +622,7 @@
   <script type="module" src="js/app.js?v=5"></script>
   <script>lucide.createIcons();</script>
 
-  <!-- ═══ Dynamic JSON-LD Products ═══ -->
-  <script>
 
-    // Inject product JSON-LD for Google after products load
-    async function injectProductSchema() {
-      try {
-        const products = await getProducts();
-        if (!products || products.length === 0) return;
-        const schemaList = products.slice(0, 20).map(p => ({
-          "@type": "Product",
-          "name": p.name,
-          "description": p.description,
-          "image": p.image,
-          "brand": { "@type": "Brand", "name": "DROPYMART" },
-          "offers": {
-            "@type": "Offer",
-            "priceCurrency": "INR",
-            "price": p.price,
-            "availability": "https://schema.org/InStock",
-            "url": "https://www.dropymart.store/",
-            "seller": { "@type": "Organization", "name": "DROPYMART" }
-          },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": p.rating,
-            "reviewCount": p.reviews
-          }
-        }));
-        const script = document.createElement('script');
-        script.type = 'application/ld+json';
-        script.text = JSON.stringify({ "@context": "https://schema.org", "@graph": schemaList });
-        document.head.appendChild(script);
-      } catch(e) { /* silent */ }
-    }
-    // Run after app initializes
-    setTimeout(injectProductSchema, 3000);
-  </script>
 
 </body>
 </html>
