@@ -1361,6 +1361,7 @@ function createScrollProgressBar() {
 function initDynamicScrollBackground() {
   // Add initial class
   document.body.classList.add('active-sec-hero');
+  document.body.classList.add('theme-dark-scroll');
 
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
@@ -1732,9 +1733,6 @@ function initScroll3DCanvas() {
 
     ctx.globalAlpha = 1.0;
   }
-
-  draw();
-}
 
   draw();
 }
