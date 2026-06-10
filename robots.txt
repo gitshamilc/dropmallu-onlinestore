@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /js/config.js
 
-Sitemap: https://dropymart.store/sitemap.xml
+Sitemap: https://www.dropymart.store/sitemap.xml

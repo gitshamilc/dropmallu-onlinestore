@@ -363,7 +363,7 @@ const DEFAULT_SETTINGS = {
   seo_home_title: "DropyMart – Shop Trending Products, Gadgets, Electronics & Home Essentials Online",
   seo_home_desc: "Explore the latest gadgets, electronics, home essentials, fashion accessories, and trending products at DropyMart. Enjoy secure shopping, exclusive deals, affordable prices, and fast delivery across India.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-  seo_home_canonical: "https://dropymart.store"
+  seo_home_canonical: "https://www.dropymart.store"
 };
 
 const DEFAULT_HOMEPAGE_SECTIONS = [

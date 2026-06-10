@@ -135,7 +135,7 @@ function applyThemeSettings(s) {
 
 // ── Hydrate SEO & Schema metadata ───────────────────────────────
 function hydrateMetadata(b) {
-  const canonicalUrl = `https://dropymart.store/blog/${slugify(b.title)}`;
+  const canonicalUrl = `https://www.dropymart.store/blog/${slugify(b.title)}`;
   
   // Set title
   document.title = `${b.title} — Insights & Tech News | DROPYMART`;
@@ -186,14 +186,14 @@ function hydrateMetadata(b) {
     "author": [{
       "@type": "Person",
       "name": b.author || "DROPYMART Writer",
-      "url": "https://dropymart.store/"
+      "url": "https://www.dropymart.store/"
     }],
     "publisher": {
       "@type": "Organization",
       "name": "DROPYMART",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://dropymart.store/favicon.ico"
+        "url": "https://www.dropymart.store/favicon.ico"
       }
     },
     "description": b.summary
@@ -208,13 +208,13 @@ function hydrateMetadata(b) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://dropymart.store/"
+        "item": "https://www.dropymart.store/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Blog",
-        "item": "https://dropymart.store/#section-newsletter"
+        "item": "https://www.dropymart.store/#section-newsletter"
       },
       {
         "@type": "ListItem",

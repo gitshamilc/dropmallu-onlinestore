@@ -187,7 +187,7 @@ function getCategoryMeta(slug) {
 
 // ── Hydrate SEO & Schema metadata ───────────────────────────────
 function hydrateMetadata(slug) {
-  const canonicalUrl = `https://dropymart.store/category/${slug}`;
+  const canonicalUrl = `https://www.dropymart.store/category/${slug}`;
   const meta = getCategoryMeta(slug);
   
   // Set title
@@ -234,7 +234,7 @@ function hydrateMetadata(slug) {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://dropymart.store/"
+        "item": "https://www.dropymart.store/"
       },
       {
         "@type": "ListItem",
