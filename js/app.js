@@ -578,6 +578,18 @@ function addToCart(id) {
   if (existing) { existing.qty++; } else {
     cart.push({ id: item.id, name: item.name, price: item.price, image: item.image, qty: 1 });
   }
+
+  // Meta Pixel AddToCart event
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('AddToCart', {
+      content_name: item.name,
+      content_category: item.category,
+      content_ids: [item.id],
+      value: item.price,
+      currency: 'INR'
+    });
+  }
+
   refreshCart();
   openCart();
 }
@@ -663,6 +675,16 @@ function doCheckout() {
     total += cost;
     lines += `${i + 1}. *${item.name}* (Qty: ${item.qty}) — ₹${cost.toLocaleString('en-IN')}\n`;
   });
+
+  // Meta Pixel InitiateCheckout event for cart purchases
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('InitiateCheckout', {
+      num_items: cart.length,
+      value: total,
+      currency: 'INR'
+    });
+  }
+
   const msg = `Hi! I want to order from DROPYMART:\n\n${lines}\n*Total:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm!`;
   window.open(`https://wa.me/919895177154?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -759,6 +781,9 @@ function showProduct(p) {
     specsHtml += '</div>';
   }
   
+  const originalPriceVal = Math.round(p.price * 1.35);
+  const originalPriceFormatted = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(originalPriceVal);
+
   body.innerHTML = `
     <div class="pdp-grid">
       <div class="pdp-left">
@@ -766,39 +791,60 @@ function showProduct(p) {
         ${galleryHtml}
       </div>
       <div class="pdp-info pdp-right">
-        ${p.badge ? `<span class="pdp-badge">${escapeHTML(p.badge)}</span>` : ''}
+        ${p.badge ? `<span class="pdp-badge" style="align-self: flex-start; margin-bottom: 10px;">${escapeHTML(p.badge)}</span>` : ''}
         <h2 class="pdp-title">${escapeHTML(p.name)}</h2>
         <div class="pdp-rating-row">
           <span class="pdp-stars" style="color:#fbbf24; margin-right:5px;">${ratingStars}</span>
           <span class="pdp-rating-val" style="font-weight:700; color:var(--primary); margin-right:5px;">${escapeHTML(p.rating || 4.5)}</span>
           <span class="pdp-reviews-count" style="color:var(--text-sub);">(${escapeHTML(p.reviews || 20)} Ratings)</span>
         </div>
-        <div class="pdp-price-container">
-          <span class="pdp-price">${price}</span>
-          <span class="pdp-delivery-tag" style="color:var(--primary); font-size:12px; font-weight:600; margin-left:12px;">FREE Delivery in 2-3 Days</span>
+        <div class="pdp-price-container" style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 12px 18px; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+          <span class="pdp-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">${price}</span>
+          <span class="pdp-compare-price" style="font-size: 1.2rem; text-decoration: line-through; color: var(--text-sub); margin-left: 8px;">${originalPriceFormatted}</span>
+          <span class="pdp-discount-badge" style="font-size: 0.85rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 4px; margin-left: 8px;">26% OFF</span>
         </div>
         
-        <p class="pdp-desc" style="margin-top:12px; line-height:1.5; font-size:13px; color:var(--text-sub);">${escapeHTML(p.description)}</p>
-        
-        ${specsHtml}
-        
-        <div class="pdp-urgency-box" style="margin-top:15px; margin-bottom:15px;">
+        <div class="pdp-urgency-box" style="margin-top:5px; margin-bottom:15px;">
           <span class="pdp-stock-warning" style="${stockStyle}">${escapeHTML(stockText)}</span>
         </div>
+
+        <div class="pdp-trust-indicators" style="display: flex; gap: 15px; margin-bottom: 20px; font-size: 12px; color: var(--text-sub); flex-wrap: wrap; border-bottom: 1px solid var(--border-glass); padding-bottom: 15px;">
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="shield-check" style="color: #10b981; width: 14px; height: 14px;"></i> 100% Secure Checkout</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="truck" style="color: #10b981; width: 14px; height: 14px;"></i> Free & Fast Delivery</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="refresh-cw" style="color: #10b981; width: 14px; height: 14px;"></i> 7-Day Replacement Policy</span>
+        </div>
  
-        <div class="pdp-actions-container">
+        <div class="pdp-actions-container" style="display: flex; gap: 15px; margin-top: 5px; margin-bottom: 25px;">
           <button class="btn-pdp btn-pdp-cart" onclick="addToCart('${escapeHTML(p.id)}'); closeModals();">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             ADD TO CART
           </button>
           <button class="btn-pdp btn-pdp-buynow" onclick="directBuy('${escapeHTML(p.id)}')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            BUY NOW
+            <svg width="18" height="18" viewBox="0 0 448 512" fill="currentColor" style="margin-right: 4px;"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5.1-3.9-10.6-6.9z"/></svg>
+            ORDER ON WHATSAPP
           </button>
         </div>
+
+        <p class="pdp-desc" style="margin-top:12px; line-height:1.5; font-size:13px; color:var(--text-sub);">${escapeHTML(p.description)}</p>
+        
+        ${specsHtml}
       </div>
     </div>
   `;
+  
+  if (window.lucide) window.lucide.createIcons();
+
+  // Meta Pixel ViewContent event
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('ViewContent', {
+      content_name: p.name,
+      content_category: p.category,
+      content_ids: [p.id],
+      value: p.price,
+      currency: 'INR'
+    });
+  }
+
   productModal.classList.add('active');
   
   if (window.location.hash !== `#product-${p.id}`) {
@@ -809,7 +855,19 @@ function showProduct(p) {
 window.directBuy = function(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
-  const msg = `Hi! I want to order from DROPYMART:\n\n*Product:* ${p.name}\n*Price:* ₹${p.price.toLocaleString('en-IN')}\n\nPlease confirm availability!`;
+  const msg = `Hi, I'm interested in ordering ${p.name}. Please share complete details.`;
+
+  // Meta Pixel Lead event for direct purchases
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('Lead', {
+      content_name: p.name,
+      content_category: p.category,
+      content_ids: [p.id],
+      value: p.price,
+      currency: 'INR'
+    });
+  }
+
   window.open(`https://wa.me/919895177154?text=${encodeURIComponent(msg)}`, '_blank');
 };
 

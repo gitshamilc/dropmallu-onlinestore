@@ -342,6 +342,18 @@ window.addToCart = function(id) {
   } else {
     cart.push({ id: item.id, name: item.name, price: item.price, image: item.image, qty: 1 });
   }
+
+  // Meta Pixel AddToCart event
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('AddToCart', {
+      content_name: item.name,
+      content_category: item.category,
+      content_ids: [item.id],
+      value: item.price,
+      currency: 'INR'
+    });
+  }
+
   refreshCart();
   openCart();
 };
@@ -436,6 +448,16 @@ function doCheckout() {
     total += cost;
     lines += `${i + 1}. *${item.name}* (Qty: ${item.qty}) — ₹${cost.toLocaleString('en-IN')}\n`;
   });
+
+  // Meta Pixel InitiateCheckout event for cart purchases
+  if (typeof window.trackMetaEvent === 'function') {
+    window.trackMetaEvent('InitiateCheckout', {
+      num_items: cart.length,
+      value: total,
+      currency: 'INR'
+    });
+  }
+
   const msg = `Hi! I want to order from DROPYMART:\n\n${lines}\n*Total:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm!`;
   window.open(`https://wa.me/919895177154?text=${encodeURIComponent(msg)}`, '_blank');
 }

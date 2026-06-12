@@ -363,7 +363,8 @@ const DEFAULT_SETTINGS = {
   seo_home_title: "DropyMart – Shop Trending Products, Gadgets, Electronics & Home Essentials Online",
   seo_home_desc: "Explore the latest gadgets, electronics, home essentials, fashion accessories, and trending products at DropyMart. Enjoy secure shopping, exclusive deals, affordable prices, and fast delivery across India.",
   seo_home_og_image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-  seo_home_canonical: "https://www.dropymart.store"
+  seo_home_canonical: "https://www.dropymart.store",
+  meta_pixel_id: ""
 };
 
 const DEFAULT_HOMEPAGE_SECTIONS = [
@@ -403,7 +404,35 @@ const DEFAULT_MEDIA = [
   { id: "m2", name: "Stealth Smartwatch Banner", url: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&q=80", size: "38 KB", type: "image/jpeg" }
 ];
 
+function initMetaPixel(pixelId) {
+  if (!pixelId) return;
+  if (window.fbq) return;
+  
+  // Standard Meta Pixel code snippet
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  
+  fbq('init', pixelId.trim());
+  fbq('track', 'PageView');
+}
+
+function trackMetaEvent(eventName, params = {}) {
+  if (window.fbq) {
+    fbq('track', eventName, params);
+  }
+}
+
+window.initMetaPixel = initMetaPixel;
+window.trackMetaEvent = trackMetaEvent;
+
 async function getSettings() {
+  let settings = DEFAULT_SETTINGS;
   try {
     const local = localStorage.getItem("dropymart_settings");
     if (local) {
@@ -438,14 +467,22 @@ async function getSettings() {
       if (modified) {
         localStorage.setItem("dropymart_settings", JSON.stringify(parsed));
       }
-      return { ...DEFAULT_SETTINGS, ...parsed };
+      settings = { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (e) {}
   
-  try {
-    localStorage.setItem("dropymart_settings", JSON.stringify(DEFAULT_SETTINGS));
-  } catch (e) {}
-  return DEFAULT_SETTINGS;
+  if (settings === DEFAULT_SETTINGS) {
+    try {
+      localStorage.setItem("dropymart_settings", JSON.stringify(DEFAULT_SETTINGS));
+    } catch (e) {}
+  }
+
+  // Initialize Pixel dynamically if ID exists
+  if (settings.meta_pixel_id && typeof window !== 'undefined') {
+    initMetaPixel(settings.meta_pixel_id);
+  }
+  
+  return settings;
 }
 
 async function saveSettings(settings) {

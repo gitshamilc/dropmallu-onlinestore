@@ -662,6 +662,7 @@ async function loadSettingsIntoForm() {
       document.getElementById("s-seo-home-desc").value = s.seo_home_desc || "";
       document.getElementById("s-seo-home-canonical").value = s.seo_home_canonical || "";
       document.getElementById("s-seo-home-og-image").value = s.seo_home_og_image || "";
+      document.getElementById("s-meta-pixel-id").value = s.meta_pixel_id || "";
 
       // Hero
       document.getElementById("s-hero-badge").value = s.hero_badge || "";
@@ -753,6 +754,7 @@ async function handleSettingsSubmit(e) {
       seo_home_desc: document.getElementById("s-seo-home-desc").value.trim(),
       seo_home_canonical: document.getElementById("s-seo-home-canonical").value.trim(),
       seo_home_og_image: document.getElementById("s-seo-home-og-image").value.trim(),
+      meta_pixel_id: document.getElementById("s-meta-pixel-id").value.trim(),
 
       hero_badge: document.getElementById("s-hero-badge").value.trim(),
       hero_title: document.getElementById("s-hero-title").value.trim(),
