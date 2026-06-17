@@ -39,6 +39,41 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "dropmallu-onlinestore.vercel.app"
+        }
+      ],
+      "destination": "https://www.dropymart.store/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "dropmallu.xyz"
+        }
+      ],
+      "destination": "https://www.dropymart.store/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "dropymart.store"
+        }
+      ],
+      "destination": "https://www.dropymart.store/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/product/:slug", "destination": "/product.html" },
     { "source": "/category/:slug", "destination": "/category.html" },
